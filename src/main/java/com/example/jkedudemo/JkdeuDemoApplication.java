@@ -1,0 +1,13 @@
+package com.example.jkedudemo;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class JkdeuDemoApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(JkdeuDemoApplication.class, args);
+    }
+
+}
