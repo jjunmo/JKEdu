@@ -8,4 +8,6 @@ public class SpeakingTest {
 
     @Id
     private Long id;
+
+    private String question;
 }

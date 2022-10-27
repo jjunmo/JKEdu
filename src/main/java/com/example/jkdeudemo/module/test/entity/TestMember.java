@@ -15,10 +15,19 @@ public class TestMember {
     @Id
     private Long id;
 
-    @OneToOne
-    private Students student;
+    /**
+     * 학생 정보
+     */
 
-    @OneToMany
-    private List<ExamCategory> examCategorys = new ArrayList<>();
+
+    /**
+     * 작성한 답안
+     */
+    private String answer;
+
+    /**
+     * 정답 갯수
+     */
+    private Integer ok_answer;
 
 }

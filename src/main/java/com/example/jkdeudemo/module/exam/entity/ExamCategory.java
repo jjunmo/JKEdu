@@ -1,11 +1,9 @@
 package com.example.jkdeudemo.module.exam.entity;
 
 import com.example.jkdeudemo.module.exam.entity.category.*;
+import com.example.jkdeudemo.module.test.entity.TestMember;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +15,7 @@ public class ExamCategory {
     @OneToMany
     private List<SpeakingTest> speakingTestList=new ArrayList<>();
 
+    //시험시 쓰기문제는 하나
     @OneToOne
     private WritingTest writingTest;
 
@@ -28,6 +27,12 @@ public class ExamCategory {
 
     @OneToMany
     private List<GrammerTest> grammerTests=new ArrayList<>();
+
+    /**
+     * 시험 응시자
+     */
+    @ManyToOne
+    private TestMember testMember;
 
 
 

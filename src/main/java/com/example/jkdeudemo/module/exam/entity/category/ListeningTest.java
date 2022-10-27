@@ -7,4 +7,8 @@ import javax.persistence.Id;
 public class ListeningTest {
     @Id
     private Long id;
+
+    private String question;
+
+    private String correct_answer;
 }
