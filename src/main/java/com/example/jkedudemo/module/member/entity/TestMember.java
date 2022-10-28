@@ -1,4 +1,4 @@
-package com.example.jkedudemo.module.test.entity;
+package com.example.jkedudemo.module.member.entity;
 
 import com.example.jkedudemo.module.member.entity.Member;
 

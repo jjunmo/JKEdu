@@ -1,4 +1,4 @@
-package com.example.jkedudemo.module.test.entity;
+package com.example.jkedudemo.module.academy.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;

@@ -1,7 +1,6 @@
 package com.example.jkedudemo.module.academy.entity;
 
 
-import com.example.jkedudemo.module.test.entity.AcademyTestMember;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

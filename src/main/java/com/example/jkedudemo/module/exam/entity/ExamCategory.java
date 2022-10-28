@@ -1,7 +1,7 @@
 package com.example.jkedudemo.module.exam.entity;
 
 import com.example.jkedudemo.module.exam.entity.category.*;
-import com.example.jkedudemo.module.test.entity.TestMember;
+import com.example.jkedudemo.module.member.entity.TestMember;
 
 import javax.persistence.*;
 import java.util.ArrayList;
