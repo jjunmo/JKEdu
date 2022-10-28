@@ -1,6 +1,6 @@
 package com.example.jkedudemo.module.member.entity;
 
-import com.example.jkedudemo.module.member.role.RoleType;
+import com.example.jkedudemo.module.role.RoleType;
 import lombok.*;
 
 import javax.persistence.*;

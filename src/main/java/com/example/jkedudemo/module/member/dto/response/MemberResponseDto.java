@@ -2,7 +2,7 @@ package com.example.jkedudemo.module.member.dto.response;
 
 
 import com.example.jkedudemo.module.member.entity.Member;
-import com.example.jkedudemo.module.member.role.RoleType;
+import com.example.jkedudemo.module.role.RoleType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

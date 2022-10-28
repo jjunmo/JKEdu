@@ -17,9 +17,8 @@ public class SmsAuthRestController {
 
     private final SmsAuthService smsAuthService;
 
-    @GetMapping("/check/sendSMS")
-    public
-    String sendSMS(String phoneNumber) {
+    @GetMapping("/sendSMS")
+    public String sendSMS(String phoneNumber) {
 
         Random random  = new Random();
         String numStr = "";
@@ -33,4 +32,5 @@ public class SmsAuthRestController {
         smsAuthService.certifiedPhoneNumber(phoneNumber,numStr);
         return numStr;
     }
+
 }
