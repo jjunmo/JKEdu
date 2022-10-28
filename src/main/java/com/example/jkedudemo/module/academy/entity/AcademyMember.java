@@ -26,6 +26,8 @@ public class AcademyMember {
 
     private String academy_password;
 
+    private String phone_number;
+
     @OneToMany
     private List<AcademyTestMember> academyTestMemberList = new ArrayList<>();
 
