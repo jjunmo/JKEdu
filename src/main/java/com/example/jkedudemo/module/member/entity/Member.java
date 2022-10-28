@@ -11,16 +11,20 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Table(name = "member")
 public class Member {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    //@Column(nullable = false)
     private String email;
 
+   // @Column(nullable = false)
     private String member_password;
 
+    //@Column(nullable = false)
     private String phone_number;
 
     @Enumerated(EnumType.STRING)

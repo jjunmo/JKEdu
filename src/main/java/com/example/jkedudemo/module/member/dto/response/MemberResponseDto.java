@@ -7,11 +7,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Slf4j
 public class MemberResponseDto {
     private String email;
     private String phone_number;
@@ -23,5 +25,6 @@ public class MemberResponseDto {
                 .roleType(member.getRole_type())
                 .email(member.getEmail())
                 .build();
+
     }
 }

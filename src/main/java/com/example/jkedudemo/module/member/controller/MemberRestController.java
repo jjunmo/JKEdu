@@ -20,16 +20,6 @@ public class MemberRestController {
 
     private final MemberService memberService;
 
-//    /**
-//     *  회원가입
-//     * @param member 회원가입 정보
-//     * @return 회원가입
-//     */
-//    @PostMapping("/user/register")
-//    public HttpEntity<Object> createMember(@RequestBody Member member){
-//        memberService.createMember(member);
-//        return ResponseEntity.ok(member);
-//    }
 
     /**
      *  비밀번호 변경

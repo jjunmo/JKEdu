@@ -19,19 +19,6 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
     private final MemberRepository memberRepository;
 
-//    @Transactional
-//    public Member createMember(Member member){
-//        Optional<Member> memberOptional = memberRepository.findByEmail(member.getEmail());
-//        if(memberOptional.isEmpty()) {
-//            memberRepository.save(member);
-//        }else{
-//            log.info("이미 존재하는 이메일입니다.");
-//            return null;
-//        }
-//        return member;
-//    }
-
-
     /**
      *
      * @return 현재 유저정보를 가져옴

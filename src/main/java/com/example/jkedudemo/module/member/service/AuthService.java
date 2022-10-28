@@ -38,7 +38,6 @@ public class AuthService {
     @Transactional
     public TokenDto login(MemberRequestDto requestDto) {
         UsernamePasswordAuthenticationToken authenticationToken = requestDto.toAuthentication();
-        log.info(requestDto.getEmail());
         Authentication authentication = managerBuilder.getObject().authenticate(authenticationToken);
 
 

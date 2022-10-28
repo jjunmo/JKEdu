@@ -25,6 +25,7 @@ public class MemberRequestDto {
                 .phone_number(phone_number)
                 .email(email)
                 .member_password(passwordEncoder.encode(member_password))
+                .role_type(RoleType.ROLE_USER)
                 .build();
     }
 

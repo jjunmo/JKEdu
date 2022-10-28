@@ -30,7 +30,7 @@ public class AuthController {
     /**
      *  로그인
      * @param requestDto 사용자 정보
-     * @return 로그인 성공
+     * @return 토큰 값 , 토큰 유효시간
      */
     @PostMapping("/user/login")
     public HttpEntity<TokenDto> login(@RequestBody MemberRequestDto requestDto) {

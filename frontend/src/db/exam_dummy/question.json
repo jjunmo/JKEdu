@@ -1,0 +1,32 @@
+{
+  "question": [
+    {
+      "q": "다음 사진과 일치하는 단어를 고르시오.",
+      "example": ["finger", "fish", "full", "fun"],
+      "answer": "finger",
+      "category": "multiple-choice",
+      "havePicture": true,
+      "src": "https://dictionary.cambridge.org/ko/images/thumb/finger_noun_002_13894.jpg?version=5.0.250"
+    },
+    {
+      "q": "다음 빈칸에 알맞은 단어를 쓰시오.",
+      "mainText": "We ______ boys.",
+      "answer": "are",
+      "category": "narrative"
+    },
+    {
+      "q": "다음을 듣고 알맞은 것을 고르시오.",
+      "example": ["n", "a", "b", "c"],
+      "answer": "n",
+      "category": "multiple-choice",
+      "url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
+    },
+    {
+      "q": "다음 사진에 알맞은 단어를 쓰시오.",
+      "answer": "n",
+      "category": "narrative",
+      "havePicture": true,
+      "src": "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=http%3A%2F%2Fcfile2.uf.tistory.com%2Fimage%2F2408DD3658A648B12CF09D"
+    }
+  ]
+}
