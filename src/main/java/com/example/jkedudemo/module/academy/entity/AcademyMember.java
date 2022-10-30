@@ -1,7 +1,7 @@
 package com.example.jkedudemo.module.academy.entity;
 
 
-import com.example.jkedudemo.module.role.RoleType;
+import com.example.jkedudemo.module.common.enums.RoleType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,6 +11,7 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Deprecated
 @Entity
 @Setter
 @Getter

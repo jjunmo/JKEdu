@@ -4,6 +4,7 @@ import com.example.jkedudemo.module.member.entity.Member;
 
 import javax.persistence.*;
 
+@Deprecated
 @Entity
 public class TestMember {
 

@@ -2,7 +2,7 @@ package com.example.jkedudemo.module.member.dto.response;
 
 
 import com.example.jkedudemo.module.member.entity.Member;
-import com.example.jkedudemo.module.role.RoleType;
+import com.example.jkedudemo.module.common.enums.RoleType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,8 +21,8 @@ public class MemberResponseDto {
 
     public static MemberResponseDto of(Member member) {
         return MemberResponseDto.builder()
-                .phone_number(member.getPhone_number())
-                .roleType(member.getRole_type())
+                .phone_number(member.getPhoneNumber())
+                .roleType(member.getRoleType())
                 .email(member.getEmail())
                 .build();
 

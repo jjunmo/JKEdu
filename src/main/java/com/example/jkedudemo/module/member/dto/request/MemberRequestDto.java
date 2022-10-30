@@ -1,7 +1,7 @@
 package com.example.jkedudemo.module.member.dto.request;
 
 import com.example.jkedudemo.module.member.entity.Member;
-import com.example.jkedudemo.module.role.RoleType;
+import com.example.jkedudemo.module.common.enums.RoleType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,14 +18,14 @@ public class MemberRequestDto {
     private String member_password;
     private String phone_number;
 
-    private RoleType role_type;
+    private RoleType roleType;
 
     public Member toMember(PasswordEncoder passwordEncoder) {
         return Member.builder()
-                .phone_number(phone_number)
+                .phoneNumber(phone_number)
                 .email(email)
                 .member_password(passwordEncoder.encode(member_password))
-                .role_type(RoleType.ROLE_USER)
+                .roleType(roleType)
                 .build();
     }
 

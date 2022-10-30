@@ -3,6 +3,7 @@ package com.example.jkedudemo.module.academy.entity;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
+@Deprecated
 @Entity
 public class AcademyTestMember {
 

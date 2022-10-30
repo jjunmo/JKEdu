@@ -33,7 +33,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     private UserDetails createUserDetails(Member member) {
-        GrantedAuthority grantedAuthority = new SimpleGrantedAuthority(member.getRole_type().toString());
+        GrantedAuthority grantedAuthority = new SimpleGrantedAuthority(member.getRoleType().toString());
 
         return new User(
                 String.valueOf(member.getId()),

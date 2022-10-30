@@ -37,6 +37,8 @@ public class AuthService {
 
     @Transactional
     public TokenDto login(MemberRequestDto requestDto) {
+
+        // TODO: Status 체크
         UsernamePasswordAuthenticationToken authenticationToken = requestDto.toAuthentication();
         Authentication authentication = managerBuilder.getObject().authenticate(authenticationToken);
 

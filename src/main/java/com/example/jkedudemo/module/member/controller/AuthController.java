@@ -12,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/auth")
 @RequiredArgsConstructor
 public class AuthController {
     private final AuthService authService;
@@ -24,6 +24,7 @@ public class AuthController {
      */
     @PostMapping("/user/register")
     public HttpEntity<MemberResponseDto> signup(@RequestBody MemberRequestDto requestDto) {
+        // TODO:회원가입 requestDto 데이터 체크
         return ResponseEntity.ok(authService.signup(requestDto));
     }
 
