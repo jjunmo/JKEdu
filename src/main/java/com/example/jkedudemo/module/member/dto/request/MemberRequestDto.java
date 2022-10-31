@@ -17,7 +17,6 @@ public class MemberRequestDto {
     private String email;
     private String memberPassword;
     private String phoneNumber;
-
     private RoleType roleType;
 
     public Member toMember(PasswordEncoder passwordEncoder) {

@@ -82,14 +82,17 @@ public class MemberService {
         return "시스템 운영자에게 문의하세요.";
     }
 
+    @Transactional
     public String certifiedPhoneNumberCheck(String phoneNumber ,String code){
         Optional<MemberPhoneAuth> optional = memberPhoneAuthRepository.findByPhoneNumberAndCode(phoneNumber,code);
         if(optional.isEmpty()){
-            return "인증번호가 올바르지 않습니다.";
+            return "휴대폰번호와 인증번호를 확인하세요";
         }else{
-            optional.get().setCheckYn(YN.Y);
-            return "OK";
+            MemberPhoneAuth memberPhoneAuth = optional.get();
+            memberPhoneAuth.setCheckYn(YN.Y);
+            log.info("인증"+memberPhoneAuth.getCheckYn().toString());
         }
+        return "OK";
     }
 
 

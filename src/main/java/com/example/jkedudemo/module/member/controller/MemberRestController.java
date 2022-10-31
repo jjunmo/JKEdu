@@ -38,15 +38,20 @@ public class MemberRestController {
         }
     }
 
+    /**
+     *
+     * @param phoneNumber 수신자 번호
+     * @param code 인증번호
+     * @return 인증결과
+     */
     @GetMapping("/sendSMS/check")
     public HttpEntity<String> sendSMSCheck(String phoneNumber , String code){
         String result = memberService.certifiedPhoneNumberCheck(phoneNumber,code);
         if(result.equals("OK")) {
-            return ResponseEntity.ok("해당 휴대전화 인증 완료 되아었습니다.");
+            return ResponseEntity.ok("인증을 완료 했습니다.");
         }else {
-            return ResponseEntity.badRequest().body("인증 실패");
+            return ResponseEntity.badRequest().body("인증을 실패하였습니다.");
         }
-
     }
 
 
