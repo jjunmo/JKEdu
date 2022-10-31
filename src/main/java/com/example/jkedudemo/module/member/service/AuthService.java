@@ -43,12 +43,9 @@ public class AuthService {
             throw new RuntimeException("이미 가입되어 있는 유저입니다");
         }
         //비밀번호 인코딩
-        Member member = requestDto.toMember(passwordEncoder);
+        Member reqMember = requestDto.toMember(passwordEncoder);
+        Member member = memberRepository.save(reqMember);
 
-        //권한에 따라 학원아이디 부여
-        if(requestDto.getRoleType().equals(RoleType.ROLE_ACADEMY)){
-                member.setAcademyId(member.getId());
-        }
 
         //휴대폰 인증 여부
         Optional<MemberPhoneAuth> memberPhoneAuthOptional = memberPhoneAuthRepository.findByPhoneNumberAndCheckYnAndPhoneAuthType(requestDto.getPhoneNumber(),YN.Y, PhoneAuthType.JOIN);
@@ -64,6 +61,14 @@ public class AuthService {
             memberPhoneAuthOptional.get().setMember(member);
         }
 
+        //학원 학생인지 확인
+        if(member.getRoleType().equals(RoleType.ROLE_ACADEMY)){
+            member.setAcademyId(member.getId());
+            member.setStatus(Status.GREEN);
+        }
+
+
+
         return MemberResponseDto.of(memberRepository.save(member));
 
     }
@@ -72,6 +77,16 @@ public class AuthService {
     public TokenDto login(MemberRequestDto requestDto) {
 
         // TODO: Status 체크
+        Optional<Member> memberOptional = memberRepository.findByEmail(requestDto.getEmail());
+        if(memberOptional.isEmpty()){
+            throw new RuntimeException("존재하지 않는 회원입니다.");
+        }
+        Member reqMember = memberOptional.get();
+        if(reqMember.getStatus().equals(Status.YELLOW)){
+            throw new RuntimeException("정지 대상입니다.");
+        }
+
+
         UsernamePasswordAuthenticationToken authenticationToken = requestDto.toAuthentication();
         Authentication authentication = managerBuilder.getObject().authenticate(authenticationToken);
 

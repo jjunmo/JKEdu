@@ -18,14 +18,12 @@ public class MemberResponseDto {
     private String email;
     private String phoneNumber;
     private RoleType roleType;
-    private Long academyId;
 
     public static MemberResponseDto of(Member member) {
             return MemberResponseDto.builder()
                     .phoneNumber(member.getPhoneNumber())
                     .roleType(member.getRoleType())
                     .email(member.getEmail())
-                    .academyId(member.getAcademyId())
                     .build();
 
     }

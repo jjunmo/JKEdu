@@ -32,7 +32,7 @@ public class Member extends BaseTime {
     //@Column(nullable = false)
     private String phoneNumber;
 
-    // TODO: RoleType -> ROLE_TEACHER_STUDENT ( TEACHER_id ) 저장
+    // TODO: RoleType -> ROLE_TEACHER_STUDENT ( academyId ) 저장
     private Long academyId;
 
     @Enumerated(EnumType.STRING)
