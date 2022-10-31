@@ -4,8 +4,9 @@ import com.example.jkedudemo.module.common.BaseTime;
 import lombok.Data;
 
 @Data
-public class Exam객관식DTO extends BaseTime {
+public class ExamMultipleChoiceDTO extends BaseTime {
     private Long id;
-    private Integer sort;
-    private String title;
+    //문항
+    private Integer questNumber;
+    private String questContent;
 }

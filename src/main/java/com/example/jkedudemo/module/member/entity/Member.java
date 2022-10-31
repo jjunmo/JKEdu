@@ -24,13 +24,13 @@ public class Member extends BaseTime {
     private String email;
 
    // @Column(nullable = false)
-    private String member_password;
+    private String memberPassword;
 
     //@Column(nullable = false)
     private String phoneNumber;
 
     // TODO: RoleType -> ROLE_TEACHER_STUDENT ( TEACHER_id ) 저장
-    private Long teacherId;
+    private Long AcademyId;
 
     @Enumerated(EnumType.STRING)
     private RoleType roleType;

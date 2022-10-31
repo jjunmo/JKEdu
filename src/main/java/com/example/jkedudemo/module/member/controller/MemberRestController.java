@@ -4,6 +4,7 @@ package com.example.jkedudemo.module.member.controller;
 
 import com.example.jkedudemo.module.member.dto.request.ChangePasswordRequestDto;
 import com.example.jkedudemo.module.member.dto.response.MemberResponseDto;
+import com.example.jkedudemo.module.member.entity.MemberPhoneAuth;
 import com.example.jkedudemo.module.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,14 +23,30 @@ public class MemberRestController {
 
     private final MemberService memberService;
 
+    /**
+     * 인증번호 발송
+     * @param phoneNumber 수신자 번호
+     * @return 인증번호 발송여부
+     */
     @GetMapping("/sendSMS")
     public HttpEntity<String> sendSMS(String phoneNumber) {
         String result = memberService.certifiedPhoneNumber(phoneNumber);
         if (result.equals("OK")) {
-            return ResponseEntity.ok("인증을 성공했습니다.");
+            return ResponseEntity.ok("인증번호 발송");
         } else {
             return ResponseEntity.badRequest().body(result);
         }
+    }
+
+    @GetMapping("/sendSMS/check")
+    public HttpEntity<String> sendSMSCheck(String phoneNumber , String code){
+        String result = memberService.certifiedPhoneNumberCheck(phoneNumber,code);
+        if(result.equals("OK")) {
+            return ResponseEntity.ok("해당 휴대전화 인증 완료 되아었습니다.");
+        }else {
+            return ResponseEntity.badRequest().body("인증 실패");
+        }
+
     }
 
 

@@ -1,8 +1,6 @@
 package com.example.jkedudemo.module.member.entity;
 
 import com.example.jkedudemo.module.common.BaseTime;
-import com.example.jkedudemo.module.common.enums.PhoneAuthSort;
-import com.example.jkedudemo.module.common.enums.YN;
 import lombok.*;
 
 import javax.persistence.*;

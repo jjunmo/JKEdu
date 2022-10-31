@@ -1,7 +1,7 @@
 package com.example.jkedudemo.module.member.entity;
 
 import com.example.jkedudemo.module.common.BaseTime;
-import com.example.jkedudemo.module.common.enums.PhoneAuthSort;
+import com.example.jkedudemo.module.common.enums.PhoneAuthType;
 import com.example.jkedudemo.module.common.enums.YN;
 import lombok.*;
 
@@ -24,15 +24,15 @@ public class MemberPhoneAuth extends BaseTime {
     @JoinColumn
     private Member member;
 
-    //@Column(nullable = false)
     private String phoneNumber;
 
     @Enumerated(EnumType.STRING)
-    private PhoneAuthSort phoneAuthSort;
+    private PhoneAuthType phoneAuthType;
 
     @Enumerated(EnumType.STRING)
     private YN checkYn;
 
+    //인증 코드
     private String code;
 
 }

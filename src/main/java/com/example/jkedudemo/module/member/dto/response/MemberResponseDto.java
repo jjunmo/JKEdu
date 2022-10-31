@@ -16,12 +16,12 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class MemberResponseDto {
     private String email;
-    private String phone_number;
+    private String phoneNumber;
     private RoleType roleType;
 
     public static MemberResponseDto of(Member member) {
         return MemberResponseDto.builder()
-                .phone_number(member.getPhoneNumber())
+                .phoneNumber(member.getPhoneNumber())
                 .roleType(member.getRoleType())
                 .email(member.getEmail())
                 .build();

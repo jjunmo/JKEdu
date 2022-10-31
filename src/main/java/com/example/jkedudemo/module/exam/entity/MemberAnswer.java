@@ -16,12 +16,15 @@ public class MemberAnswer extends BaseTime {
     @ManyToOne
     private MemberAnswerCategory category;
 
+    //문제
     @ManyToOne
     private ExamQuest quest;
 
-    private String 나의답;
+    //내가 입력한 답
+    private String myAnswer;
 
+    // 정답 여부
     @Enumerated(EnumType.STRING)
-    private YN 정답;
+    private YN AnswerYN;
 
 }

@@ -1,7 +1,7 @@
 package com.example.jkedudemo.module.member.service;
 
 
-import com.example.jkedudemo.module.common.enums.PhoneAuthSort;
+import com.example.jkedudemo.module.common.enums.PhoneAuthType;
 import com.example.jkedudemo.module.common.enums.Status;
 import com.example.jkedudemo.module.common.enums.YN;
 import com.example.jkedudemo.module.config.SecurityUtil;
@@ -42,7 +42,7 @@ public class MemberService {
 
         Optional<Member> memberOptional = memberRepository.findByPhoneNumberAndStatusIn(phoneNumber, List.of(Status.GREEN, Status.YELLOW));
         if (memberOptional.isPresent()) {
-            return "이미 회원이 존재합니다.";
+            return "해당 휴대전화로 가입된 회원이 존재합니다.";
         }
 
         String api_key = "NCSCAVV6MBJ5GU58";
@@ -61,10 +61,10 @@ public class MemberService {
             JSONObject obj = (JSONObject) coolsms.send(params);
             System.out.println(obj.toString());
 
-            Optional<MemberPhoneAuth> optional = memberPhoneAuthRepository.findByPhoneNumberAndPhoneAuthSort(phoneNumber, PhoneAuthSort.Join);
+            Optional<MemberPhoneAuth> optional = memberPhoneAuthRepository.findByPhoneNumberAndPhoneAuthType(phoneNumber, PhoneAuthType.Join);
             if (optional.isEmpty()) {
                 memberPhoneAuthRepository.save( new MemberPhoneAuth(
-                    null, null, phoneNumber, PhoneAuthSort.Join, YN.N, cerNum.toString()
+                    null, null, phoneNumber, PhoneAuthType.Join, YN.N, cerNum.toString()
                 ));
                 // save
             } else {
@@ -74,6 +74,7 @@ public class MemberService {
                 memberPhoneAuth.setCode(cerNum.toString());
             }
             return "OK";
+            //인증코드 발송
         } catch (CoolsmsException e) {
             System.out.println(e.getMessage());
             System.out.println(e.getCode());
@@ -81,6 +82,23 @@ public class MemberService {
         return "시스템 운영자에게 문의하세요.";
     }
 
+    public String certifiedPhoneNumberCheck(String phoneNumber ,String code){
+        Optional<MemberPhoneAuth> optional = memberPhoneAuthRepository.findByPhoneNumberAndCode(phoneNumber,code);
+        if(optional.isEmpty()){
+            return "인증번호가 올바르지 않습니다.";
+        }else{
+            optional.get().setCheckYn(YN.Y);
+            return "OK";
+        }
+    }
+
+
+
+    /**
+     *
+     * @param phoneNumber 수신자 번호
+     * @return 인증번호 생성
+     */
     private static StringBuilder getCerNum(String phoneNumber) {
         Random random  = new Random();
         StringBuilder cerNum = new StringBuilder();
@@ -114,10 +132,10 @@ public class MemberService {
     @Transactional
     public MemberResponseDto changeMemberPassword(String exPassword, String newPassword) {
         Member member = memberRepository.findById(SecurityUtil.getCurrentMemberId()).orElseThrow(() -> new RuntimeException("로그인된 유저 정보가 없습니다"));
-        if (!passwordEncoder.matches(exPassword, member.getMember_password())) {
+        if (!passwordEncoder.matches(exPassword, member.getMemberPassword())) {
             throw new RuntimeException("비밀번호가 맞지 않습니다");
         }
-        member.setMember_password(passwordEncoder.encode((newPassword)));
+        member.setMemberPassword(passwordEncoder.encode((newPassword)));
         return MemberResponseDto.of(memberRepository.save(member));
     }
 

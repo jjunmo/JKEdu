@@ -9,13 +9,13 @@ import java.util.List;
 public class ExamQuestDTO {
     private Long id;
     private QuestType type;
-    private String title;
-    private String subTitle;
+    private String question;
+    private String subQuestion;
     private String imgUrl;
     private String videoUrl;
     private String speakUrl;
 
     // 객관식일때만 있음
-    List<Exam객관식DTO> 객관식문항;
+    List<ExamMultipleChoiceDTO> MultipleChoice;
 
 }

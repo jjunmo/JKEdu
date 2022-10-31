@@ -11,10 +11,12 @@ public class ExamCategoryDTO {
 
     private ExamType examType;
 
+
     private List<ExamQuestDTO> examQuestDTOList;
 
 }
 
+//JSON
 //{
 //    id: 1
 //    examType: "Speaking",

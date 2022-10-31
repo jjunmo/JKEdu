@@ -4,18 +4,17 @@ import com.example.jkedudemo.module.common.BaseTime;
 
 import javax.persistence.*;
 
-@Entity(name = "MEMBER_EXAM_QUEST_객관식")
-public class Exam객관식 extends BaseTime {
+@Entity(name = "MEMBER_EXAM_QUEST_MULTIPLE_CHOICE")
+public class ExamMultipleChoice extends BaseTime {
     @Id
     private Long id;
 
-    /**
-     * 시험 응시자
-     */
+    //
     @ManyToOne
     private ExamQuest quest;
+    //문항
+    private Integer questNumber;
 
-    private Integer sort;
-    private String title;
+    private String questContent;
 
 }

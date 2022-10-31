@@ -11,9 +11,11 @@ public class MemberAnswerCategory extends BaseTime {
     @Id
     private Long id;
 
+    //멤버 정보
     @ManyToOne
     private Member member;
 
+    //문제 유형
     @ManyToOne
     private ExamCategory category;
 

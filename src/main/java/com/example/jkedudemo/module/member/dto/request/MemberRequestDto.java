@@ -15,21 +15,21 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Builder
 public class MemberRequestDto {
     private String email;
-    private String member_password;
-    private String phone_number;
+    private String memberPassword;
+    private String phoneNumber;
 
     private RoleType roleType;
 
     public Member toMember(PasswordEncoder passwordEncoder) {
         return Member.builder()
-                .phoneNumber(phone_number)
+                .phoneNumber(phoneNumber)
                 .email(email)
-                .member_password(passwordEncoder.encode(member_password))
+                .memberPassword(passwordEncoder.encode(memberPassword))
                 .roleType(roleType)
                 .build();
     }
 
     public UsernamePasswordAuthenticationToken toAuthentication() {
-        return new UsernamePasswordAuthenticationToken(email, member_password);
+        return new UsernamePasswordAuthenticationToken(email, memberPassword);
     }
 }
