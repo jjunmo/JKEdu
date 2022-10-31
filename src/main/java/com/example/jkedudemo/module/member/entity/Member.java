@@ -4,6 +4,8 @@ import com.example.jkedudemo.module.common.BaseTime;
 import com.example.jkedudemo.module.common.enums.RoleType;
 import com.example.jkedudemo.module.common.enums.Status;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
 
@@ -13,6 +15,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@DynamicInsert
 @Table(name = "member")
 public class Member extends BaseTime {
 
@@ -30,12 +33,13 @@ public class Member extends BaseTime {
     private String phoneNumber;
 
     // TODO: RoleType -> ROLE_TEACHER_STUDENT ( TEACHER_id ) 저장
-    private Long AcademyId;
+    private Long academyId;
 
     @Enumerated(EnumType.STRING)
     private RoleType roleType;
 
     @Enumerated(EnumType.STRING)
+    @ColumnDefault("'GREEN'")
     private Status status;
 
 }

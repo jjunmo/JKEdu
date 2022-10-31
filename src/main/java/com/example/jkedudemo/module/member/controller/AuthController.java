@@ -1,9 +1,11 @@
 package com.example.jkedudemo.module.member.controller;
 
 
+import com.example.jkedudemo.module.common.enums.RoleType;
 import com.example.jkedudemo.module.member.dto.TokenDto;
 import com.example.jkedudemo.module.member.dto.request.MemberRequestDto;
 import com.example.jkedudemo.module.member.dto.response.MemberResponseDto;
+import com.example.jkedudemo.module.member.entity.Member;
 import com.example.jkedudemo.module.member.service.AuthService;
 import lombok.RequiredArgsConstructor;
 
@@ -25,6 +27,7 @@ public class AuthController {
     @PostMapping("/user/register")
     public HttpEntity<MemberResponseDto> signup(@RequestBody MemberRequestDto requestDto) {
         // TODO:회원가입 requestDto 데이터 체크
+
         return ResponseEntity.ok(authService.signup(requestDto));
     }
 

@@ -61,10 +61,10 @@ public class MemberService {
             JSONObject obj = (JSONObject) coolsms.send(params);
             System.out.println(obj.toString());
 
-            Optional<MemberPhoneAuth> optional = memberPhoneAuthRepository.findByPhoneNumberAndPhoneAuthType(phoneNumber, PhoneAuthType.Join);
+            Optional<MemberPhoneAuth> optional = memberPhoneAuthRepository.findByPhoneNumberAndPhoneAuthType(phoneNumber, PhoneAuthType.JOIN);
             if (optional.isEmpty()) {
                 memberPhoneAuthRepository.save( new MemberPhoneAuth(
-                    null, null, phoneNumber, PhoneAuthType.Join, YN.N, cerNum.toString()
+                    null, null, phoneNumber, PhoneAuthType.JOIN, YN.N, cerNum.toString()
                 ));
                 // save
             } else {
@@ -90,6 +90,7 @@ public class MemberService {
         }else{
             MemberPhoneAuth memberPhoneAuth = optional.get();
             memberPhoneAuth.setCheckYn(YN.Y);
+            memberPhoneAuth.setPhoneAuthType(PhoneAuthType.JOIN);
             log.info("인증"+memberPhoneAuth.getCheckYn().toString());
         }
         return "OK";
