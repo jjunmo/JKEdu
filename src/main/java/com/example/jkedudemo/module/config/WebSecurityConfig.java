@@ -14,6 +14,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.header.writers.frameoptions.XFrameOptionsHeaderWriter;
 import org.springframework.stereotype.Component;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.CorsUtils;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @RequiredArgsConstructor
 @Configuration
@@ -38,6 +42,9 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+                .cors().configurationSource(corsConfigurationSource())
+                .and()
+
                 .headers()
                 .frameOptions()
                 .sameOrigin()
@@ -64,6 +71,7 @@ public class WebSecurityConfig {
 
                 .and()
                 .authorizeRequests()
+                .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                 .antMatchers("/auth/**","/member/**").permitAll()
                 .anyRequest().authenticated()
 
@@ -71,5 +79,21 @@ public class WebSecurityConfig {
                 .apply(new JwtSecurityConfig(tokenProvider));
 
         return http.build();
+    }
+
+    @Deprecated
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration config = new CorsConfiguration();
+
+        config.addAllowedOrigin("http://localhost:3000");
+        //config.addAllowedOrigin("http://프론트 AWS  주소"); // 프론트 IPv4 주소
+        config.addAllowedMethod("*");
+        config.addAllowedHeader("*");
+        config.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+        return source;
     }
 }

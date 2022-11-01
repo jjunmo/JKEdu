@@ -26,9 +26,11 @@ public class MemberPhoneAuth extends BaseTime {
 
     private String phoneNumber;
 
+    //JOIN , IDFIND ,PWFIND
     @Enumerated(EnumType.STRING)
     private PhoneAuthType phoneAuthType;
 
+    //인증 여부
     @Enumerated(EnumType.STRING)
     private YN checkYn;
 

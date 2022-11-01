@@ -33,7 +33,7 @@ public class Member extends BaseTime {
     private String phoneNumber;
 
     // TODO: RoleType -> ROLE_TEACHER_STUDENT ( academyId ) 저장
-    private Long academyId;
+    private String academyId;
 
     @Enumerated(EnumType.STRING)
     private RoleType roleType;

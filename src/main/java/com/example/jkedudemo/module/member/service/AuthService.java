@@ -1,5 +1,6 @@
 package com.example.jkedudemo.module.member.service;
 
+import com.example.jkedudemo.module.common.Util.Cer;
 import com.example.jkedudemo.module.common.enums.PhoneAuthType;
 import com.example.jkedudemo.module.common.enums.RoleType;
 import com.example.jkedudemo.module.common.enums.Status;
@@ -12,6 +13,7 @@ import com.example.jkedudemo.module.member.entity.Member;
 import com.example.jkedudemo.module.member.entity.MemberPhoneAuth;
 import com.example.jkedudemo.module.member.repository.MemberPhoneAuthRepository;
 import com.example.jkedudemo.module.member.repository.MemberRepository;
+import edu.emory.mathcs.backport.java.util.concurrent.helpers.Utils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,12 +23,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 public class AuthService {
     private final AuthenticationManagerBuilder managerBuilder;
     private final MemberRepository memberRepository;
@@ -39,9 +42,10 @@ public class AuthService {
     public MemberResponseDto signup(MemberRequestDto requestDto) {
 
 
-        if (memberRepository.existsByEmail(requestDto.getEmail())) {
+        if (memberRepository.existsByEmailAndStatusIn(requestDto.getEmail(), List.of(Status.GREEN,Status.YELLOW))) {
             throw new RuntimeException("이미 가입되어 있는 유저입니다");
         }
+
         //비밀번호 인코딩
         Member reqMember = requestDto.toMember(passwordEncoder);
         Member member = memberRepository.save(reqMember);
@@ -61,14 +65,12 @@ public class AuthService {
             memberPhoneAuthOptional.get().setMember(member);
         }
 
-        //학원 학생인지 확인
+        //학원 학생인지 확인 (학원코드 발행)
         if(member.getRoleType().equals(RoleType.ROLE_ACADEMY)){
-            member.setAcademyId(member.getId());
-            member.setStatus(Status.GREEN);
+            member.setAcademyId(Cer.getCerStrNum(requestDto.getPhoneNumber()));
         }
 
-
-
+        member.setStatus(Status.GREEN);
         return MemberResponseDto.of(memberRepository.save(member));
 
     }
@@ -76,11 +78,13 @@ public class AuthService {
     @Transactional
     public TokenDto login(MemberRequestDto requestDto) {
 
-        // TODO: Status 체크
+
         Optional<Member> memberOptional = memberRepository.findByEmail(requestDto.getEmail());
         if(memberOptional.isEmpty()){
             throw new RuntimeException("존재하지 않는 회원입니다.");
         }
+
+        //Status 체크
         Member reqMember = memberOptional.get();
         if(reqMember.getStatus().equals(Status.YELLOW)){
             throw new RuntimeException("정지 대상입니다.");

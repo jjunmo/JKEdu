@@ -13,10 +13,10 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @SpringBootApplication
 @EnableJpaAuditing
-public class JkdeuDemoApplication {
+public class JkeduDemoApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(JkdeuDemoApplication.class, args);
+        SpringApplication.run(JkeduDemoApplication.class, args);
     }
 
 }

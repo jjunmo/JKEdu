@@ -15,7 +15,7 @@ public class MemberRequestDto {
     private String memberPassword;
     private String phoneNumber;
     private RoleType roleType;
-    private Long academyId;
+    private String academyId;
 
 
 

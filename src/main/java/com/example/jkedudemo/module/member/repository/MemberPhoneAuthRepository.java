@@ -13,7 +13,7 @@ public interface MemberPhoneAuthRepository extends JpaRepository<MemberPhoneAuth
 
     Optional<MemberPhoneAuth> findByPhoneNumberAndPhoneAuthType(String phoneNumber, PhoneAuthType phoneAuthSort);
 
-    Optional<MemberPhoneAuth> findByPhoneNumberAndCode(String phoneNumber, String code);
+    Optional<MemberPhoneAuth> findByPhoneNumberAndCodeAndPhoneAuthType(String phoneNumber, String code , PhoneAuthType phoneAuthType);
 
     Optional<MemberPhoneAuth> findByPhoneNumberAndCheckYnAndPhoneAuthType(String phoneNumber, YN checkYN, PhoneAuthType phoneAuthType);
 }
