@@ -136,13 +136,13 @@ public class MemberService {
 
     /**
      * 계정 삭제
-     * @param password 현재 비밀번호
+     * @param memberPassword 현재 비밀번호
      * @return 계정 삭제 상태로 변경
      */
     @Transactional
-    public MemberResponseDto deleteMember(String password) {
+    public MemberResponseDto deleteMember(String memberPassword) {
         Member member = isMemberCurrent();
-        if (!passwordEncoder.matches(password, member.getMemberPassword())) {
+        if (!passwordEncoder.matches(memberPassword, member.getMemberPassword())) {
             throw new RuntimeException("비밀번호가 맞지 않습니다");
         }
         member.setStatus(Status.RED);

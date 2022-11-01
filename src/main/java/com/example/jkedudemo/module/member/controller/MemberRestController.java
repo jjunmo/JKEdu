@@ -84,7 +84,7 @@ public class MemberRestController {
      */
     @PostMapping("/delete")
     public HttpEntity<MemberResponseDto> setMemberDelete(@RequestBody DeleteMemberRequestDto request) {
-        return ResponseEntity.ok(memberService.deleteMember(request.getPassword()));
+        return ResponseEntity.ok(memberService.deleteMember(request.getMemberPassword()));
     }
 
     /**
