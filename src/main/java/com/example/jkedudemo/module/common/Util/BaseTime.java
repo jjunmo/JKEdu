@@ -1,4 +1,4 @@
-package com.example.jkedudemo.module.common;
+package com.example.jkedudemo.module.common.Util;
 
 
 import org.springframework.data.annotation.CreatedDate;

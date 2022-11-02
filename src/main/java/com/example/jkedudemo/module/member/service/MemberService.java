@@ -1,11 +1,13 @@
 package com.example.jkedudemo.module.member.service;
 
 
+import com.example.jkedudemo.module.common.Util.DateFormat;
 import com.example.jkedudemo.module.common.enums.PhoneAuthType;
+import com.example.jkedudemo.module.common.enums.RoleType;
 import com.example.jkedudemo.module.common.enums.Status;
 import com.example.jkedudemo.module.common.enums.YN;
 import com.example.jkedudemo.module.config.SecurityUtil;
-import com.example.jkedudemo.module.member.dto.request.MemberRequestDto;
+import com.example.jkedudemo.module.member.dto.request.AcademyMemberRequestDto;
 import com.example.jkedudemo.module.member.dto.response.MemberResponseDto;
 import com.example.jkedudemo.module.member.entity.Member;
 import com.example.jkedudemo.module.member.entity.MemberPhoneAuth;
@@ -20,10 +22,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 
 import static com.example.jkedudemo.module.common.Util.Cer.getCerNum;
 
@@ -208,6 +207,15 @@ public class MemberService {
 //    }
 
 
-
-
+    /**
+     * 학원 학생 시험보
+     * @param requestDto 기름 , 연락처 ,생일
+     * @return AcademyId , ROLE_ACADEMY_STUDENT 를 가진 멤버 생성
+     */
+    @Transactional
+    public MemberResponseDto setAcademyMember(AcademyMemberRequestDto requestDto) {
+        Member member = isMemberCurrent();
+        return MemberResponseDto
+                .of(memberRepository.save(new Member(null, null, requestDto.getName(), requestDto.getBirth(), null, requestDto.getPhoneNumber(), member.getAcademyId(), RoleType.ROLE_ACADEMY_STUDENT, null)));
+        }
     }

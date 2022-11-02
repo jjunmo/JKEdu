@@ -1,6 +1,6 @@
 package com.example.jkedudemo.module.member.entity;
 
-import com.example.jkedudemo.module.common.BaseTime;
+import com.example.jkedudemo.module.common.Util.BaseTime;
 import com.example.jkedudemo.module.common.enums.RoleType;
 import com.example.jkedudemo.module.common.enums.Status;
 import lombok.*;
@@ -8,6 +8,7 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Setter
@@ -26,6 +27,11 @@ public class Member extends BaseTime {
     //@Column(nullable = false)
     private String email;
 
+    private String name;
+
+    @Temporal(TemporalType.DATE)
+    private Date birth;
+
    // @Column(nullable = false)
     private String memberPassword;
 
@@ -33,7 +39,6 @@ public class Member extends BaseTime {
     private String phoneNumber;
 
     // TODO: RoleType -> ROLE_TEACHER_STUDENT ( academyId ) 저장
-    @Column(unique=true)
     private String academyId;
 
     @Enumerated(EnumType.STRING)

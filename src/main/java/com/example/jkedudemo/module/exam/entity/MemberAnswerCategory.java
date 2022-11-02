@@ -1,7 +1,6 @@
 package com.example.jkedudemo.module.exam.entity;
 
-import com.example.jkedudemo.module.common.BaseTime;
-import com.example.jkedudemo.module.common.enums.QuestType;
+import com.example.jkedudemo.module.common.Util.BaseTime;
 import com.example.jkedudemo.module.member.entity.Member;
 
 import javax.persistence.*;

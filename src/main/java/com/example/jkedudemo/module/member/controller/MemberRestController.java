@@ -3,11 +3,13 @@ package com.example.jkedudemo.module.member.controller;
 
 
 import com.example.jkedudemo.module.common.enums.PhoneAuthType;
+import com.example.jkedudemo.module.member.dto.request.AcademyMemberRequestDto;
 import com.example.jkedudemo.module.member.dto.request.ChangePasswordRequestDto;
 import com.example.jkedudemo.module.member.dto.request.DeleteMemberRequestDto;
 import com.example.jkedudemo.module.member.dto.request.MemberRequestDto;
 import com.example.jkedudemo.module.member.dto.response.MemberResponseDto;
 
+import com.example.jkedudemo.module.member.service.AuthService;
 import com.example.jkedudemo.module.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -98,7 +100,7 @@ public class MemberRestController {
     }
 
     @GetMapping("/find/password")
-    public HttpEntity<MemberResponseDto> getMemberPassword(@RequestBody MemberRequestDto request){
+    public HttpEntity<MemberResponseDto> getMemberPassword(@RequestParam MemberRequestDto request){
         return ResponseEntity.ok(memberService.getMemberPassword(request.getEmail(), request.getPhoneNumber()));
     }
 
@@ -107,4 +109,15 @@ public class MemberRestController {
 //    public HttpEntity<MemberResponseDto> getMemberPasswordChange(@RequestBody ChangePasswordRequestDto){
 //
 //    }
+
+    /**
+     *
+     * @param request 이름 , 생일 , 연락처
+     * @return AcademyId , ROLE_ACADEMY_STUDENT 멤버 생성
+     */
+    @PostMapping("/academy/exam")
+    public HttpEntity<MemberResponseDto> academyMember(@RequestBody AcademyMemberRequestDto request){
+        return ResponseEntity.ok(memberService.setAcademyMember(request));
+    }
+
 }

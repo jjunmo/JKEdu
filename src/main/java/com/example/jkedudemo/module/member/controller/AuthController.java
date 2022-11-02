@@ -26,7 +26,6 @@ public class AuthController {
      */
     @PostMapping("/user/register")
     public HttpEntity<MemberResponseDto> signup(@RequestBody MemberRequestDto requestDto) {
-        // TODO:회원가입 requestDto 데이터 체크
 
         return ResponseEntity.ok(authService.signup(requestDto));
     }

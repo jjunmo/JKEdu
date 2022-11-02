@@ -9,6 +9,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Date;
+
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
@@ -16,12 +18,16 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class MemberResponseDto {
     private String email;
+    private String name;
     private String phoneNumber;
     private RoleType roleType;
     private String academyId;
+    private Date birth;
 
     public static MemberResponseDto of(Member member) {
             return MemberResponseDto.builder()
+                    .name(member.getName())
+                    .birth(member.getBirth())
                     .phoneNumber(member.getPhoneNumber())
                     .roleType(member.getRoleType())
                     .email(member.getEmail())

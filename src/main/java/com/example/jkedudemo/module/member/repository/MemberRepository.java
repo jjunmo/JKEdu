@@ -5,6 +5,7 @@ import com.example.jkedudemo.module.member.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.Optional;
 
 public interface MemberRepository extends JpaRepository<Member,Long> {
@@ -15,7 +16,9 @@ public interface MemberRepository extends JpaRepository<Member,Long> {
 
     boolean existsByPhoneNumberAndStatus(String phoneNumber , Status status);
     boolean existsByEmailAndStatusIn(String email ,Collection<Status> status);
-
     Optional<Member> findByPhoneNumberAndStatusIn(String phoneNumber, Collection<Status> status);
+
+    //학원 학생 리스트 조회
+    Optional<Member> findByAcademyIdAndBirthAndName(String academyId , String birth, String name);
 
 }
