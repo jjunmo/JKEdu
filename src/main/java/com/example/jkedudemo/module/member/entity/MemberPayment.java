@@ -1,6 +1,6 @@
 package com.example.jkedudemo.module.member.entity;
 
-import com.example.jkedudemo.module.common.Util.BaseTime;
+import com.example.jkedudemo.module.common.util.BaseTime;
 import lombok.*;
 
 import javax.persistence.*;

@@ -11,7 +11,6 @@ public class ExamCategoryDTO {
 
     private ExamType examType;
 
-
     private List<ExamQuestDTO> examQuestDTOList;
 
 }
@@ -23,14 +22,14 @@ public class ExamCategoryDTO {
 //    memberExamQuestDTOList: [
 //        {
 //            id:1
-//            questType : 주
+//            questType : MULTIPLE_CHODICE , DESCRIPTIVE_FORM
 //        },
 //        {
 //            id:2
-//            questType : 객
-//            객관식문항 : [
+//            questType : MULTIPLE_CHODICE , DESCRIPTIVE_FORM
+//            MULTIPLE_CHODICE : [
 //                {
-//                    sort: 1,
+//                    quest: 1,
 //                    title: flisajelf
 //                },
 //                {

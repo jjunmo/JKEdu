@@ -1,4 +1,4 @@
-package com.example.jkedudemo.module.common.Util;
+package com.example.jkedudemo.module.common.util;
 
 import java.util.Random;
 

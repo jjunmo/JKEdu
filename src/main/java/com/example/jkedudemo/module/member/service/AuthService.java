@@ -1,6 +1,6 @@
 package com.example.jkedudemo.module.member.service;
 
-import com.example.jkedudemo.module.common.Util.Cer;
+import com.example.jkedudemo.module.common.util.Cer;
 import com.example.jkedudemo.module.common.enums.PhoneAuthType;
 import com.example.jkedudemo.module.common.enums.RoleType;
 import com.example.jkedudemo.module.common.enums.Status;
@@ -13,7 +13,6 @@ import com.example.jkedudemo.module.member.entity.Member;
 import com.example.jkedudemo.module.member.entity.MemberPhoneAuth;
 import com.example.jkedudemo.module.member.repository.MemberPhoneAuthRepository;
 import com.example.jkedudemo.module.member.repository.MemberRepository;
-import edu.emory.mathcs.backport.java.util.concurrent.helpers.Utils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

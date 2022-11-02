@@ -1,7 +1,6 @@
 package com.example.jkedudemo.module.member.service;
 
 
-import com.example.jkedudemo.module.common.Util.DateFormat;
 import com.example.jkedudemo.module.common.enums.PhoneAuthType;
 import com.example.jkedudemo.module.common.enums.RoleType;
 import com.example.jkedudemo.module.common.enums.Status;
@@ -24,7 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
-import static com.example.jkedudemo.module.common.Util.Cer.getCerNum;
+import static com.example.jkedudemo.module.common.util.Cer.getCerNum;
 
 @Service
 @Slf4j
@@ -215,6 +214,9 @@ public class MemberService {
     @Transactional
     public MemberResponseDto setAcademyMember(AcademyMemberRequestDto requestDto) {
         Member member = isMemberCurrent();
+        if(!member.getRoleType().equals(RoleType.ROLE_ACADEMY))
+            throw new RuntimeException("잘못된 요청입니다.");
+
         return MemberResponseDto
                 .of(memberRepository.save(new Member(null, null, requestDto.getName(), requestDto.getBirth(), null, requestDto.getPhoneNumber(), member.getAcademyId(), RoleType.ROLE_ACADEMY_STUDENT, null)));
         }
