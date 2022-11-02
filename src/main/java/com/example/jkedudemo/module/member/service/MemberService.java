@@ -142,10 +142,14 @@ public class MemberService {
     @Transactional
     public MemberResponseDto deleteMember(String memberPassword) {
         Member member = isMemberCurrent();
+        List<MemberPhoneAuth> memberPhoneAuth =memberPhoneAuthRepository.findByPhoneNumber(member.getPhoneNumber());
+
         if (!passwordEncoder.matches(memberPassword, member.getMemberPassword())) {
             throw new RuntimeException("비밀번호가 맞지 않습니다");
         }
+        //회원탈퇴시 기존 인증여부 N
         member.setStatus(Status.RED);
+        memberPhoneAuth.forEach(memberPhoneAuth1->memberPhoneAuth1.setCheckYn(YN.N));
         return MemberResponseDto.of(memberRepository.save(member));
     }
 

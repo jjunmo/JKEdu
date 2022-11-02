@@ -37,4 +37,6 @@ public class MemberPhoneAuth extends BaseTime {
     //인증 코드
     private String code;
 
+
+
 }

@@ -66,9 +66,15 @@ public class AuthService {
         }
 
         //학원 학생인지 확인 (학원코드 발행)
-        if(member.getRoleType().equals(RoleType.ROLE_ACADEMY)){
-            member.setAcademyId(Cer.getCerStrNum(requestDto.getPhoneNumber()));
+        // TODO:학원코드 중복확인
+        if (member.getRoleType().equals(RoleType.ROLE_ACADEMY)) {
+            String academyId = Cer.getCerStrNum(requestDto.getPhoneNumber());
+            Optional<Member> academyIdCheck = memberRepository.findByAcademyId(academyId);
+            if (academyIdCheck.isEmpty()) {
+                member.setAcademyId(academyId);
+            }
         }
+
 
         member.setStatus(Status.GREEN);
         return MemberResponseDto.of(memberRepository.save(member));

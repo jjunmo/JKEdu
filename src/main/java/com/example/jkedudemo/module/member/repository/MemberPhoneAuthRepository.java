@@ -7,13 +7,16 @@ import com.example.jkedudemo.module.member.entity.MemberPhoneAuth;
 import org.hibernate.mapping.Join;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface MemberPhoneAuthRepository extends JpaRepository<MemberPhoneAuth,Long> {
 
-    Optional<MemberPhoneAuth> findByPhoneNumberAndPhoneAuthType(String phoneNumber, PhoneAuthType phoneAuthSort);
+    Optional<MemberPhoneAuth> findByPhoneNumberAndPhoneAuthType(String phoneNumber, PhoneAuthType phoneAuthType);
 
     Optional<MemberPhoneAuth> findByPhoneNumberAndCodeAndPhoneAuthType(String phoneNumber, String code , PhoneAuthType phoneAuthType);
 
     Optional<MemberPhoneAuth> findByPhoneNumberAndCheckYnAndPhoneAuthType(String phoneNumber, YN checkYN, PhoneAuthType phoneAuthType);
+
+    List<MemberPhoneAuth> findByPhoneNumber (String phoneNumber);
 }
