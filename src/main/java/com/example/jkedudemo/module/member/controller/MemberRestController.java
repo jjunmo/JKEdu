@@ -9,7 +9,7 @@ import com.example.jkedudemo.module.member.dto.request.DeleteMemberRequestDto;
 import com.example.jkedudemo.module.member.dto.request.MemberRequestDto;
 import com.example.jkedudemo.module.member.dto.response.MemberResponseDto;
 
-import com.example.jkedudemo.module.member.service.AuthService;
+import com.example.jkedudemo.module.member.entity.Member;
 import com.example.jkedudemo.module.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -40,6 +40,12 @@ public class MemberRestController {
         } else {
             return ResponseEntity.badRequest().body(result);
         }
+    }
+
+    @PostMapping("/testMember")
+    public HttpEntity<Member> testMember(){
+        return ResponseEntity.ok(memberService.setTestMember());
+
     }
 
     /**

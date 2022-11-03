@@ -23,21 +23,21 @@ spring:
     driver-class-name: org.h2.Driver
 jwt:
   secret: c3ByaW5nLWJvb3Qtc2VjdXJpdHktand0LXR1dG9yaWFsLWppd29vbi1zcHJpbmctYm9vdC1zZWN1cml0eS1qd3QtdHV0b3JpYWwK
-cloud:
-  aws:
-    s3:
-      bucket: jkedu.exam.bucket
-    credentials:
-      access-key: AKIA36UON3LIXBN2Q3KW
-      secret-key: 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
-    region:
-      static: ap-northeast-2
-      auto: false
-    stack:
-      auto: false
-logging:
-  level:
-    com:
-      amazonaws:
-        util:
-          EC2MetadataUtils: ERROR
+#cloud:
+#  aws:
+#    s3:
+#      bucket: jkedu.exam.bucket
+#    credentials:
+#      access-key: AKIA36UON3LIXBN2Q3KW
+#      secret-key: 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
+#    region:
+#      static: ap-northeast-2
+#      auto: false
+#    stack:
+#      auto: false
+#logging:
+#  level:
+#    com:
+#      amazonaws:
+#        util:
+#          EC2MetadataUtils: ERROR

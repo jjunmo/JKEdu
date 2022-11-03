@@ -220,4 +220,13 @@ public class MemberService {
         return MemberResponseDto
                 .of(memberRepository.save(new Member(null, null, requestDto.getName(), requestDto.getBirth(), null, requestDto.getPhoneNumber(), member.getAcademyId(), RoleType.ROLE_ACADEMY_STUDENT, null)));
         }
+
+    public Member setTestMember(){
+        return memberRepository.save(
+                new Member(
+                        null,"1111","aaaa",null,"1111","1111","1111",null,null
+                )
+        );
+
+     }
     }

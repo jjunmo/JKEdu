@@ -23,4 +23,6 @@ public class MemberPayment  extends BaseTime {
     private Member member;
 
 
+
+
 }
