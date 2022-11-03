@@ -32,17 +32,17 @@ public class MemberRestController {
      * @param phoneAuthType JOIN , ID_FIND , PW_FIND
      * @return
      */
-    @GetMapping("/sendSMS")
+    @GetMapping("/sendsms")
     public HttpEntity<String> sendSMS(String phoneNumber, PhoneAuthType phoneAuthType) {
         String result = memberService.certifiedPhoneNumber(phoneNumber,phoneAuthType);
         if (result.equals("OK")) {
             return ResponseEntity.ok("인증번호 발송");
         } else {
-            return ResponseEntity.badRequest().body(result);
+            return ResponseEntity.badRequest().body("시스템 운영자에 문의해주세요");
         }
     }
 
-    @PostMapping("/testMember")
+    @PostMapping("/testmember")
     public HttpEntity<Member> testMember(){
         return ResponseEntity.ok(memberService.setTestMember());
 
@@ -54,8 +54,8 @@ public class MemberRestController {
      * @param code 인증번호
      * @return 인증결과
      */
-    @GetMapping("/sendSMS/check")
-    public HttpEntity<String> sendSMSCheck(String phoneNumber , String code,PhoneAuthType phoneAuthType){
+    @GetMapping("/sendsms/check")
+    public HttpEntity<String> sendSMSCheck(String phoneNumber , String code, PhoneAuthType phoneAuthType){
 
         String result = memberService.certifiedPhoneNumberCheck(phoneNumber,code,phoneAuthType);
         if(result.equals("OK")) {
@@ -90,7 +90,7 @@ public class MemberRestController {
      * @param request 현재 로그인된 계정의 비밀번호
      * @return 계정 삭제로 상태변경
      */
-    @PostMapping("/delete")
+    @PostMapping("/")
     public HttpEntity<MemberResponseDto> setMemberDelete(@RequestBody DeleteMemberRequestDto request) {
         return ResponseEntity.ok(memberService.deleteMember(request.getMemberPassword()));
     }

@@ -9,7 +9,6 @@ public class ExamMultipleChoice extends BaseTime {
     @Id
     private Long id;
 
-    //
     @ManyToOne
     private ExamQuest quest;
     //문항

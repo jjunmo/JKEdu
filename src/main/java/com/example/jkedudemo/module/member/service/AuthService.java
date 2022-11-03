@@ -40,6 +40,7 @@ public class AuthService {
     @Transactional
     public MemberResponseDto signup(MemberRequestDto requestDto) {
 
+        //TODO:이미 가입된 휴대전화 ,재인증 ,인증요청 횟수
 
         if (memberRepository.existsByEmailAndStatusIn(requestDto.getEmail(), List.of(Status.GREEN,Status.YELLOW))) {
             throw new RuntimeException("이미 가입되어 있는 유저입니다");

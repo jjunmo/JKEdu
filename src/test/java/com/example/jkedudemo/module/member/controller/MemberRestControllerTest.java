@@ -26,7 +26,7 @@ class MemberRestControllerTest {
     public void sendSMSTest()throws Exception{
         this.mockMvc.perform(get("/member/sendSMS"))
                 .andExpect(status().isOk());
-    }
 
+    }
 
 }

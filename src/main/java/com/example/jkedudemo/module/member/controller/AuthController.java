@@ -24,7 +24,7 @@ public class AuthController {
      * @param requestDto 회원가입 데이터
      * @return 회원가입 성공.
      */
-    @PostMapping("/user/register")
+    @PostMapping("/member/register")
     public HttpEntity<MemberResponseDto> signup(@RequestBody MemberRequestDto requestDto) {
 
         return ResponseEntity.ok(authService.signup(requestDto));
@@ -35,7 +35,7 @@ public class AuthController {
      * @param requestDto 사용자 정보
      * @return 토큰 값 , 토큰 유효시간
      */
-    @PostMapping("/user/login")
+    @PostMapping("/member/login")
     public HttpEntity<TokenDto> login(@RequestBody MemberRequestDto requestDto) {
         return ResponseEntity.ok(authService.login(requestDto));
     }

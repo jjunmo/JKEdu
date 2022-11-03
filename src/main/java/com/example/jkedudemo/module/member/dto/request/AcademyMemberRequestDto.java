@@ -18,7 +18,7 @@ public class AcademyMemberRequestDto {
 
     private String phoneNumber;
 
-    private RoleType roleType;
+    private RoleType roletype;
 
-    private String academyId;
+    private String academyIåd;
 }
