@@ -128,6 +128,20 @@ public class MemberRestController {
         return ResponseEntity.ok(memberService.getPassword(request.getEmail(), request.getPhone()));
     }
 
+    @GetMapping("/ex")
+    public HttpEntity<Object> exEmail(String email){
+        String result = memberService.exEmailCheck(email);
+        HashMap<HttpStatus,String> httpStatusStringHashMap = new HashMap<>();
+        if(result.equals("OK")) {
+            httpStatusStringHashMap.put(HttpStatus.valueOf(200),"회원가입이 가능한 아이디입니다.");
+            return ResponseEntity.ok(JSONObject.toJSONString(httpStatusStringHashMap));
+        }else {
+            httpStatusStringHashMap.put(HttpStatus.valueOf(400),"이미 가입된 아이디입니다.");
+            return ResponseEntity.badRequest().body(JSONObject.toJSONString(httpStatusStringHashMap));
+        }
+
+    }
+
     //비밀번호 찾기 이후 비밀번호 재설정
 //    @PostMapping("/find/password/change")
 //    public HttpEntity<MemberResponseDto> getPasswordChange(@RequestBody ChangePasswordRequestDto){
@@ -139,6 +153,7 @@ public class MemberRestController {
      * @param request 이름 , 생일 , 연락처
      * @return AcademyId , ROLE_ACADEMY_STUDENT 멤버 생성
      */
+
     @PostMapping("/academy/exam")
     public HttpEntity<MemberResponseDto> academyMember(@RequestBody AcademyMemberRequestDto request){
         return ResponseEntity.ok(memberService.setAcademyMember(request));

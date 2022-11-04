@@ -237,6 +237,17 @@ public class MemberService {
                 .of(memberRepository.save(new Member(null, null, requestDto.getName(), requestDto.getBirth(), null, requestDto.getPhone(), member.getAcademyId(), RoleType.ROLE_ACADEMY_STUDENT, null)));
         }
 
+        public String exEmailCheck(String email){
+        Optional<Member> member = memberRepository.findByEmail(email);
+        if(member.isEmpty()){
+            return "YES";
+        }else{
+            return "NO";
+        }
+
+
+        }
+
     /**
      *
       * @return
