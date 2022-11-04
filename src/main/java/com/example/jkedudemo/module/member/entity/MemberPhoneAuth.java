@@ -24,7 +24,7 @@ public class MemberPhoneAuth extends BaseTime {
     @JoinColumn(name = "member")
     private Member member;
 
-    private String phoneNumber;
+    private String phone;
 
     //JOIN , IDFIND ,PWFIND
     @Enumerated(EnumType.STRING)
@@ -35,7 +35,7 @@ public class MemberPhoneAuth extends BaseTime {
     private YN checkYn;
 
     //인증 코드
-    private String code;
+    private String smscode;
 
 
 

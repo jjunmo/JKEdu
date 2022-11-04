@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class DeleteMemberRequestDto {
-    private String memberPassword;
+    private String password;
     private Status status;
 }

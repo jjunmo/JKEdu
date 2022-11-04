@@ -52,14 +52,14 @@ public class AuthService {
 
 
         //휴대폰 인증 여부
-        Optional<MemberPhoneAuth> memberPhoneAuthOptional = memberPhoneAuthRepository.findByPhoneNumberAndCheckYnAndPhoneAuthType(requestDto.getPhoneNumber(),YN.Y, PhoneAuthType.JOIN);
+        Optional<MemberPhoneAuth> memberPhoneAuthOptional = memberPhoneAuthRepository.findByPhoneAndCheckYnAndPhoneAuthType(requestDto.getPhone(),YN.Y, PhoneAuthType.JOIN);
 
         if(memberPhoneAuthOptional.isEmpty()){
             throw new IllegalArgumentException("인증을 완료하세요");
         }
 
         //계정 상태 체크
-        if (memberRepository.existsByPhoneNumberAndStatus(requestDto.getPhoneNumber(), Status.YELLOW)) {
+        if (memberRepository.existsByPhoneAndStatus(requestDto.getPhone(), Status.YELLOW)) {
             throw new IllegalArgumentException("정지대상입니다 고객센터에 문의하세요.");
         }else {
             memberPhoneAuthOptional.get().setMember(member);
@@ -68,7 +68,7 @@ public class AuthService {
         //학원 학생인지 확인 (학원코드 발행)
         // TODO:학원코드 중복확인
         if (member.getRoleType().equals(RoleType.ROLE_ACADEMY)) {
-            String academyId = Cer.getCerStrNum(requestDto.getPhoneNumber());
+            String academyId = Cer.getCerStrNum(requestDto.getPhone());
             Optional<Member> academyIdCheck = memberRepository.findByAcademyId(academyId);
             if (academyIdCheck.isEmpty()) {
                 member.setAcademyId(academyId);

@@ -33,10 +33,10 @@ public class Member extends BaseTime {
     private Date birth;
 
    // @Column(nullable = false)
-    private String memberPassword;
+    private String password;
 
     //@Column(nullable = false)
-    private String phoneNumber;
+    private String phone;
 
     private String academyId;
 

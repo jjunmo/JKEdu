@@ -16,9 +16,17 @@ public class AcademyMemberRequestDto {
 
     private Date birth;
 
-    private String phoneNumber;
+    private String phone;
 
-    private RoleType roletype;
+    private RoleType roleType;
 
-    private String academyIåd;
+    private String academyId;
+
+    public void setRoleType(String roleType) {
+        this.roleType = RoleType.valueOf("ROLE_"+roleType.toUpperCase());
+    }
+
+    public RoleType getRoleType() {
+        return roleType;
+    }
 }

@@ -14,9 +14,9 @@ public interface MemberRepository extends JpaRepository<Member,Long> {
 
     Optional<Member> findByAcademyId(String academyId);
 
-    boolean existsByPhoneNumberAndStatus(String phoneNumber , Status status);
+    boolean existsByPhoneAndStatus(String phone , Status status);
     boolean existsByEmailAndStatusIn(String email ,Collection<Status> status);
-    Optional<Member> findByPhoneNumberAndStatusIn(String phoneNumber, Collection<Status> status);
+    Optional<Member> findByPhoneAndStatusIn(String phone, Collection<Status> status);
 
     //학원 학생 리스트 조회
     Optional<Member> findByAcademyIdAndBirthAndName(String academyId , String birth, String name);

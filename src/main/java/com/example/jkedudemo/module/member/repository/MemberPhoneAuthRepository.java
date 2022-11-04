@@ -12,11 +12,11 @@ import java.util.Optional;
 
 public interface MemberPhoneAuthRepository extends JpaRepository<MemberPhoneAuth,Long> {
 
-    Optional<MemberPhoneAuth> findByPhoneNumberAndPhoneAuthType(String phoneNumber, PhoneAuthType phoneAuthType);
+    Optional<MemberPhoneAuth> findByPhoneAndPhoneAuthType(String phone, PhoneAuthType phoneAuthType);
 
-    Optional<MemberPhoneAuth> findByPhoneNumberAndCodeAndPhoneAuthType(String phoneNumber, String code , PhoneAuthType phoneAuthType);
+    Optional<MemberPhoneAuth> findByPhoneAndSmscodeAndPhoneAuthType(String phone, String smscode , PhoneAuthType phoneAuthType);
 
-    Optional<MemberPhoneAuth> findByPhoneNumberAndCheckYnAndPhoneAuthType(String phoneNumber, YN checkYN, PhoneAuthType phoneAuthType);
+    Optional<MemberPhoneAuth> findByPhoneAndCheckYnAndPhoneAuthType(String phone, YN checkYN, PhoneAuthType phoneAuthType);
 
-    List<MemberPhoneAuth> findByPhoneNumber (String phoneNumber);
+    List<MemberPhoneAuth> findByPhone (String phone);
 }

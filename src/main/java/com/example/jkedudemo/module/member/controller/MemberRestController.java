@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import retrofit2.http.Path;
 
 
 @RestController
@@ -28,13 +29,13 @@ public class MemberRestController {
 
     /**
      *
-     * @param phoneNumber 수신자 번호
+     * @param phone 수신자 번호
      * @param phoneAuthType JOIN , ID_FIND , PW_FIND
      * @return
      */
-    @GetMapping("/sendsms")
-    public HttpEntity<String> sendSMS(String phoneNumber, PhoneAuthType phoneAuthType) {
-        String result = memberService.certifiedPhoneNumber(phoneNumber,phoneAuthType);
+    @GetMapping("/cert")
+    public HttpEntity<String> sendSMS(@RequestParam("phone") String phone,@RequestParam("phoneauthtype") PhoneAuthType phoneAuthType) {
+        String result = memberService.certifiedPhone(phone,phoneAuthType);
         if (result.equals("OK")) {
             return ResponseEntity.ok("인증번호 발송");
         } else {
@@ -50,14 +51,14 @@ public class MemberRestController {
 
     /**
      *
-     * @param phoneNumber 수신자 번호
-     * @param code 인증번호
+     * @param phone 수신자 번호
+     * @param smscode 인증번호
      * @return 인증결과
      */
-    @GetMapping("/sendsms/check")
-    public HttpEntity<String> sendSMSCheck(String phoneNumber , String code, PhoneAuthType phoneAuthType){
+    @GetMapping("/cert/ex")
+    public HttpEntity<String> sendSMSCheck(@RequestParam("phone") String phone ,@RequestParam("smscode") String smscode,@RequestParam("phoneauthtype")PhoneAuthType phoneAuthType){
 
-        String result = memberService.certifiedPhoneNumberCheck(phoneNumber,code,phoneAuthType);
+        String result = memberService.certifiedPhoneCheck(phone,smscode,phoneAuthType);
         if(result.equals("OK")) {
             return ResponseEntity.ok("인증을 완료 했습니다.");
         }else {
@@ -69,7 +70,7 @@ public class MemberRestController {
      * 내 정보
      * @return 내 정보
      */
-    @GetMapping("/info")
+    @GetMapping("/myinfo")
     public HttpEntity<MemberResponseDto> MemberInfo(){
         return ResponseEntity.ok(memberService.getMyInfoBySecurity());
     }
@@ -80,8 +81,8 @@ public class MemberRestController {
      * @param request 기존 비밀번호 , 새 비밀번호
      * @return 비밀번호 변경
      */
-    @PutMapping("/password")
-    public HttpEntity<MemberResponseDto> setMemberPassword(@RequestBody ChangePasswordRequestDto request) {
+    @PutMapping
+    public HttpEntity<MemberResponseDto> setPassword(@RequestBody ChangePasswordRequestDto request) {
         return ResponseEntity.ok(memberService.changeMemberPassword(request.getExPassword(), request.getNewPassword()));
     }
 
@@ -90,29 +91,32 @@ public class MemberRestController {
      * @param request 현재 로그인된 계정의 비밀번호
      * @return 계정 삭제로 상태변경
      */
-    @PostMapping("/")
+    @PostMapping
     public HttpEntity<MemberResponseDto> setMemberDelete(@RequestBody DeleteMemberRequestDto request) {
-        return ResponseEntity.ok(memberService.deleteMember(request.getMemberPassword()));
+        return ResponseEntity.ok(memberService.deleteMember(request.getPassword()));
     }
 
     /**
      *
-     * @param phoneNumber 사용자 휴대폰 번호
+     * @param phone 사용자 휴대폰 번호
      * @return 해당 사용자의 Email
      */
-    @GetMapping("/find/email")
-    public HttpEntity<MemberResponseDto> getMemberEmail(String phoneNumber){
-        return ResponseEntity.ok(memberService.getMemberEmail(phoneNumber));
+    // TODO:휴대폰 인증여부 같이 확인 필요
+    @GetMapping("/check")
+    public HttpEntity<MemberResponseDto> getMemberEmail(String phone){
+        return ResponseEntity.ok(memberService.getMemberEmail(phone));
     }
 
-    @GetMapping("/find/password")
-    public HttpEntity<MemberResponseDto> getMemberPassword(@RequestParam MemberRequestDto request){
-        return ResponseEntity.ok(memberService.getMemberPassword(request.getEmail(), request.getPhoneNumber()));
+    //TODO : 비밀번호 찾기
+
+    @GetMapping
+    public HttpEntity<MemberResponseDto> getPassword(MemberRequestDto request){
+        return ResponseEntity.ok(memberService.getPassword(request.getEmail(), request.getPhone()));
     }
 
     //비밀번호 찾기 이후 비밀번호 재설정
 //    @PostMapping("/find/password/change")
-//    public HttpEntity<MemberResponseDto> getMemberPasswordChange(@RequestBody ChangePasswordRequestDto){
+//    public HttpEntity<MemberResponseDto> getPasswordChange(@RequestBody ChangePasswordRequestDto){
 //
 //    }
 

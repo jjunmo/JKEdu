@@ -19,7 +19,7 @@ import java.util.Date;
 public class MemberResponseDto {
     private String email;
     private String name;
-    private String phoneNumber;
+    private String phone;
     private RoleType roleType;
     private String academyId;
     private Date birth;
@@ -28,7 +28,7 @@ public class MemberResponseDto {
             return MemberResponseDto.builder()
                     .name(member.getName())
                     .birth(member.getBirth())
-                    .phoneNumber(member.getPhoneNumber())
+                    .phone(member.getPhone())
                     .roleType(member.getRoleType())
                     .email(member.getEmail())
                     .academyId(member.getAcademyId())

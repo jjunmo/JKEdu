@@ -44,11 +44,11 @@ public class MemberService {
 
     //TODO : 회원 삭제 후 재 회원가입에 대한 Status 상태값 체크 필요.
     @Transactional
-    public String certifiedPhoneNumber(String phoneNumber, PhoneAuthType phoneAuthType) {
+    public String certifiedPhone(String phone, PhoneAuthType phoneAuthType) {
 
-        StringBuilder cerNum = getCerNum(phoneNumber);
+        StringBuilder cerNum = getCerNum(phone);
         if(phoneAuthType.equals(PhoneAuthType.JOIN)) {
-            Optional<Member> memberOptional = memberRepository.findByPhoneNumberAndStatusIn(phoneNumber, List.of(Status.GREEN, Status.YELLOW));
+            Optional<Member> memberOptional = memberRepository.findByPhoneAndStatusIn(phone, List.of(Status.GREEN, Status.YELLOW));
             if (memberOptional.isPresent()) {
                 return "해당 휴대전화로 가입된 회원이 존재합니다.";
             }
@@ -61,8 +61,8 @@ public class MemberService {
 
         // 4 params(to, from, type, text) are mandatory. must be filled
         HashMap<String, String> params = new HashMap<String, String>();
-        params.put("to", phoneNumber);    // 수신전화번호
-        params.put("from", "050713731789");    // 발신전화번호. 테스트시에는 발신,수신 둘다 본인 번호로 하면 됨
+        params.put("to", phone);    // 수신전화번호
+        params.put("from", "010-8948-8846");    // 발신전화번호. 테스트시에는 발신,수신 둘다 본인 번호로 하면 됨
         params.put("type", "SMS");
         params.put("text", "휴대폰인증 테스트 메시지 : 인증번호는" + "["+cerNum+"]" + "입니다.");
         params.put("app_version", "test app 1.2"); // application name and version
@@ -71,17 +71,17 @@ public class MemberService {
             JSONObject obj = (JSONObject) coolsms.send(params);
             System.out.println(obj.toString());
 
-            Optional<MemberPhoneAuth> optional = memberPhoneAuthRepository.findByPhoneNumberAndPhoneAuthType(phoneNumber,phoneAuthType);
+            Optional<MemberPhoneAuth> optional = memberPhoneAuthRepository.findByPhoneAndPhoneAuthType(phone,phoneAuthType);
             if (optional.isEmpty()) {
                 memberPhoneAuthRepository.save( new MemberPhoneAuth(
-                    null, null, phoneNumber, phoneAuthType, YN.N, cerNum.toString()
+                    null, null, phone, phoneAuthType, YN.N, cerNum.toString()
                 ));
                 // save
             } else {
                 MemberPhoneAuth memberPhoneAuth = optional.get();
                 memberPhoneAuth.setMember(null);
                 memberPhoneAuth.setCheckYn(YN.N);
-                memberPhoneAuth.setCode(cerNum.toString());
+                memberPhoneAuth.setSmscode(cerNum.toString());
             }
             return "OK";
             //인증코드 발송
@@ -93,8 +93,8 @@ public class MemberService {
     }
 
     @Transactional
-    public String certifiedPhoneNumberCheck(String phoneNumber ,String code , PhoneAuthType phoneAuthType){
-        Optional<MemberPhoneAuth> optional = memberPhoneAuthRepository.findByPhoneNumberAndCodeAndPhoneAuthType(phoneNumber, code, phoneAuthType);
+    public String certifiedPhoneCheck(String phone ,String smscode , PhoneAuthType phoneAuthType){
+        Optional<MemberPhoneAuth> optional = memberPhoneAuthRepository.findByPhoneAndSmscodeAndPhoneAuthType(phone, smscode, phoneAuthType);
         if(optional.isEmpty()){
             return "휴대폰번호와 인증번호를 확인하세요";
         }else{
@@ -125,25 +125,25 @@ public class MemberService {
     @Transactional
     public MemberResponseDto changeMemberPassword(String exPassword, String newPassword) {
         Member member = isMemberCurrent();
-        if (!passwordEncoder.matches(exPassword, member.getMemberPassword())) {
+        if (!passwordEncoder.matches(exPassword, member.getPassword())) {
             throw new RuntimeException("비밀번호가 맞지 않습니다");
         }
 
-        member.setMemberPassword(passwordEncoder.encode((newPassword)));
+        member.setPassword(passwordEncoder.encode((newPassword)));
         return MemberResponseDto.of(memberRepository.save(member));
     }
 
     /**
      * 계정 삭제
-     * @param memberPassword 현재 비밀번호
+     * @param password 현재 비밀번호
      * @return 계정 삭제 상태로 변경
      */
     @Transactional
-    public MemberResponseDto deleteMember(String memberPassword) {
+    public MemberResponseDto deleteMember(String password) {
         Member member = isMemberCurrent();
-        List<MemberPhoneAuth> memberPhoneAuth =memberPhoneAuthRepository.findByPhoneNumber(member.getPhoneNumber());
+        List<MemberPhoneAuth> memberPhoneAuth =memberPhoneAuthRepository.findByPhone(member.getPhone());
 
-        if (!passwordEncoder.matches(memberPassword, member.getMemberPassword())) {
+        if (!passwordEncoder.matches(password, member.getPassword())) {
             throw new RuntimeException("비밀번호가 맞지 않습니다");
         }
         //회원탈퇴시 기존 인증여부 N
@@ -154,15 +154,15 @@ public class MemberService {
 
     /**
      *
-     * @param phoneNumber 수신자 번호
+     * @param phone 수신자 번호
      * @return
      */
-    public MemberResponseDto getMemberEmail(String phoneNumber){
-        Optional<MemberPhoneAuth> memberPhoneAuthOptional = memberPhoneAuthRepository.findByPhoneNumberAndCheckYnAndPhoneAuthType(phoneNumber,YN.Y, PhoneAuthType.ID_FIND);
+    public MemberResponseDto getMemberEmail(String phone){
+        Optional<MemberPhoneAuth> memberPhoneAuthOptional = memberPhoneAuthRepository.findByPhoneAndCheckYnAndPhoneAuthType(phone,YN.Y, PhoneAuthType.ID_FIND);
         if(memberPhoneAuthOptional.isEmpty()){
             throw new RuntimeException("인증을 완료하세요");
         }
-        Optional<Member> memberOptional=memberRepository.findByPhoneNumberAndStatusIn(phoneNumber,List.of(Status.GREEN,Status.YELLOW));
+        Optional<Member> memberOptional=memberRepository.findByPhoneAndStatusIn(phone,List.of(Status.GREEN,Status.YELLOW));
         if(memberOptional.isPresent()){
             Member member = memberOptional.get();
             return MemberResponseDto.of(member);
@@ -175,18 +175,18 @@ public class MemberService {
     /**
      * 비밀번호 찾기
      * @param email 가입된 이메일
-     * @param phoneNumber 가입된 휴대전화
+     * @param phone 가입된 휴대전화
      * @return member
      */
-    public MemberResponseDto getMemberPassword(String email , String phoneNumber){
+    public MemberResponseDto getPassword(String email , String phone){
         if(memberRepository.existsByEmailAndStatusIn(email,List.of(Status.GREEN,Status.YELLOW))){
             throw new RuntimeException("해당 이메일로 가입된 아이디가 없습니다.");
         }
-        Optional<MemberPhoneAuth> memberPhoneAuthOptional = memberPhoneAuthRepository.findByPhoneNumberAndCheckYnAndPhoneAuthType(phoneNumber,YN.Y, PhoneAuthType.PW_FIND);
+        Optional<MemberPhoneAuth> memberPhoneAuthOptional = memberPhoneAuthRepository.findByPhoneAndCheckYnAndPhoneAuthType(phone,YN.Y, PhoneAuthType.PW_FIND);
         if(memberPhoneAuthOptional.isEmpty()){
             throw new RuntimeException("인증을 완료하세요");
         }
-        Optional<Member> memberOptional=memberRepository.findByPhoneNumberAndStatusIn(phoneNumber,List.of(Status.GREEN));
+        Optional<Member> memberOptional=memberRepository.findByPhoneAndStatusIn(phone,List.of(Status.GREEN));
         if(memberOptional.isPresent()){
             Member member = memberOptional.get();
             return MemberResponseDto.of(member);
@@ -196,13 +196,13 @@ public class MemberService {
     }
 
     //TODO:비밀번호 찾기 이후 비밀번호 재설정
-//    public MemberResponseDto getMemberPasswordChange(String exPassword,String newPassword){
+//    public MemberResponseDto getPasswordChange(String exPassword,String newPassword){
 //        Member member = isMemberCurrent();
 //        if () {
 //            throw new RuntimeException("비밀번호가 맞지 않습니다");
 //        }
 //
-//        member.setMemberPassword(passwordEncoder.encode((newPassword)));
+//        member.setPassword(passwordEncoder.encode((newPassword)));
 //        return MemberResponseDto.of(memberRepository.save(member));
 //    }
 
@@ -219,7 +219,7 @@ public class MemberService {
             throw new RuntimeException("잘못된 요청입니다.");
 
         return MemberResponseDto
-                .of(memberRepository.save(new Member(null, null, requestDto.getName(), requestDto.getBirth(), null, requestDto.getPhoneNumber(), member.getAcademyId(), RoleType.ROLE_ACADEMY_STUDENT, null)));
+                .of(memberRepository.save(new Member(null, null, requestDto.getName(), requestDto.getBirth(), null, requestDto.getPhone(), member.getAcademyId(), RoleType.ROLE_ACADEMY_STUDENT, null)));
         }
 
     public Member setTestMember(){

@@ -14,24 +14,33 @@ import java.util.Date;
 @Builder
 public class MemberRequestDto {
     private String email;
-    private String memberPassword;
-    private String phoneNumber;
+    private String password;
+    private String phone;
     private RoleType roleType;
     private String academyId;
+
+    public void setRoleType(String roleType) {
+        this.roleType = RoleType.valueOf("ROLE_"+roleType.toUpperCase());
+    }
+
+    public RoleType getRoleType() {
+        return roleType;
+    }
 
 
 
     public Member toMember(PasswordEncoder passwordEncoder) {
         return Member.builder()
-                .phoneNumber(phoneNumber)
+                .phone(phone)
                 .email(email)
-                .memberPassword(passwordEncoder.encode(memberPassword))
+                .password(passwordEncoder.encode(password))
                 .academyId(academyId)
-                .roleType(roleType)
+                .roleType(getRoleType())
                 .build();
     }
 
+
     public UsernamePasswordAuthenticationToken toAuthentication() {
-        return new UsernamePasswordAuthenticationToken(email, memberPassword);
+        return new UsernamePasswordAuthenticationToken(email, password);
     }
 }

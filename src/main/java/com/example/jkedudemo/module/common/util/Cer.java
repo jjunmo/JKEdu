@@ -14,10 +14,10 @@ public class Cer {
 
     /**
      *
-     * @param phoneNumber 수신자 번호
+     * @param phone 수신자 번호
      * @return 인증번호 생성
      */
-    public static StringBuilder getCerNum(String phoneNumber) {
+    public static StringBuilder getCerNum(String phone) {
         Random random  = new Random();
         StringBuilder cerNum = new StringBuilder();
         for(int i=0; i<4; i++) {
@@ -28,8 +28,8 @@ public class Cer {
         return cerNum;
     }
 
-    public static String getCerStrNum(String phoneNumber){
-       return String.valueOf(Cer.getCerStr().append(Cer.getCerNum(phoneNumber)));
+    public static String getCerStrNum(String phone){
+       return String.valueOf(Cer.getCerStr().append(Cer.getCerNum(phone)));
     }
 
 
