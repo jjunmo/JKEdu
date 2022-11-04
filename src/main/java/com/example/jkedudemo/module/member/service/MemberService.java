@@ -43,6 +43,13 @@ public class MemberService {
     }
 
     //TODO : 회원 삭제 후 재 회원가입에 대한 Status 상태값 체크 필요.
+
+    /**
+     *
+     * @param phone
+     * @param phoneAuthType
+     * @return
+     */
     @Transactional
     public String certifiedPhone(String phone, PhoneAuthType phoneAuthType) {
 
@@ -92,6 +99,13 @@ public class MemberService {
         return "시스템 운영자에게 문의하세요.";
     }
 
+    /**
+     *
+     * @param phone
+     * @param smscode
+     * @param phoneAuthType
+     * @return
+     */
     @Transactional
     public String certifiedPhoneCheck(String phone ,String smscode , PhoneAuthType phoneAuthType){
         Optional<MemberPhoneAuth> optional = memberPhoneAuthRepository.findByPhoneAndSmscodeAndPhoneAuthType(phone, smscode, phoneAuthType);
@@ -108,7 +122,7 @@ public class MemberService {
 
     /**
      *
-     * @return 현재 유저정보를 가져옴
+     * @return
      */
     public MemberResponseDto getMyInfoBySecurity() {
         return memberRepository.findById(SecurityUtil.getCurrentMemberId())
@@ -117,10 +131,10 @@ public class MemberService {
     }
 
     /**
-     *  비밀번호 변경
-     * @param exPassword 기존 비밀번호
-     * @param newPassword 새 비밀번호
-     * @return 변경된 비밀번호 저장
+     *
+     * @param exPassword
+     * @param newPassword
+     * @return
      */
     @Transactional
     public MemberResponseDto changeMemberPassword(String exPassword, String newPassword) {
@@ -134,9 +148,9 @@ public class MemberService {
     }
 
     /**
-     * 계정 삭제
-     * @param password 현재 비밀번호
-     * @return 계정 삭제 상태로 변경
+     *
+     * @param password
+     * @return
      */
     @Transactional
     public MemberResponseDto deleteMember(String password) {
@@ -154,7 +168,7 @@ public class MemberService {
 
     /**
      *
-     * @param phone 수신자 번호
+     * @param phone
      * @return
      */
     public MemberResponseDto getMemberEmail(String phone){
@@ -172,11 +186,12 @@ public class MemberService {
     }
 
     //TODO: return 타입 확인
+
     /**
-     * 비밀번호 찾기
-     * @param email 가입된 이메일
-     * @param phone 가입된 휴대전화
-     * @return member
+     *
+     * @param email
+     * @param phone
+     * @return
      */
     public MemberResponseDto getPassword(String email , String phone){
         if(memberRepository.existsByEmailAndStatusIn(email,List.of(Status.GREEN,Status.YELLOW))){
@@ -222,6 +237,10 @@ public class MemberService {
                 .of(memberRepository.save(new Member(null, null, requestDto.getName(), requestDto.getBirth(), null, requestDto.getPhone(), member.getAcademyId(), RoleType.ROLE_ACADEMY_STUDENT, null)));
         }
 
+    /**
+     *
+      * @return
+     */
     public Member setTestMember(){
         return memberRepository.save(
                 new Member(

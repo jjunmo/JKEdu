@@ -20,9 +20,9 @@ public class AuthController {
     private final AuthService authService;
 
     /**
-     *  회원가입
-     * @param requestDto 회원가입 데이터
-     * @return 회원가입 성공.
+     *
+     * @param requestDto
+     * @return
      */
     @PostMapping("/member/register")
     public HttpEntity<MemberResponseDto> signup(@RequestBody MemberRequestDto requestDto) {
@@ -31,9 +31,9 @@ public class AuthController {
     }
 
     /**
-     *  로그인
-     * @param requestDto 사용자 정보
-     * @return 토큰 값 , 토큰 유효시간
+     *
+     * @param requestDto
+     * @return
      */
     @PostMapping("/member/login")
     public HttpEntity<TokenDto> login(@RequestBody MemberRequestDto requestDto) {

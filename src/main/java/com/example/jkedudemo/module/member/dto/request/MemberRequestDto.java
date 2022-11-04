@@ -19,6 +19,7 @@ public class MemberRequestDto {
     private RoleType roleType;
     private String academyId;
 
+    //RoleType 바인딩 처리
     public void setRoleType(String roleType) {
         this.roleType = RoleType.valueOf("ROLE_"+roleType.toUpperCase());
     }

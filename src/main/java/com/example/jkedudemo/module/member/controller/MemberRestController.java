@@ -29,8 +29,8 @@ public class MemberRestController {
 
     /**
      *
-     * @param phone 수신자 번호
-     * @param phoneAuthType JOIN , ID_FIND , PW_FIND
+     * @param phone
+     * @param phoneAuthType
      * @return
      */
     @GetMapping("/cert")
@@ -43,6 +43,10 @@ public class MemberRestController {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     @PostMapping("/testmember")
     public HttpEntity<Member> testMember(){
         return ResponseEntity.ok(memberService.setTestMember());
@@ -51,9 +55,10 @@ public class MemberRestController {
 
     /**
      *
-     * @param phone 수신자 번호
-     * @param smscode 인증번호
-     * @return 인증결과
+     * @param phone
+     * @param smscode
+     * @param phoneAuthType
+     * @return
      */
     @GetMapping("/cert/ex")
     public HttpEntity<String> sendSMSCheck(@RequestParam("phone") String phone ,@RequestParam("smscode") String smscode,@RequestParam("phoneauthtype")PhoneAuthType phoneAuthType){
@@ -67,8 +72,8 @@ public class MemberRestController {
     }
 
     /**
-     * 내 정보
-     * @return 내 정보
+     *
+     * @return
      */
     @GetMapping("/myinfo")
     public HttpEntity<MemberResponseDto> MemberInfo(){
@@ -77,9 +82,9 @@ public class MemberRestController {
 
 
     /**
-     *  비밀번호 변경
-     * @param request 기존 비밀번호 , 새 비밀번호
-     * @return 비밀번호 변경
+     *
+     * @param request
+     * @return
      */
     @PutMapping
     public HttpEntity<MemberResponseDto> setPassword(@RequestBody ChangePasswordRequestDto request) {
@@ -87,9 +92,9 @@ public class MemberRestController {
     }
 
     /**
-     * 계정 삭제
-     * @param request 현재 로그인된 계정의 비밀번호
-     * @return 계정 삭제로 상태변경
+     *
+     * @param request
+     * @return
      */
     @PostMapping
     public HttpEntity<MemberResponseDto> setMemberDelete(@RequestBody DeleteMemberRequestDto request) {
@@ -98,8 +103,8 @@ public class MemberRestController {
 
     /**
      *
-     * @param phone 사용자 휴대폰 번호
-     * @return 해당 사용자의 Email
+     * @param phone
+     * @return
      */
     // TODO:휴대폰 인증여부 같이 확인 필요
     @GetMapping("/check")
