@@ -13,10 +13,14 @@ import com.example.jkedudemo.module.member.entity.Member;
 import com.example.jkedudemo.module.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.json.simple.JSONObject;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import retrofit2.http.Path;
+
+import java.util.HashMap;
 
 
 @RestController
@@ -34,12 +38,15 @@ public class MemberRestController {
      * @return
      */
     @GetMapping("/cert")
-    public HttpEntity<String> sendSMS(@RequestParam("phone") String phone,@RequestParam("phoneauthtype") PhoneAuthType phoneAuthType) {
+    public HttpEntity<Object> sendSMS(@RequestParam("phone") String phone,@RequestParam("phoneauthtype") PhoneAuthType phoneAuthType) {
         String result = memberService.certifiedPhone(phone,phoneAuthType);
+        HashMap<HttpStatus,String> httpStatusStringHashMap = new HashMap<>();
         if (result.equals("OK")) {
-            return ResponseEntity.ok("인증번호 발송");
+            httpStatusStringHashMap.put(HttpStatus.valueOf(200),"문자 발송 성공");
+            return ResponseEntity.ok(JSONObject.toJSONString(httpStatusStringHashMap));
         } else {
-            return ResponseEntity.badRequest().body("시스템 운영자에 문의해주세요");
+            httpStatusStringHashMap.put(HttpStatus.valueOf(400),"관리자에게 문의 해주세요.");
+            return ResponseEntity.badRequest().body(JSONObject.toJSONString(httpStatusStringHashMap));
         }
     }
 
@@ -61,13 +68,15 @@ public class MemberRestController {
      * @return
      */
     @GetMapping("/cert/ex")
-    public HttpEntity<String> sendSMSCheck(@RequestParam("phone") String phone ,@RequestParam("smscode") String smscode,@RequestParam("phoneauthtype")PhoneAuthType phoneAuthType){
-
+    public HttpEntity<Object> sendSMSCheck(@RequestParam("phone") String phone ,@RequestParam("smscode") String smscode,@RequestParam("phoneauthtype")PhoneAuthType phoneAuthType){
         String result = memberService.certifiedPhoneCheck(phone,smscode,phoneAuthType);
+        HashMap<HttpStatus,String> httpStatusStringHashMap = new HashMap<>();
         if(result.equals("OK")) {
-            return ResponseEntity.ok("인증을 완료 했습니다.");
+            httpStatusStringHashMap.put(HttpStatus.valueOf(200),"인증을 성공하였습니다.");
+            return ResponseEntity.ok(JSONObject.toJSONString(httpStatusStringHashMap));
         }else {
-            return ResponseEntity.badRequest().body("인증을 실패하였습니다.");
+            httpStatusStringHashMap.put(HttpStatus.valueOf(400),"인증에 실패하였습니다.");
+            return ResponseEntity.badRequest().body(JSONObject.toJSONString(httpStatusStringHashMap));
         }
     }
 
@@ -134,5 +143,6 @@ public class MemberRestController {
     public HttpEntity<MemberResponseDto> academyMember(@RequestBody AcademyMemberRequestDto request){
         return ResponseEntity.ok(memberService.setAcademyMember(request));
     }
+
 
 }
