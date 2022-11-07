@@ -7,6 +7,7 @@ import com.example.jkedudemo.module.common.enums.Status;
 import com.example.jkedudemo.module.common.enums.YN;
 import com.example.jkedudemo.module.jwt.TokenProvider;
 import com.example.jkedudemo.module.member.dto.TokenDto;
+import com.example.jkedudemo.module.member.dto.request.FindPasswordRequestDto;
 import com.example.jkedudemo.module.member.dto.request.MemberRequestDto;
 import com.example.jkedudemo.module.member.dto.response.MemberResponseDto;
 import com.example.jkedudemo.module.member.entity.Member;
@@ -35,6 +36,8 @@ public class AuthService {
     private final MemberPhoneAuthRepository memberPhoneAuthRepository;
     private final PasswordEncoder passwordEncoder;
     private final TokenProvider tokenProvider;
+
+    private final MemberService memberService;
 
 
     @Transactional
@@ -102,6 +105,40 @@ public class AuthService {
 
 
         return tokenProvider.generateTokenDto(authentication);
+    }
+
+
+    //TODO:비밀번호 찾기 안됨.
+    @Transactional
+    public TokenDto getPassword(FindPasswordRequestDto request){
+
+        String result = memberService.certifiedPhoneCheck(request.getPhone(),request.getSmscode(),request.getPhoneauth());
+
+
+        if(result.equals("OK")){
+            Optional<Member> memberOptional = memberRepository.findByPhoneAndStatusIn(request.getPhone(),List.of(Status.GREEN,Status.YELLOW));
+            if(memberOptional.isEmpty()){
+                throw new RuntimeException("해당 정보로 가입된 아이디가 없습니다.");
+            }
+            Optional<MemberPhoneAuth> memberPhoneAuthOptional = memberPhoneAuthRepository.findByPhoneAndPhoneauth(request.getPhone(),Phoneauth.PW);
+            if(memberPhoneAuthOptional.isEmpty()){
+                throw new RuntimeException("휴대폰 인증을 완료하세요.");
+            }
+            MemberPhoneAuth memberPhoneAuth = memberPhoneAuthOptional.get();
+            Member member=memberOptional.get();
+            memberPhoneAuth.setMember(member);
+            memberPhoneAuth.setCheckYn(YN.Y);
+
+
+            UsernamePasswordAuthenticationToken authenticationToken = request.toAuthentication(member.getEmail(), member.getPassword());
+            Authentication authentication = managerBuilder.getObject().authenticate(authenticationToken);
+
+
+            return tokenProvider.generateTokenDto(authentication);
+        }
+
+        throw new RuntimeException("인증이 실패하였습니다.");
+
     }
 
 }

@@ -3,14 +3,13 @@ package com.example.jkedudemo.module.member.controller;
 
 
 import com.example.jkedudemo.module.common.enums.Phoneauth;
-import com.example.jkedudemo.module.member.dto.request.AcademyMemberRequestDto;
-import com.example.jkedudemo.module.member.dto.request.ChangePasswordRequestDto;
-import com.example.jkedudemo.module.member.dto.request.DeleteMemberRequestDto;
-import com.example.jkedudemo.module.member.dto.request.MemberRequestDto;
+import com.example.jkedudemo.module.member.dto.TokenDto;
+import com.example.jkedudemo.module.member.dto.request.*;
 import com.example.jkedudemo.module.member.dto.response.HttpStatusResopnse;
 import com.example.jkedudemo.module.member.dto.response.MemberResponseDto;
 
 import com.example.jkedudemo.module.member.entity.Member;
+import com.example.jkedudemo.module.member.service.AuthService;
 import com.example.jkedudemo.module.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 public class MemberRestController {
 
+    private final AuthService authService;
     private final MemberService memberService;
 
     /**
@@ -113,21 +113,33 @@ public class MemberRestController {
     /**
      *
      * @param phone
+     * @param smscode
+     * @param phoneauth
      * @return
      */
-    // TODO:휴대폰 인증여부 같이 확인 필요
     @GetMapping("/check")
-    public HttpEntity<MemberResponseDto> getMemberEmail(String phone){
-        return ResponseEntity.ok(memberService.getMemberEmail(phone));
+    public HttpEntity<MemberResponseDto> getMemberEmail(String phone , String smscode,Phoneauth phoneauth){
+        return ResponseEntity.ok(memberService.getMemberEmail(phone,smscode,phoneauth));
     }
 
     //TODO : 비밀번호 찾기
 
-    @GetMapping
-    public HttpEntity<MemberResponseDto> getPassword(MemberRequestDto request){
-        return ResponseEntity.ok(memberService.getPassword(request.getEmail(), request.getPhone()));
+    @PostMapping("/check")
+    public HttpEntity<TokenDto> getPassword(@RequestBody FindPasswordRequestDto request){
+        return ResponseEntity.ok(authService.getPassword(request));
     }
 
+    @PutMapping("/check")
+    public HttpEntity<MemberResponseDto> getNewPassword(String newPassword){
+        throw new RuntimeException("aaa");
+    }
+
+
+    /**
+     * 이메일 중복확인
+     * @param email
+     * @return
+     */
     @GetMapping("/excheck")
     public HttpEntity<Object> exEmail(String email){
         String result = memberService.exEmailCheck(email);

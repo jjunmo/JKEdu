@@ -17,4 +17,5 @@ public interface MemberPhoneAuthRepository extends JpaRepository<MemberPhoneAuth
     Optional<MemberPhoneAuth> findByPhoneAndCheckYnAndPhoneauth(String phone, YN checkYN, Phoneauth phoneauth);
 
     List<MemberPhoneAuth> findByPhone (String phone);
+
 }

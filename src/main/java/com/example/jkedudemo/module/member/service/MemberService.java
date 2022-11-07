@@ -110,13 +110,13 @@ public class MemberService {
     public String certifiedPhoneCheck(String phone ,String smscode , Phoneauth phoneauth){
         Optional<MemberPhoneAuth> optional = memberPhoneAuthRepository.findByPhoneAndSmscodeAndPhoneauth(phone, smscode, phoneauth);
         if(optional.isEmpty()){
-            return "휴대폰번호와 인증번호를 확인하세요";
+            return "false"; //휴대폰 번호와 인증번호 불일치
         }else{
             MemberPhoneAuth memberPhoneAuth = optional.get();
             memberPhoneAuth.setCheckYn(YN.Y);
             log.info("인증"+memberPhoneAuth.getCheckYn().toString());
+            return "OK";
         }
-        return "OK";
     }
 
 
@@ -171,44 +171,36 @@ public class MemberService {
      * @param phone
      * @return
      */
-    public MemberResponseDto getMemberEmail(String phone){
-        Optional<MemberPhoneAuth> memberPhoneAuthOptional = memberPhoneAuthRepository.findByPhoneAndCheckYnAndPhoneauth(phone,YN.Y, Phoneauth.ID);
-        if(memberPhoneAuthOptional.isEmpty()){
-            throw new RuntimeException("인증을 완료하세요");
-        }
-        Optional<Member> memberOptional=memberRepository.findByPhoneAndStatusIn(phone,List.of(Status.GREEN,Status.YELLOW));
-        if(memberOptional.isPresent()){
-            Member member = memberOptional.get();
+    @Transactional
+    public MemberResponseDto getMemberEmail(String phone , String smscode, Phoneauth phoneauth) {
+
+        String result = certifiedPhoneCheck(phone, smscode,phoneauth);
+
+        //TODO : 예외처리 이후 테스트 / 정상적인 sms 인증 이후 다시 재인증시 인증되지않음 / POSTMAN 이용시 정상작동 확인
+
+        if(result.equals("OK")){
+            Optional<Member> memberOptional = memberRepository.findByPhoneAndStatusIn(phone,List.of(Status.GREEN,Status.YELLOW));
+            if(memberOptional.isEmpty()){
+                throw new RuntimeException("해당 정보로 가입된 아이디가 없습니다.");
+            }
+            Optional<MemberPhoneAuth> memberPhoneAuthOptional = memberPhoneAuthRepository.findByPhoneAndPhoneauth(phone,Phoneauth.ID);
+            if(memberPhoneAuthOptional.isEmpty()){
+                throw new RuntimeException("휴대폰 인증을 완료하세요.");
+            }
+            MemberPhoneAuth memberPhoneAuth = memberPhoneAuthOptional.get();
+            Member member=memberOptional.get();
+            memberPhoneAuth.setMember(member);
+            memberPhoneAuth.setCheckYn(YN.Y);
+
             return MemberResponseDto.of(member);
+             }
+        throw new RuntimeException("인증이 실패하였습니다.");
         }
 
-        throw new RuntimeException("가입된 이메일 정보가 없습니다.");
-    }
 
     //TODO: return 타입 확인
 
-    /**
-     *
-     * @param email
-     * @param phone
-     * @return
-     */
-    public MemberResponseDto getPassword(String email , String phone){
-        if(memberRepository.existsByEmailAndStatusIn(email,List.of(Status.GREEN,Status.YELLOW))){
-            throw new RuntimeException("해당 이메일로 가입된 아이디가 없습니다.");
-        }
-        Optional<MemberPhoneAuth> memberPhoneAuthOptional = memberPhoneAuthRepository.findByPhoneAndCheckYnAndPhoneauth(phone,YN.Y, Phoneauth.PW);
-        if(memberPhoneAuthOptional.isEmpty()){
-            throw new RuntimeException("인증을 완료하세요");
-        }
-        Optional<Member> memberOptional=memberRepository.findByPhoneAndStatusIn(phone,List.of(Status.GREEN));
-        if(memberOptional.isPresent()){
-            Member member = memberOptional.get();
-            return MemberResponseDto.of(member);
-        }
-        //정지된 회원
-        throw new RuntimeException("시스템 운영자에 문의하세요");
-    }
+
 
     //TODO:비밀번호 찾기 이후 비밀번호 재설정
 //    public MemberResponseDto getPasswordChange(String exPassword,String newPassword){
