@@ -1,11 +1,9 @@
 package com.example.jkedudemo.module.member.controller;
 
 
-import com.example.jkedudemo.module.common.enums.RoleType;
 import com.example.jkedudemo.module.member.dto.TokenDto;
 import com.example.jkedudemo.module.member.dto.request.MemberRequestDto;
 import com.example.jkedudemo.module.member.dto.response.MemberResponseDto;
-import com.example.jkedudemo.module.member.entity.Member;
 import com.example.jkedudemo.module.member.service.AuthService;
 import lombok.RequiredArgsConstructor;
 

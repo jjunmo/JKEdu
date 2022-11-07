@@ -1,7 +1,6 @@
 package com.example.jkedudemo.module.member.dto.request;
 
-import com.example.jkedudemo.module.common.enums.RoleType;
-import com.example.jkedudemo.module.common.enums.Status;
+import com.example.jkedudemo.module.common.enums.Role;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,15 +17,15 @@ public class AcademyMemberRequestDto {
 
     private String phone;
 
-    private RoleType roleType;
+    private Role role;
 
     private String academyId;
 
-    public void setRoleType(String roleType) {
-        this.roleType = RoleType.valueOf("ROLE_"+roleType.toUpperCase());
+    public void setRole(String roletype) {
+        this.role = Role.valueOf("ROLE_"+roletype.toUpperCase());
     }
 
-    public RoleType getRoleType() {
-        return roleType;
+    public Role getRole() {
+        return role;
     }
 }

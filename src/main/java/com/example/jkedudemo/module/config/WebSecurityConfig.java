@@ -1,6 +1,6 @@
 package com.example.jkedudemo.module.config;
 
-import com.example.jkedudemo.module.common.util.PhoneAuthTypeConverter;
+import com.example.jkedudemo.module.common.util.PhoneauthConverter;
 import com.example.jkedudemo.module.jwt.JwtAccessDeniedHandler;
 import com.example.jkedudemo.module.jwt.JwtAuthenticationEntryPoint;
 import com.example.jkedudemo.module.jwt.TokenProvider;
@@ -43,7 +43,7 @@ public class WebSecurityConfig implements WebMvcConfigurer {
 
     @Override
     public void addFormatters(FormatterRegistry registry) {
-        registry.addConverter(new PhoneAuthTypeConverter());
+        registry.addConverter(new PhoneauthConverter());
     }
 
     //TODO: role에 따른 권한설정 미구현.

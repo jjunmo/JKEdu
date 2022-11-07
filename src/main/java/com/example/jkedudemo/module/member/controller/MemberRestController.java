@@ -2,7 +2,7 @@ package com.example.jkedudemo.module.member.controller;
 
 
 
-import com.example.jkedudemo.module.common.enums.PhoneAuthType;
+import com.example.jkedudemo.module.common.enums.Phoneauth;
 import com.example.jkedudemo.module.member.dto.request.AcademyMemberRequestDto;
 import com.example.jkedudemo.module.member.dto.request.ChangePasswordRequestDto;
 import com.example.jkedudemo.module.member.dto.request.DeleteMemberRequestDto;
@@ -14,17 +14,9 @@ import com.example.jkedudemo.module.member.entity.Member;
 import com.example.jkedudemo.module.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.json.simple.JSONObject;
 import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import retrofit2.http.Path;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 
 
 @RestController
@@ -38,12 +30,12 @@ public class MemberRestController {
     /**
      *
      * @param phone
-     * @param phoneAuthType
+     * @param phoneauth
      * @return
      */
     @GetMapping("/cert")
-    public HttpEntity<HttpStatusResopnse> sendSMS(@RequestParam("phone") String phone, @RequestParam("phoneauthtype") PhoneAuthType phoneAuthType) {
-        String result = memberService.certifiedPhone(phone,phoneAuthType);
+    public HttpEntity<HttpStatusResopnse> sendSMS(@RequestParam("phone") String phone, @RequestParam("phoneauth") Phoneauth phoneauth) {
+        String result = memberService.certifiedPhone(phone, phoneauth);
         HttpStatusResopnse httpStatusResopnse = new HttpStatusResopnse();
         if (result.equals("OK")) {
             httpStatusResopnse.setStatus("200");
@@ -70,12 +62,12 @@ public class MemberRestController {
      *
      * @param phone
      * @param smscode
-     * @param phoneAuthType
+     * @param phoneauth
      * @return
      */
     @GetMapping("/cert/ex")
-    public HttpEntity<Object> sendSMSCheck(@RequestParam("phone") String phone ,@RequestParam("smscode") String smscode,@RequestParam("phoneauthtype")PhoneAuthType phoneAuthType){
-        String result = memberService.certifiedPhoneCheck(phone,smscode,phoneAuthType);
+    public HttpEntity<Object> sendSMSCheck(@RequestParam("phone") String phone ,@RequestParam("smscode") String smscode,@RequestParam("phoneauth") Phoneauth phoneauth){
+        String result = memberService.certifiedPhoneCheck(phone,smscode, phoneauth);
         HttpStatusResopnse httpStatusResopnse = new HttpStatusResopnse();
         if(result.equals("OK")) {
             httpStatusResopnse.setStatus("200");

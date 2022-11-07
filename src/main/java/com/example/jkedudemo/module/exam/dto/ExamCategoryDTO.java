@@ -1,6 +1,6 @@
 package com.example.jkedudemo.module.exam.dto;
 
-import com.example.jkedudemo.module.common.enums.ExamType;
+import com.example.jkedudemo.module.common.enums.Exam;
 import lombok.Data;
 
 import java.util.List;
@@ -9,7 +9,7 @@ import java.util.List;
 public class ExamCategoryDTO {
     private Long id;
 
-    private ExamType examType;
+    private Exam exam;
 
     private List<ExamQuestDTO> examQuestDTOList;
 

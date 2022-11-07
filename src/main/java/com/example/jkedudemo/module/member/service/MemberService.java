@@ -1,8 +1,8 @@
 package com.example.jkedudemo.module.member.service;
 
 
-import com.example.jkedudemo.module.common.enums.PhoneAuthType;
-import com.example.jkedudemo.module.common.enums.RoleType;
+import com.example.jkedudemo.module.common.enums.Phoneauth;
+import com.example.jkedudemo.module.common.enums.Role;
 import com.example.jkedudemo.module.common.enums.Status;
 import com.example.jkedudemo.module.common.enums.YN;
 import com.example.jkedudemo.module.config.SecurityUtil;
@@ -47,14 +47,14 @@ public class MemberService {
     /**
      *
      * @param phone
-     * @param phoneAuthType
+     * @param phoneauth
      * @return
      */
     @Transactional
-    public String certifiedPhone(String phone, PhoneAuthType phoneAuthType) {
+    public String certifiedPhone(String phone, Phoneauth phoneauth) {
 
         StringBuilder cerNum = getCerNum(phone);
-        if(phoneAuthType.equals(PhoneAuthType.JOIN)) {
+        if(phoneauth.equals(Phoneauth.JOIN)) {
             Optional<Member> memberOptional = memberRepository.findByPhoneAndStatusIn(phone, List.of(Status.GREEN, Status.YELLOW));
             if (memberOptional.isPresent()) {
                 return "exEmail";
@@ -78,10 +78,10 @@ public class MemberService {
             JSONObject obj = (JSONObject) coolsms.send(params);
             System.out.println(obj.toString());
 
-            Optional<MemberPhoneAuth> optional = memberPhoneAuthRepository.findByPhoneAndPhoneAuthType(phone,phoneAuthType);
+            Optional<MemberPhoneAuth> optional = memberPhoneAuthRepository.findByPhoneAndPhoneauth(phone, phoneauth);
             if (optional.isEmpty()) {
                 memberPhoneAuthRepository.save( new MemberPhoneAuth(
-                    null, null, phone, phoneAuthType, YN.N, cerNum.toString()
+                    null, null, phone, phoneauth, YN.N, cerNum.toString()
                 ));
                 // save
             } else {
@@ -103,12 +103,12 @@ public class MemberService {
      *
      * @param phone
      * @param smscode
-     * @param phoneAuthType
+     * @param phoneauth
      * @return
      */
     @Transactional
-    public String certifiedPhoneCheck(String phone ,String smscode , PhoneAuthType phoneAuthType){
-        Optional<MemberPhoneAuth> optional = memberPhoneAuthRepository.findByPhoneAndSmscodeAndPhoneAuthType(phone, smscode, phoneAuthType);
+    public String certifiedPhoneCheck(String phone ,String smscode , Phoneauth phoneauth){
+        Optional<MemberPhoneAuth> optional = memberPhoneAuthRepository.findByPhoneAndSmscodeAndPhoneauth(phone, smscode, phoneauth);
         if(optional.isEmpty()){
             return "휴대폰번호와 인증번호를 확인하세요";
         }else{
@@ -172,7 +172,7 @@ public class MemberService {
      * @return
      */
     public MemberResponseDto getMemberEmail(String phone){
-        Optional<MemberPhoneAuth> memberPhoneAuthOptional = memberPhoneAuthRepository.findByPhoneAndCheckYnAndPhoneAuthType(phone,YN.Y, PhoneAuthType.ID_FIND);
+        Optional<MemberPhoneAuth> memberPhoneAuthOptional = memberPhoneAuthRepository.findByPhoneAndCheckYnAndPhoneauth(phone,YN.Y, Phoneauth.ID);
         if(memberPhoneAuthOptional.isEmpty()){
             throw new RuntimeException("인증을 완료하세요");
         }
@@ -197,7 +197,7 @@ public class MemberService {
         if(memberRepository.existsByEmailAndStatusIn(email,List.of(Status.GREEN,Status.YELLOW))){
             throw new RuntimeException("해당 이메일로 가입된 아이디가 없습니다.");
         }
-        Optional<MemberPhoneAuth> memberPhoneAuthOptional = memberPhoneAuthRepository.findByPhoneAndCheckYnAndPhoneAuthType(phone,YN.Y, PhoneAuthType.PW_FIND);
+        Optional<MemberPhoneAuth> memberPhoneAuthOptional = memberPhoneAuthRepository.findByPhoneAndCheckYnAndPhoneauth(phone,YN.Y, Phoneauth.PW);
         if(memberPhoneAuthOptional.isEmpty()){
             throw new RuntimeException("인증을 완료하세요");
         }
@@ -230,11 +230,11 @@ public class MemberService {
     @Transactional
     public MemberResponseDto setAcademyMember(AcademyMemberRequestDto requestDto) {
         Member member = isMemberCurrent();
-        if(!member.getRoleType().equals(RoleType.ROLE_ACADEMY))
+        if(!member.getRole().equals(Role.ROLE_ACADEMY))
             throw new RuntimeException("잘못된 요청입니다.");
 
         return MemberResponseDto
-                .of(memberRepository.save(new Member(null, null, requestDto.getName(), requestDto.getBirth(), null, requestDto.getPhone(), member.getAcademyId(), RoleType.ROLE_ACADEMY_STUDENT, null, 0)));
+                .of(memberRepository.save(new Member(null, null, requestDto.getName(), requestDto.getBirth(), null, requestDto.getPhone(), member.getAcademyId(), Role.ROLE_ACADEMY_STUDENT, null, 0)));
         }
 
     /**

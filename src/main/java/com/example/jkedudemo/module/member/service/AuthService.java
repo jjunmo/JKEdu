@@ -1,8 +1,8 @@
 package com.example.jkedudemo.module.member.service;
 
+import com.example.jkedudemo.module.common.enums.Role;
 import com.example.jkedudemo.module.common.util.Cer;
-import com.example.jkedudemo.module.common.enums.PhoneAuthType;
-import com.example.jkedudemo.module.common.enums.RoleType;
+import com.example.jkedudemo.module.common.enums.Phoneauth;
 import com.example.jkedudemo.module.common.enums.Status;
 import com.example.jkedudemo.module.common.enums.YN;
 import com.example.jkedudemo.module.jwt.TokenProvider;
@@ -52,7 +52,7 @@ public class AuthService {
 
 
         //휴대폰 인증 여부
-        Optional<MemberPhoneAuth> memberPhoneAuthOptional = memberPhoneAuthRepository.findByPhoneAndCheckYnAndPhoneAuthType(requestDto.getPhone(),YN.Y, PhoneAuthType.JOIN);
+        Optional<MemberPhoneAuth> memberPhoneAuthOptional = memberPhoneAuthRepository.findByPhoneAndCheckYnAndPhoneauth(requestDto.getPhone(),YN.Y, Phoneauth.JOIN);
 
         if(memberPhoneAuthOptional.isEmpty()){
             throw new IllegalArgumentException("인증을 완료하세요");
@@ -67,7 +67,7 @@ public class AuthService {
 
         //학원 학생인지 확인 (학원코드 발행)
         // TODO:학원코드 중복확인
-        if (member.getRoleType().equals(RoleType.ROLE_ACADEMY)) {
+        if (member.getRole().equals(Role.ROLE_ACADEMY)) {
             String academyId = Cer.getCerStrNum(requestDto.getPhone());
             Optional<Member> academyIdCheck = memberRepository.findByAcademyId(academyId);
             if (academyIdCheck.isEmpty()) {

@@ -1,12 +1,10 @@
 package com.example.jkedudemo.module.member.dto.request;
 
+import com.example.jkedudemo.module.common.enums.Role;
 import com.example.jkedudemo.module.member.entity.Member;
-import com.example.jkedudemo.module.common.enums.RoleType;
 import lombok.*;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import java.util.Date;
 
 @Getter
 @AllArgsConstructor
@@ -17,16 +15,16 @@ public class MemberRequestDto {
     private String password;
     private String phone;
     private String name;
-    private RoleType roleType;
+    private Role role;
     private String academyId;
 
-    //RoleType 바인딩 처리
-    public void setRoleType(String roleType) {
-        this.roleType = RoleType.valueOf("ROLE_"+roleType.toUpperCase());
+    //Roletype 바인딩 처리
+    public void setRole(String roletype) {
+        this.role = Role.valueOf("ROLE_"+roletype.toUpperCase());
     }
 
-    public RoleType getRoleType() {
-        return roleType;
+    public Role getRole() {
+        return role;
     }
 
 
@@ -38,7 +36,7 @@ public class MemberRequestDto {
                 .email(email)
                 .password(passwordEncoder.encode(password))
                 .academyId(academyId)
-                .roleType(getRoleType())
+                .role(getRole())
                 .build();
     }
 

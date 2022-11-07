@@ -1,7 +1,7 @@
 package com.example.jkedudemo.module.member.entity;
 
 import com.example.jkedudemo.module.common.util.BaseTime;
-import com.example.jkedudemo.module.common.enums.RoleType;
+import com.example.jkedudemo.module.common.enums.Role;
 import com.example.jkedudemo.module.common.enums.Status;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
@@ -41,7 +41,7 @@ public class Member extends BaseTime {
     private String academyId;
 
     @Enumerated(EnumType.STRING)
-    private RoleType roleType;
+    private Role role;
 
     @Enumerated(EnumType.STRING)
     @ColumnDefault("'GREEN'")

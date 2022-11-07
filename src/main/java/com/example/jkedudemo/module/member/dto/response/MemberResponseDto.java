@@ -2,7 +2,7 @@ package com.example.jkedudemo.module.member.dto.response;
 
 
 import com.example.jkedudemo.module.member.entity.Member;
-import com.example.jkedudemo.module.common.enums.RoleType;
+import com.example.jkedudemo.module.common.enums.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,7 +20,7 @@ public class MemberResponseDto {
     private String email;
     private String name;
     private String phone;
-    private RoleType roleType;
+    private Role role;
     private String academyId;
     private Date birth;
 
@@ -29,7 +29,7 @@ public class MemberResponseDto {
                     .name(member.getName())
                     .birth(member.getBirth())
                     .phone(member.getPhone())
-                    .roleType(member.getRoleType())
+                    .role(member.getRole())
                     .email(member.getEmail())
                     .academyId(member.getAcademyId())
                     .build();

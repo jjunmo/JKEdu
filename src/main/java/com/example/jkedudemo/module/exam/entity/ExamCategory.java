@@ -1,7 +1,7 @@
 package com.example.jkedudemo.module.exam.entity;
 
 import com.example.jkedudemo.module.common.util.BaseTime;
-import com.example.jkedudemo.module.common.enums.ExamType;
+import com.example.jkedudemo.module.common.enums.Exam;
 
 import javax.persistence.*;
 
@@ -12,7 +12,7 @@ public class ExamCategory extends BaseTime {
 
     //시험 유형
     @Enumerated(EnumType.STRING)
-    private ExamType examType;
+    private Exam exam;
 
 
 }
