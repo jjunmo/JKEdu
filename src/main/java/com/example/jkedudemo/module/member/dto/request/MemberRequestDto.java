@@ -16,6 +16,7 @@ public class MemberRequestDto {
     private String email;
     private String password;
     private String phone;
+    private String name;
     private RoleType roleType;
     private String academyId;
 
@@ -33,6 +34,7 @@ public class MemberRequestDto {
     public Member toMember(PasswordEncoder passwordEncoder) {
         return Member.builder()
                 .phone(phone)
+                .name(name)
                 .email(email)
                 .password(passwordEncoder.encode(password))
                 .academyId(academyId)
