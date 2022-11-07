@@ -47,6 +47,9 @@ public class Member extends BaseTime {
     @ColumnDefault("'GREEN'")
     private Status status;
 
+    @ColumnDefault("0")
+    private Integer testCount;
+
     //TODO: 약관동의 체크
 
 

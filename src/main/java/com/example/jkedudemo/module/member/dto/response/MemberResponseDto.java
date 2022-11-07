@@ -33,6 +33,5 @@ public class MemberResponseDto {
                     .email(member.getEmail())
                     .academyId(member.getAcademyId())
                     .build();
-
     }
 }

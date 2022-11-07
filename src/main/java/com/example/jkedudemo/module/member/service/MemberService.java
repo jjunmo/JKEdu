@@ -57,7 +57,7 @@ public class MemberService {
         if(phoneAuthType.equals(PhoneAuthType.JOIN)) {
             Optional<Member> memberOptional = memberRepository.findByPhoneAndStatusIn(phone, List.of(Status.GREEN, Status.YELLOW));
             if (memberOptional.isPresent()) {
-                return "해당 휴대전화로 가입된 회원이 존재합니다.";
+                return "exEmail";
             }
         }
 
@@ -234,17 +234,21 @@ public class MemberService {
             throw new RuntimeException("잘못된 요청입니다.");
 
         return MemberResponseDto
-                .of(memberRepository.save(new Member(null, null, requestDto.getName(), requestDto.getBirth(), null, requestDto.getPhone(), member.getAcademyId(), RoleType.ROLE_ACADEMY_STUDENT, null)));
+                .of(memberRepository.save(new Member(null, null, requestDto.getName(), requestDto.getBirth(), null, requestDto.getPhone(), member.getAcademyId(), RoleType.ROLE_ACADEMY_STUDENT, null, 0)));
         }
 
-        public String exEmailCheck(String email){
+    /**
+     * 이메일 중복체크
+     * @param email
+     * @return
+     */
+    public String exEmailCheck(String email){
         Optional<Member> member = memberRepository.findByEmail(email);
         if(member.isEmpty()){
             return "YES";
         }else{
             return "NO";
         }
-
 
         }
 
@@ -255,7 +259,7 @@ public class MemberService {
     public Member setTestMember(){
         return memberRepository.save(
                 new Member(
-                        null,"1111","aaaa",null,"1111","1111","1111",null,null
+                        null,"1111","aaaa",null,"1111","1111","1111",null,null,0
                 )
         );
 

@@ -7,6 +7,7 @@ import com.example.jkedudemo.module.member.dto.request.AcademyMemberRequestDto;
 import com.example.jkedudemo.module.member.dto.request.ChangePasswordRequestDto;
 import com.example.jkedudemo.module.member.dto.request.DeleteMemberRequestDto;
 import com.example.jkedudemo.module.member.dto.request.MemberRequestDto;
+import com.example.jkedudemo.module.member.dto.response.HttpStatusResopnse;
 import com.example.jkedudemo.module.member.dto.response.MemberResponseDto;
 
 import com.example.jkedudemo.module.member.entity.Member;
@@ -20,7 +21,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import retrofit2.http.Path;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
 
 
 @RestController
@@ -38,15 +42,17 @@ public class MemberRestController {
      * @return
      */
     @GetMapping("/cert")
-    public HttpEntity<Object> sendSMS(@RequestParam("phone") String phone,@RequestParam("phoneauthtype") PhoneAuthType phoneAuthType) {
+    public HttpEntity<HttpStatusResopnse> sendSMS(@RequestParam("phone") String phone, @RequestParam("phoneauthtype") PhoneAuthType phoneAuthType) {
         String result = memberService.certifiedPhone(phone,phoneAuthType);
-        HashMap<HttpStatus,String> httpStatusStringHashMap = new HashMap<>();
+        HttpStatusResopnse httpStatusResopnse = new HttpStatusResopnse();
         if (result.equals("OK")) {
-            httpStatusStringHashMap.put(HttpStatus.valueOf(200),"문자 발송 성공");
-            return ResponseEntity.ok(JSONObject.toJSONString(httpStatusStringHashMap));
+            httpStatusResopnse.setStatus("200");
+            httpStatusResopnse.setMessage("메세지 발송 성공");
+            return ResponseEntity.ok(httpStatusResopnse);
         } else {
-            httpStatusStringHashMap.put(HttpStatus.valueOf(400),"관리자에게 문의 해주세요.");
-            return ResponseEntity.badRequest().body(JSONObject.toJSONString(httpStatusStringHashMap));
+            httpStatusResopnse.setStatus("400");
+            httpStatusResopnse.setMessage("관리자에게 문의 해주세요");
+            return ResponseEntity.badRequest().body(httpStatusResopnse);
         }
     }
 
@@ -70,13 +76,15 @@ public class MemberRestController {
     @GetMapping("/cert/ex")
     public HttpEntity<Object> sendSMSCheck(@RequestParam("phone") String phone ,@RequestParam("smscode") String smscode,@RequestParam("phoneauthtype")PhoneAuthType phoneAuthType){
         String result = memberService.certifiedPhoneCheck(phone,smscode,phoneAuthType);
-        HashMap<HttpStatus,String> httpStatusStringHashMap = new HashMap<>();
+        HttpStatusResopnse httpStatusResopnse = new HttpStatusResopnse();
         if(result.equals("OK")) {
-            httpStatusStringHashMap.put(HttpStatus.valueOf(200),"인증을 성공하였습니다.");
-            return ResponseEntity.ok(JSONObject.toJSONString(httpStatusStringHashMap));
+            httpStatusResopnse.setStatus("200");
+            httpStatusResopnse.setMessage("인증 성공");
+            return ResponseEntity.ok(httpStatusResopnse);
         }else {
-            httpStatusStringHashMap.put(HttpStatus.valueOf(400),"인증에 실패하였습니다.");
-            return ResponseEntity.badRequest().body(JSONObject.toJSONString(httpStatusStringHashMap));
+            httpStatusResopnse.setStatus("400");
+            httpStatusResopnse.setMessage("인증 실패");
+            return ResponseEntity.badRequest().body(httpStatusResopnse);
         }
     }
 
@@ -128,16 +136,18 @@ public class MemberRestController {
         return ResponseEntity.ok(memberService.getPassword(request.getEmail(), request.getPhone()));
     }
 
-    @GetMapping("/ex")
+    @GetMapping("/excheck")
     public HttpEntity<Object> exEmail(String email){
         String result = memberService.exEmailCheck(email);
-        HashMap<HttpStatus,String> httpStatusStringHashMap = new HashMap<>();
+        HttpStatusResopnse httpStatusResopnse = new HttpStatusResopnse();
         if(result.equals("OK")) {
-            httpStatusStringHashMap.put(HttpStatus.valueOf(200),"회원가입이 가능한 아이디입니다.");
-            return ResponseEntity.ok(JSONObject.toJSONString(httpStatusStringHashMap));
+            httpStatusResopnse.setStatus("200");
+            httpStatusResopnse.setMessage("회원가입이 가능한 아이디 입니다.");
+            return ResponseEntity.ok(httpStatusResopnse);
         }else {
-            httpStatusStringHashMap.put(HttpStatus.valueOf(400),"이미 가입된 아이디입니다.");
-            return ResponseEntity.badRequest().body(JSONObject.toJSONString(httpStatusStringHashMap));
+            httpStatusResopnse.setStatus("400");
+            httpStatusResopnse.setMessage("이미 존재하는 아이디 입니다.");
+            return ResponseEntity.badRequest().body(httpStatusResopnse);
         }
 
     }
