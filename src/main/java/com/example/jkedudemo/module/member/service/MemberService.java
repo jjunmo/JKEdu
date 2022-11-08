@@ -7,7 +7,7 @@ import com.example.jkedudemo.module.common.enums.Status;
 import com.example.jkedudemo.module.common.enums.YN;
 import com.example.jkedudemo.module.config.SecurityUtil;
 import com.example.jkedudemo.module.member.dto.request.AcademyMemberRequestDto;
-import com.example.jkedudemo.module.member.dto.response.MemberResponseDto;
+import com.example.jkedudemo.module.member.dto.response.*;
 import com.example.jkedudemo.module.member.entity.Member;
 import com.example.jkedudemo.module.member.entity.MemberPhoneAuth;
 import com.example.jkedudemo.module.member.repository.MemberPhoneAuthRepository;
@@ -110,7 +110,7 @@ public class MemberService {
     public String certifiedPhoneCheck(String phone ,String smscode , Phoneauth phoneauth){
         Optional<MemberPhoneAuth> optional = memberPhoneAuthRepository.findByPhoneAndSmscodeAndPhoneauth(phone, smscode, phoneauth);
         if(optional.isEmpty()){
-            return "false"; //휴대폰 번호와 인증번호 불일치
+            throw new MyInternalServerException("인증번호가 일치하지 않습니다.");
         }else{
             MemberPhoneAuth memberPhoneAuth = optional.get();
             memberPhoneAuth.setCheckYn(YN.Y);
@@ -124,9 +124,9 @@ public class MemberService {
      *
      * @return
      */
-    public MemberResponseDto getMyInfoBySecurity() {
+    public MemberMyInfoResponseDto getMyInfoBySecurity() {
         return memberRepository.findById(SecurityUtil.getCurrentMemberId())
-                .map(MemberResponseDto::of)
+                .map(MemberMyInfoResponseDto::myInfo)
                 .orElseThrow(() -> new MyInternalServerException("로그인 유저 정보가 없습니다"));
     }
 
@@ -137,14 +137,15 @@ public class MemberService {
      * @return
      */
     @Transactional
-    public MemberResponseDto changeMemberPassword(String exPassword, String newPassword) {
+    public MemberStatusOkResponseDto changeMemberPassword(String exPassword, String newPassword) {
         Member member = isMemberCurrent();
         if (!passwordEncoder.matches(exPassword, member.getPassword())) {
             throw new MyInternalServerException("비밀번호가 맞지 않습니다");
         }
 
         member.setPassword(passwordEncoder.encode((newPassword)));
-        return MemberResponseDto.of(memberRepository.save(member));
+        memberRepository.save(member);
+        return MemberStatusOkResponseDto.statusOk();
     }
 
     /**
@@ -153,7 +154,7 @@ public class MemberService {
      * @return
      */
     @Transactional
-    public MemberResponseDto deleteMember(String password) {
+    public MemberStatusOkResponseDto deleteMember(String password) {
         Member member = isMemberCurrent();
         List<MemberPhoneAuth> memberPhoneAuth =memberPhoneAuthRepository.findByPhone(member.getPhone());
 
@@ -163,12 +164,13 @@ public class MemberService {
         //회원탈퇴시 기존 인증여부 N
         member.setStatus(Status.RED);
         memberPhoneAuth.forEach(memberPhoneAuth1->memberPhoneAuth1.setCheckYn(YN.N));
-        return MemberResponseDto.of(memberRepository.save(member));
+        memberRepository.save(member);
+        return MemberStatusOkResponseDto.statusOk();
     }
 
-    public MemberResponseDto memberName(){
+    public MemberNameResopnseDto memberName(){
         Member member = isMemberCurrent();
-        return MemberResponseDto.of(member);
+        return MemberNameResopnseDto.name(member);
     }
 
     /**
@@ -177,7 +179,7 @@ public class MemberService {
      * @return
      */
     @Transactional
-    public MemberResponseDto getMemberEmail(String phone , String smscode, Phoneauth phoneauth) {
+    public MemberIdFindResopnseDto getMemberEmail(String phone , String smscode, Phoneauth phoneauth) {
 
         String result = certifiedPhoneCheck(phone, smscode,phoneauth);
 
@@ -197,7 +199,7 @@ public class MemberService {
             memberPhoneAuth.setMember(member);
             memberPhoneAuth.setCheckYn(YN.Y);
 
-            return MemberResponseDto.of(member);
+            return MemberIdFindResopnseDto.idFind(member);
              }
         throw new MyInternalServerException("인증이 실패하였습니다.");
         }
@@ -225,13 +227,11 @@ public class MemberService {
      * @return AcademyId , ROLE_ACADEMY_STUDENT 를 가진 멤버 생성
      */
     @Transactional
-    public MemberResponseDto setAcademyMember(AcademyMemberRequestDto requestDto) {
+    public com.example.jkedudemo.module.member.dto.response.AcademyMemberResponseDto setAcademyMember(AcademyMemberRequestDto requestDto) {
         Member member = isMemberCurrent();
         if(!member.getRole().equals(Role.ROLE_ACADEMY))
-            throw new MyInternalServerException("잘못된 요청입니다.");
-
-        return MemberResponseDto
-                .of(memberRepository.save(new Member(null, null, requestDto.getName(), requestDto.getBirth(), null, requestDto.getPhone(), member.getAcademyId(), Role.ROLE_ACADEMY_STUDENT, null, 0)));
+            throw new MyInternalServerException("학원계정이 아닙니다.");
+        return com.example.jkedudemo.module.member.dto.response.AcademyMemberResponseDto.academyExamId(memberRepository.save(new Member(null, null, requestDto.getName(), requestDto.getBirth(), null, requestDto.getPhone(), member.getAcademyId(), Role.ROLE_ACADEMY_STUDENT, null, 0)));
         }
 
     /**

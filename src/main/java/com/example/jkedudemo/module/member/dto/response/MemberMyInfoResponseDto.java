@@ -7,7 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 import java.util.Date;
 
@@ -15,26 +14,33 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Slf4j
-public class MemberResponseDto {
+public class MemberMyInfoResponseDto {
+    private String status;
+    private String message;
     private String email;
     private String name;
     private String phone;
-    private Role role;
     private String academyId;
-    private Date birth;
-    private HttpStatusResopnse httpStatusResopnse;
+    private Integer testCount;
 
-    public static MemberResponseDto of(Member member) {
-        return MemberResponseDto.builder()
-                .httpStatusResopnse(new HttpStatusResopnse())
+
+    public static MemberMyInfoResponseDto myInfo(Member member) {
+        return MemberMyInfoResponseDto.builder()
+                .status("200")
+                .message("OK")
                 .name(member.getName())
-                .birth(member.getBirth())
                 .phone(member.getPhone())
-                .role(member.getRole())
                 .email(member.getEmail())
                 .academyId(member.getAcademyId())
+                .testCount(member.getTestCount())
                 .build();
     }
+
+
+
+
+
+
+
 
 }

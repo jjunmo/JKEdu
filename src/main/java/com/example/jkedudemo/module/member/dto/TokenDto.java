@@ -17,4 +17,8 @@ public class TokenDto {
 
     private Long tokenExpiresIn;
 
+    private String status;
+
+    private String message;
+
 }

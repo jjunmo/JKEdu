@@ -15,7 +15,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 @EnableJpaAuditing
 public class JkeduDemoApplication {
 
-    //TODO: ResponseDto 수정 상태코드 적용 , HttpStatusResponseDto 작성예정
+    //TODO: ResponseDto 수정 상태코드 적용
     public static void main(String[] args) {
         SpringApplication.run(JkeduDemoApplication.class, args);
     }

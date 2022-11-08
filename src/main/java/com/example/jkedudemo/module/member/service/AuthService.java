@@ -8,9 +8,8 @@ import com.example.jkedudemo.module.common.enums.YN;
 import com.example.jkedudemo.module.handler.MyInternalServerException;
 import com.example.jkedudemo.module.jwt.TokenProvider;
 import com.example.jkedudemo.module.member.dto.TokenDto;
-import com.example.jkedudemo.module.member.dto.request.FindPasswordRequestDto;
 import com.example.jkedudemo.module.member.dto.request.MemberRequestDto;
-import com.example.jkedudemo.module.member.dto.response.MemberResponseDto;
+import com.example.jkedudemo.module.member.dto.response.*;
 import com.example.jkedudemo.module.member.entity.Member;
 import com.example.jkedudemo.module.member.entity.MemberPhoneAuth;
 import com.example.jkedudemo.module.member.repository.MemberPhoneAuthRepository;
@@ -23,7 +22,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 import java.util.Optional;
@@ -43,7 +41,7 @@ public class AuthService {
 
 
     @Transactional
-    public MemberResponseDto signup(MemberRequestDto requestDto) {
+    public MemberStatusOkResponseDto signup(MemberRequestDto requestDto) {
 
         //TODO:이미 가입된 휴대전화 ,재인증 ,인증요청 횟수
 
@@ -81,7 +79,8 @@ public class AuthService {
 
 
         member.setStatus(Status.GREEN);
-        return MemberResponseDto.of(memberRepository.save(member));
+        memberRepository.save(member);
+        return MemberStatusOkResponseDto.statusOk();
 
     }
 

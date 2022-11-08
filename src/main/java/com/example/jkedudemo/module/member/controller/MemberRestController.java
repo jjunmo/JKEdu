@@ -4,10 +4,8 @@ package com.example.jkedudemo.module.member.controller;
 
 import com.example.jkedudemo.module.common.enums.Phoneauth;
 import com.example.jkedudemo.module.handler.MyInternalServerException;
-import com.example.jkedudemo.module.member.dto.TokenDto;
 import com.example.jkedudemo.module.member.dto.request.*;
-import com.example.jkedudemo.module.member.dto.response.HttpStatusResopnse;
-import com.example.jkedudemo.module.member.dto.response.MemberResponseDto;
+import com.example.jkedudemo.module.member.dto.response.*;
 
 import com.example.jkedudemo.module.member.entity.Member;
 import com.example.jkedudemo.module.member.service.AuthService;
@@ -35,11 +33,10 @@ public class MemberRestController {
      * @return
      */
     @GetMapping("/cert")
-    public HttpEntity<HttpStatusResopnse> sendSMS(@RequestParam("phone") String phone, @RequestParam("phoneauth") Phoneauth phoneauth) {
+    public HttpEntity<MemberStatusOkResponseDto> sendSMS(@RequestParam("phone") String phone, @RequestParam("phoneauth") Phoneauth phoneauth) {
         String result = memberService.certifiedPhone(phone, phoneauth);
         if (result.equals("OK")) {
-            HttpStatusResopnse httpStatusResopnse = new HttpStatusResopnse();
-            return ResponseEntity.ok(httpStatusResopnse);
+            return ResponseEntity.ok(MemberStatusOkResponseDto.statusOk());
         } else {
             throw new MyInternalServerException("관리자에게 문의해주세요.");
         }
@@ -63,11 +60,10 @@ public class MemberRestController {
      * @return
      */
     @GetMapping("/cert/ex")
-    public HttpEntity<Object> sendSMSCheck(@RequestParam("phone") String phone ,@RequestParam("smscode") String smscode,@RequestParam("phoneauth") Phoneauth phoneauth){
+    public HttpEntity<MemberStatusOkResponseDto> sendSMSCheck(@RequestParam("phone") String phone , @RequestParam("smscode") String smscode, @RequestParam("phoneauth") Phoneauth phoneauth){
         String result = memberService.certifiedPhoneCheck(phone,smscode, phoneauth);
         if(result.equals("OK")) {
-            HttpStatusResopnse httpStatusResopnse = new HttpStatusResopnse();
-            return ResponseEntity.ok(httpStatusResopnse);
+            return ResponseEntity.ok(MemberStatusOkResponseDto.statusOk());
         }else {
             throw new MyInternalServerException("인증실패");
         }
@@ -78,7 +74,7 @@ public class MemberRestController {
      * @return
      */
     @GetMapping("/myinfo")
-    public HttpEntity<MemberResponseDto> MemberInfo(){
+    public HttpEntity<MemberMyInfoResponseDto> MemberInfo(){
         return ResponseEntity.ok(memberService.getMyInfoBySecurity());
     }
 
@@ -88,8 +84,8 @@ public class MemberRestController {
      * @param request
      * @return
      */
-    @PutMapping
-    public HttpEntity<MemberResponseDto> setPassword(@RequestBody ChangePasswordRequestDto request) {
+    @PutMapping("/myinfo")
+    public HttpEntity<MemberStatusOkResponseDto> setPassword(@RequestBody ChangePasswordRequestDto request) {
         return ResponseEntity.ok(memberService.changeMemberPassword(request.getExPassword(), request.getNewPassword()));
     }
 
@@ -99,7 +95,7 @@ public class MemberRestController {
      * @return
      */
     @PostMapping
-    public HttpEntity<MemberResponseDto> setMemberDelete(@RequestBody DeleteMemberRequestDto request) {
+    public HttpEntity<MemberStatusOkResponseDto> setMemberDelete(@RequestBody DeleteMemberRequestDto request) {
         return ResponseEntity.ok(memberService.deleteMember(request.getPassword()));
     }
 
@@ -111,7 +107,7 @@ public class MemberRestController {
      * @return
      */
     @GetMapping("/check")
-    public HttpEntity<MemberResponseDto> getMemberEmail(String phone , String smscode,Phoneauth phoneauth){
+    public HttpEntity<MemberIdFindResopnseDto> getMemberEmail(String phone , String smscode, Phoneauth phoneauth){
         return ResponseEntity.ok(memberService.getMemberEmail(phone,smscode,phoneauth));
     }
 
@@ -123,7 +119,7 @@ public class MemberRestController {
 //    }
 
     @PutMapping("/check")
-    public HttpEntity<MemberResponseDto> getNewPassword(String newPassword){
+    public HttpEntity<MemberMyInfoResponseDto> getNewPassword(String newPassword){
         throw new MyInternalServerException("aaa");
     }
 
@@ -134,11 +130,10 @@ public class MemberRestController {
      * @return
      */
     @GetMapping("/excheck")
-    public HttpEntity<Object> exEmail(String email){
+    public HttpEntity<MemberStatusOkResponseDto> exEmail(String email){
         String result = memberService.exEmailCheck(email);
         if(result.equals("OK")) {
-            HttpStatusResopnse httpStatusResopnse = new HttpStatusResopnse();
-            return ResponseEntity.ok(httpStatusResopnse);
+            return ResponseEntity.ok(MemberStatusOkResponseDto.statusOk());
         }else {
             throw new MyInternalServerException("이미 존재하는 아이디입니다.");
         }
@@ -158,12 +153,12 @@ public class MemberRestController {
      */
 
     @PostMapping("/academy/exam")
-    public HttpEntity<MemberResponseDto> academyMember(@RequestBody AcademyMemberRequestDto request){
+    public HttpEntity<AcademyMemberResponseDto> academyMember(@RequestBody AcademyMemberRequestDto request){
         return ResponseEntity.ok(memberService.setAcademyMember(request));
     }
 
     @GetMapping("/name")
-    public HttpEntity<MemberResponseDto> setMemberName() {
+    public HttpEntity<MemberNameResopnseDto> setMemberName() {
         return ResponseEntity.ok(memberService.memberName());
     }
 
