@@ -1,5 +1,6 @@
 package com.example.jkedudemo.module.jwt;
 
+import com.example.jkedudemo.module.handler.MyInternalServerException;
 import com.example.jkedudemo.module.member.dto.TokenDto;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
@@ -78,7 +79,7 @@ public class TokenProvider {
         Claims claims = parseClaims(accessToken);
 
         if (claims.get(AUTHORITIES_KEY) == null) {
-            throw new RuntimeException("권한 정보가 없는 토큰입니다.");
+            throw new MyInternalServerException("권한 정보가 없는 토큰입니다.");
         }
 
 

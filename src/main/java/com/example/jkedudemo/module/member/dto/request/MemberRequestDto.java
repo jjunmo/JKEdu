@@ -18,6 +18,11 @@ public class MemberRequestDto {
     private Role role;
     private String academyId;
 
+    public MemberRequestDto(String email, String password) {
+        this.email=email;
+        this.password=password;
+    }
+
     //Roletype 바인딩 처리
     public void setRole(String role) {
         this.role = Role.valueOf("ROLE_"+role.toUpperCase());

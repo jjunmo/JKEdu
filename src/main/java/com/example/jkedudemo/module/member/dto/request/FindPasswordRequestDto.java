@@ -25,8 +25,5 @@ public class FindPasswordRequestDto {
         return phoneauth;
     }
 
-    public UsernamePasswordAuthenticationToken toAuthentication(String email ,String password) {
-        return new UsernamePasswordAuthenticationToken(email, password);
-    }
 
 }

@@ -23,15 +23,18 @@ public class MemberResponseDto {
     private Role role;
     private String academyId;
     private Date birth;
+    private HttpStatusResopnse httpStatusResopnse;
 
     public static MemberResponseDto of(Member member) {
-            return MemberResponseDto.builder()
-                    .name(member.getName())
-                    .birth(member.getBirth())
-                    .phone(member.getPhone())
-                    .role(member.getRole())
-                    .email(member.getEmail())
-                    .academyId(member.getAcademyId())
-                    .build();
+        return MemberResponseDto.builder()
+                .httpStatusResopnse(new HttpStatusResopnse())
+                .name(member.getName())
+                .birth(member.getBirth())
+                .phone(member.getPhone())
+                .role(member.getRole())
+                .email(member.getEmail())
+                .academyId(member.getAcademyId())
+                .build();
     }
+
 }

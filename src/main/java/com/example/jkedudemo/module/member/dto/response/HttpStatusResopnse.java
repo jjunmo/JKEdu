@@ -4,14 +4,12 @@ import com.example.jkedudemo.module.member.entity.Member;
 import lombok.*;
 
 @Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 
 public class HttpStatusResopnse {
 
-    private String status;
-    private String message;
+    private String status = "200";
+    private String message = "OK";
 
 }

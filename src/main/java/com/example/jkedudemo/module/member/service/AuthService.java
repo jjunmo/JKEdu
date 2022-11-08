@@ -5,6 +5,7 @@ import com.example.jkedudemo.module.common.util.Cer;
 import com.example.jkedudemo.module.common.enums.Phoneauth;
 import com.example.jkedudemo.module.common.enums.Status;
 import com.example.jkedudemo.module.common.enums.YN;
+import com.example.jkedudemo.module.handler.MyInternalServerException;
 import com.example.jkedudemo.module.jwt.TokenProvider;
 import com.example.jkedudemo.module.member.dto.TokenDto;
 import com.example.jkedudemo.module.member.dto.request.FindPasswordRequestDto;
@@ -22,6 +23,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 import java.util.Optional;
@@ -46,7 +48,7 @@ public class AuthService {
         //TODO:이미 가입된 휴대전화 ,재인증 ,인증요청 횟수
 
         if (memberRepository.existsByEmailAndStatusIn(requestDto.getEmail(), List.of(Status.GREEN,Status.YELLOW))) {
-            throw new RuntimeException("이미 가입되어 있는 유저입니다");
+            throw new MyInternalServerException("이미 가입되어 있는 유저입니다");
         }
 
         //비밀번호 인코딩
@@ -58,18 +60,17 @@ public class AuthService {
         Optional<MemberPhoneAuth> memberPhoneAuthOptional = memberPhoneAuthRepository.findByPhoneAndCheckYnAndPhoneauth(requestDto.getPhone(),YN.Y, Phoneauth.JOIN);
 
         if(memberPhoneAuthOptional.isEmpty()){
-            throw new IllegalArgumentException("인증을 완료하세요");
+            throw new MyInternalServerException("인증을 완료하세요");
         }
 
         //계정 상태 체크
         if (memberRepository.existsByPhoneAndStatus(requestDto.getPhone(), Status.YELLOW)) {
-            throw new IllegalArgumentException("정지대상입니다 고객센터에 문의하세요.");
+            throw new MyInternalServerException("정지대상입니다 고객센터에 문의하세요.");
         }else {
             memberPhoneAuthOptional.get().setMember(member);
         }
 
         //학원 학생인지 확인 (학원코드 발행)
-        // TODO:학원코드 중복확인
         if (member.getRole().equals(Role.ROLE_ACADEMY)) {
             String academyId = Cer.getCerStrNum(requestDto.getPhone());
             Optional<Member> academyIdCheck = memberRepository.findByAcademyId(academyId);
@@ -90,13 +91,13 @@ public class AuthService {
 
         Optional<Member> memberOptional = memberRepository.findByEmail(requestDto.getEmail());
         if(memberOptional.isEmpty()){
-            throw new RuntimeException("존재하지 않는 회원입니다.");
+            throw new MyInternalServerException("존재하지 않는 회원입니다.");
         }
 
         //Status 체크
         Member reqMember = memberOptional.get();
         if(reqMember.getStatus().equals(Status.YELLOW)){
-            throw new RuntimeException("정지 대상입니다.");
+            throw new MyInternalServerException("정지 대상입니다.");
         }
 
 
@@ -108,37 +109,6 @@ public class AuthService {
     }
 
 
-    //TODO:비밀번호 찾기 안됨.
-    @Transactional
-    public TokenDto getPassword(FindPasswordRequestDto request){
 
-        String result = memberService.certifiedPhoneCheck(request.getPhone(),request.getSmscode(),request.getPhoneauth());
-
-
-        if(result.equals("OK")){
-            Optional<Member> memberOptional = memberRepository.findByPhoneAndStatusIn(request.getPhone(),List.of(Status.GREEN,Status.YELLOW));
-            if(memberOptional.isEmpty()){
-                throw new RuntimeException("해당 정보로 가입된 아이디가 없습니다.");
-            }
-            Optional<MemberPhoneAuth> memberPhoneAuthOptional = memberPhoneAuthRepository.findByPhoneAndPhoneauth(request.getPhone(),Phoneauth.PW);
-            if(memberPhoneAuthOptional.isEmpty()){
-                throw new RuntimeException("휴대폰 인증을 완료하세요.");
-            }
-            MemberPhoneAuth memberPhoneAuth = memberPhoneAuthOptional.get();
-            Member member=memberOptional.get();
-            memberPhoneAuth.setMember(member);
-            memberPhoneAuth.setCheckYn(YN.Y);
-
-
-            UsernamePasswordAuthenticationToken authenticationToken = request.toAuthentication(member.getEmail(), member.getPassword());
-            Authentication authentication = managerBuilder.getObject().authenticate(authenticationToken);
-
-
-            return tokenProvider.generateTokenDto(authentication);
-        }
-
-        throw new RuntimeException("인증이 실패하였습니다.");
-
-    }
 
 }

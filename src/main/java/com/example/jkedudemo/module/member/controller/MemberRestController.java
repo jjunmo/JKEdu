@@ -3,6 +3,7 @@ package com.example.jkedudemo.module.member.controller;
 
 
 import com.example.jkedudemo.module.common.enums.Phoneauth;
+import com.example.jkedudemo.module.handler.MyInternalServerException;
 import com.example.jkedudemo.module.member.dto.TokenDto;
 import com.example.jkedudemo.module.member.dto.request.*;
 import com.example.jkedudemo.module.member.dto.response.HttpStatusResopnse;
@@ -36,15 +37,11 @@ public class MemberRestController {
     @GetMapping("/cert")
     public HttpEntity<HttpStatusResopnse> sendSMS(@RequestParam("phone") String phone, @RequestParam("phoneauth") Phoneauth phoneauth) {
         String result = memberService.certifiedPhone(phone, phoneauth);
-        HttpStatusResopnse httpStatusResopnse = new HttpStatusResopnse();
         if (result.equals("OK")) {
-            httpStatusResopnse.setStatus("200");
-            httpStatusResopnse.setMessage("메세지 발송 성공");
+            HttpStatusResopnse httpStatusResopnse = new HttpStatusResopnse();
             return ResponseEntity.ok(httpStatusResopnse);
         } else {
-            httpStatusResopnse.setStatus("400");
-            httpStatusResopnse.setMessage("관리자에게 문의 해주세요");
-            return ResponseEntity.badRequest().body(httpStatusResopnse);
+            throw new MyInternalServerException("관리자에게 문의해주세요.");
         }
     }
 
@@ -68,15 +65,11 @@ public class MemberRestController {
     @GetMapping("/cert/ex")
     public HttpEntity<Object> sendSMSCheck(@RequestParam("phone") String phone ,@RequestParam("smscode") String smscode,@RequestParam("phoneauth") Phoneauth phoneauth){
         String result = memberService.certifiedPhoneCheck(phone,smscode, phoneauth);
-        HttpStatusResopnse httpStatusResopnse = new HttpStatusResopnse();
         if(result.equals("OK")) {
-            httpStatusResopnse.setStatus("200");
-            httpStatusResopnse.setMessage("인증 성공");
+            HttpStatusResopnse httpStatusResopnse = new HttpStatusResopnse();
             return ResponseEntity.ok(httpStatusResopnse);
         }else {
-            httpStatusResopnse.setStatus("400");
-            httpStatusResopnse.setMessage("인증 실패");
-            return ResponseEntity.badRequest().body(httpStatusResopnse);
+            throw new MyInternalServerException("인증실패");
         }
     }
 
@@ -122,16 +115,16 @@ public class MemberRestController {
         return ResponseEntity.ok(memberService.getMemberEmail(phone,smscode,phoneauth));
     }
 
-    //TODO : 비밀번호 찾기
-
-    @PostMapping("/check")
-    public HttpEntity<TokenDto> getPassword(@RequestBody FindPasswordRequestDto request){
-        return ResponseEntity.ok(authService.getPassword(request));
-    }
+    //  TODO : 비밀번호 찾기 기존 방식 인코딩된 비밀번호 해결못함 / 이메일로 임시 비밀번호 발급방식 적용검토
+//
+//    @PostMapping("/check")
+//    public HttpEntity<TokenDto> getPassword(@RequestBody FindPasswordRequestDto request){
+//        return ResponseEntity.ok();
+//    }
 
     @PutMapping("/check")
     public HttpEntity<MemberResponseDto> getNewPassword(String newPassword){
-        throw new RuntimeException("aaa");
+        throw new MyInternalServerException("aaa");
     }
 
 
@@ -143,15 +136,11 @@ public class MemberRestController {
     @GetMapping("/excheck")
     public HttpEntity<Object> exEmail(String email){
         String result = memberService.exEmailCheck(email);
-        HttpStatusResopnse httpStatusResopnse = new HttpStatusResopnse();
         if(result.equals("OK")) {
-            httpStatusResopnse.setStatus("200");
-            httpStatusResopnse.setMessage("회원가입이 가능한 아이디 입니다.");
+            HttpStatusResopnse httpStatusResopnse = new HttpStatusResopnse();
             return ResponseEntity.ok(httpStatusResopnse);
         }else {
-            httpStatusResopnse.setStatus("400");
-            httpStatusResopnse.setMessage("이미 존재하는 아이디 입니다.");
-            return ResponseEntity.badRequest().body(httpStatusResopnse);
+            throw new MyInternalServerException("이미 존재하는 아이디입니다.");
         }
 
     }
@@ -172,6 +161,12 @@ public class MemberRestController {
     public HttpEntity<MemberResponseDto> academyMember(@RequestBody AcademyMemberRequestDto request){
         return ResponseEntity.ok(memberService.setAcademyMember(request));
     }
+
+    @GetMapping("/name")
+    public HttpEntity<MemberResponseDto> setMemberName() {
+        return ResponseEntity.ok(memberService.memberName());
+    }
+
 
 
 }

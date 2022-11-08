@@ -1,6 +1,6 @@
 package com.example.jkedudemo.module.member.service;
 
-
+import com.example.jkedudemo.module.handler.MyInternalServerException;
 import com.example.jkedudemo.module.common.enums.Phoneauth;
 import com.example.jkedudemo.module.common.enums.Role;
 import com.example.jkedudemo.module.common.enums.Status;
@@ -39,7 +39,7 @@ public class MemberService {
     //토큰확인
     public Member isMemberCurrent() {
         return memberRepository.findById(SecurityUtil.getCurrentMemberId())
-                .orElseThrow(() -> new RuntimeException("로그인 유저 정보가 없습니다"));
+                .orElseThrow(() -> new MyInternalServerException("로그인 유저 정보가 없습니다"));
     }
 
     //TODO : 회원 삭제 후 재 회원가입에 대한 Status 상태값 체크 필요.
@@ -57,7 +57,7 @@ public class MemberService {
         if(phoneauth.equals(Phoneauth.JOIN)) {
             Optional<Member> memberOptional = memberRepository.findByPhoneAndStatusIn(phone, List.of(Status.GREEN, Status.YELLOW));
             if (memberOptional.isPresent()) {
-                return "exEmail";
+                throw new MyInternalServerException("이미 존재하는 이메일 입니다.");
             }
         }
 
@@ -96,7 +96,7 @@ public class MemberService {
             System.out.println(e.getMessage());
             System.out.println(e.getCode());
         }
-        return "시스템 운영자에게 문의하세요.";
+        throw new MyInternalServerException("운영자에게 문의 부탁드립니다.");
     }
 
     /**
@@ -127,7 +127,7 @@ public class MemberService {
     public MemberResponseDto getMyInfoBySecurity() {
         return memberRepository.findById(SecurityUtil.getCurrentMemberId())
                 .map(MemberResponseDto::of)
-                .orElseThrow(() -> new RuntimeException("로그인 유저 정보가 없습니다"));
+                .orElseThrow(() -> new MyInternalServerException("로그인 유저 정보가 없습니다"));
     }
 
     /**
@@ -140,7 +140,7 @@ public class MemberService {
     public MemberResponseDto changeMemberPassword(String exPassword, String newPassword) {
         Member member = isMemberCurrent();
         if (!passwordEncoder.matches(exPassword, member.getPassword())) {
-            throw new RuntimeException("비밀번호가 맞지 않습니다");
+            throw new MyInternalServerException("비밀번호가 맞지 않습니다");
         }
 
         member.setPassword(passwordEncoder.encode((newPassword)));
@@ -158,12 +158,17 @@ public class MemberService {
         List<MemberPhoneAuth> memberPhoneAuth =memberPhoneAuthRepository.findByPhone(member.getPhone());
 
         if (!passwordEncoder.matches(password, member.getPassword())) {
-            throw new RuntimeException("비밀번호가 맞지 않습니다");
+            throw new MyInternalServerException("비밀번호가 맞지 않습니다");
         }
         //회원탈퇴시 기존 인증여부 N
         member.setStatus(Status.RED);
         memberPhoneAuth.forEach(memberPhoneAuth1->memberPhoneAuth1.setCheckYn(YN.N));
         return MemberResponseDto.of(memberRepository.save(member));
+    }
+
+    public MemberResponseDto memberName(){
+        Member member = isMemberCurrent();
+        return MemberResponseDto.of(member);
     }
 
     /**
@@ -181,11 +186,11 @@ public class MemberService {
         if(result.equals("OK")){
             Optional<Member> memberOptional = memberRepository.findByPhoneAndStatusIn(phone,List.of(Status.GREEN,Status.YELLOW));
             if(memberOptional.isEmpty()){
-                throw new RuntimeException("해당 정보로 가입된 아이디가 없습니다.");
+                throw new MyInternalServerException("해당 정보로 가입된 아이디가 없습니다.");
             }
             Optional<MemberPhoneAuth> memberPhoneAuthOptional = memberPhoneAuthRepository.findByPhoneAndPhoneauth(phone,Phoneauth.ID);
             if(memberPhoneAuthOptional.isEmpty()){
-                throw new RuntimeException("휴대폰 인증을 완료하세요.");
+                throw new MyInternalServerException("휴대폰 인증을 완료하세요.");
             }
             MemberPhoneAuth memberPhoneAuth = memberPhoneAuthOptional.get();
             Member member=memberOptional.get();
@@ -194,7 +199,7 @@ public class MemberService {
 
             return MemberResponseDto.of(member);
              }
-        throw new RuntimeException("인증이 실패하였습니다.");
+        throw new MyInternalServerException("인증이 실패하였습니다.");
         }
 
 
@@ -206,7 +211,7 @@ public class MemberService {
 //    public MemberResponseDto getPasswordChange(String exPassword,String newPassword){
 //        Member member = isMemberCurrent();
 //        if () {
-//            throw new RuntimeException("비밀번호가 맞지 않습니다");
+//            throw new MyInternalServerException("비밀번호가 맞지 않습니다");
 //        }
 //
 //        member.setPassword(passwordEncoder.encode((newPassword)));
@@ -223,7 +228,7 @@ public class MemberService {
     public MemberResponseDto setAcademyMember(AcademyMemberRequestDto requestDto) {
         Member member = isMemberCurrent();
         if(!member.getRole().equals(Role.ROLE_ACADEMY))
-            throw new RuntimeException("잘못된 요청입니다.");
+            throw new MyInternalServerException("잘못된 요청입니다.");
 
         return MemberResponseDto
                 .of(memberRepository.save(new Member(null, null, requestDto.getName(), requestDto.getBirth(), null, requestDto.getPhone(), member.getAcademyId(), Role.ROLE_ACADEMY_STUDENT, null, 0)));
@@ -243,6 +248,41 @@ public class MemberService {
         }
 
         }
+
+    //    //TODO:비밀번호 찾기 안됨.
+//    @Transactional
+//    public TokenDto getPassword(@RequestBody FindPasswordRequestDto request){
+//
+//        String result = memberService.certifiedPhoneCheck(request.getPhone(),request.getSmscode(),request.getPhoneauth());
+//
+//
+//        if(result.equals("OK")){
+//            Optional<Member> memberOptional = memberRepository.findByPhoneAndStatusIn(request.getPhone(),List.of(Status.GREEN,Status.YELLOW));
+//            if(memberOptional.isEmpty()){
+//                throw new MyInternalServerException("해당 정보로 가입된 아이디가 없습니다.");
+//            }
+//
+//            Optional<MemberPhoneAuth> memberPhoneAuthOptional = memberPhoneAuthRepository.findByPhoneAndPhoneauth(request.getPhone(),Phoneauth.PW);
+//            if(memberPhoneAuthOptional.isEmpty()){
+//                throw new MyInternalServerException("휴대폰 인증을 완료하세요.");
+//            }
+//
+//            MemberPhoneAuth memberPhoneAuth = memberPhoneAuthOptional.get();
+//            Member member=memberOptional.get();
+//            memberPhoneAuth.setMember(member);
+//            memberPhoneAuth.setCheckYn(YN.Y);
+//
+//
+//
+//            MemberRequestDto requestDto =new MemberRequestDto(member.getEmail(),member.getPassword());
+//
+//            return login(requestDto);
+//
+//        }
+//
+//        throw new MyInternalServerException("인증이 실패하였습니다.");
+//
+//    }
 
     /**
      *
