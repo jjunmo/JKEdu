@@ -2,9 +2,11 @@ package com.example.jkedudemo.module.upload;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -18,17 +20,15 @@ public class AmazonS3ResourceStorage {
     private final AmazonS3Client amazonS3Client;
 
     public void store(String fullPath, MultipartFile multipartFile) {
-        File file = new File(MultipartUtil.getLocalHomeDirectory(), fullPath);
+        ObjectMetadata metadata =new ObjectMetadata();
+        metadata.setContentType(MediaType.ALL_VALUE);
+        metadata.setContentLength(multipartFile.getSize());
         try {
-            multipartFile.transferTo(file);
-            amazonS3Client.putObject(new PutObjectRequest(bucket, fullPath, file)
+            amazonS3Client.putObject(new PutObjectRequest(bucket, fullPath, multipartFile.getInputStream(),metadata)
                     .withCannedAcl(CannedAccessControlList.PublicRead));
+            amazonS3Client.getResourceUrl(bucket,fullPath);
         } catch (Exception e) {
-            throw new RuntimeException();
-        } finally {
-            if (file.exists()) {
-                file.delete();
-            }
+            e.printStackTrace();
         }
     }
 }

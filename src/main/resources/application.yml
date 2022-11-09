@@ -28,10 +28,10 @@ jwt:
 cloud:
   aws:
     s3:
-      bucket: jkedu.exam.bucket
+      bucket: jkedu.exam
     credentials:
-      access-key: AKIA36UON3LIXBN2Q3KW
-      secret-key: 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
+      access-key: AKIA36UON3LI2IPGFY4W
+      secret-key: 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
     region:
       static: ap-northeast-2
       auto: false

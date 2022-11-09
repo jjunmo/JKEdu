@@ -44,7 +44,6 @@ public class MemberService {
 
     //TODO : 회원 삭제 후 재 회원가입에 대한 Status 상태값 체크 필요.
 
-
     @Transactional
     public String certifiedPhone(String phone, Phoneauth phoneauth) {
 
@@ -96,7 +95,6 @@ public class MemberService {
         throw new MyInternalServerException("운영자에게 문의 부탁드립니다.");
     }
 
-
     @Transactional
     public String certifiedPhoneCheck(String phone ,String smscode , Phoneauth phoneauth){
 
@@ -113,8 +111,6 @@ public class MemberService {
             return "OK";
         }
     }
-
-
 
     public MemberMyInfoResponseDto getMyInfoBySecurity() {
         return memberRepository.findById(SecurityUtil.getCurrentMemberId())
@@ -183,11 +179,6 @@ public class MemberService {
         throw new MyInternalServerException("인증이 실패하였습니다.");
         }
 
-
-    //TODO: return 타입 확인
-
-
-
     //TODO:비밀번호 찾기 이후 비밀번호 재설정
 //    public MemberResponseDto getPasswordChange(String exPassword,String newPassword){
 //        Member member = isMemberCurrent();
@@ -198,8 +189,6 @@ public class MemberService {
 //        member.setPassword(passwordEncoder.encode((newPassword)));
 //        return MemberResponseDto.of(memberRepository.save(member));
 //    }
-
-
 
     @Transactional
     public AcademyMemberResponseDto setAcademyMember(AcademyMemberRequestDto requestDto) {
@@ -219,7 +208,6 @@ public class MemberService {
         }
 
         }
-
 
     @Transactional
     public MemberStatusOkResponseDto getNewPassword(String phone ,String smscode ,Phoneauth phoneauth){

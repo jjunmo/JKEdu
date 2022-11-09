@@ -16,7 +16,6 @@ public class MemberNameResopnseDto {
     public String message;
     public String name;
 
-
     public static MemberNameResopnseDto name(Member member){
         return MemberNameResopnseDto.builder()
                 .status("200")

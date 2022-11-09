@@ -23,7 +23,6 @@ public class MemberMyInfoResponseDto {
     private String academyId;
     private Integer testCount;
 
-
     public static MemberMyInfoResponseDto myInfo(Member member) {
         return MemberMyInfoResponseDto.builder()
                 .status("200")

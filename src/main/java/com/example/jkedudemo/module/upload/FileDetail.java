@@ -15,6 +15,7 @@ public class FileDetail extends BaseTime {
     private String name;
     private String format;
     private String path;
+    private String url;
     private long bytes;
 
 

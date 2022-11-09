@@ -22,7 +22,4 @@ public class MemberPayment  extends BaseTime {
     @JoinColumn
     private Member member;
 
-
-
-
 }

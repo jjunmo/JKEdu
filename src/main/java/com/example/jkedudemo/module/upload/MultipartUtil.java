@@ -8,13 +8,6 @@ public final class MultipartUtil {
     private static final String BASE_DIR = "images";
 
     /**
-     * 로컬에서의 사용자 홈 디렉토리 경로를 반환합니다.
-     */
-    public static String getLocalHomeDirectory() {
-        return System.getProperty("user.home");
-    }
-
-    /**
      * 새로운 파일 고유 ID를 생성합니다.
      * @return 36자리의 UUID
      */

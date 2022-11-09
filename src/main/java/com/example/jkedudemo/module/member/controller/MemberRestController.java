@@ -25,7 +25,12 @@ public class MemberRestController {
 
     private final MemberService memberService;
 
-
+    /**
+     * 문자발송
+     * @param phone 연락처
+     * @param phoneauth JOIN , ID ,PW
+     * @return SMS 발송
+     */
     @GetMapping("/cert")
     public HttpEntity<MemberStatusOkResponseDto> sendSMS(@RequestParam("phone") String phone, @RequestParam("phoneauth") Phoneauth phoneauth) {
         String result = memberService.certifiedPhone(phone, phoneauth);
@@ -36,14 +41,13 @@ public class MemberRestController {
         }
     }
 
-
-    @PostMapping("/testmember")
-    public HttpEntity<Member> testMember(){
-        return ResponseEntity.ok(memberService.setTestMember());
-
-    }
-
-
+    /**
+     * 인증하기
+     * @param phone 연락처
+     * @param smscode 인증번호
+     * @param phoneauth JOIN ,ID ,PW
+     * @return 인증여부
+     */
     @GetMapping("/cert/ex")
     public HttpEntity<MemberStatusOkResponseDto> sendSMSCheck(@RequestParam("phone") String phone , @RequestParam("smscode") String smscode, @RequestParam("phoneauth") Phoneauth phoneauth){
         String result = memberService.certifiedPhoneCheck(phone,smscode, phoneauth);
@@ -54,38 +58,76 @@ public class MemberRestController {
         }
     }
 
+    /**
+     *
+     * @return 테스트 멤버 생성
+     */
+    @PostMapping("/testmember")
+    public HttpEntity<Member> testMember(){
+        return ResponseEntity.ok(memberService.setTestMember());
 
+    }
+
+    /**
+     * 내 정보
+     * @return 정보 확인
+     */
     @GetMapping("/myinfo")
     public HttpEntity<MemberMyInfoResponseDto> MemberInfo(){
         return ResponseEntity.ok(memberService.getMyInfoBySecurity());
     }
 
-
+    /**
+     * 비밀번호 변경
+     * @param request exPassword , newPassword
+     * @return 비밀번호 변경
+     */
     @PutMapping("/myinfo")
     public HttpEntity<MemberStatusOkResponseDto> setPassword(@RequestBody ChangePasswordRequestDto request) {
         return ResponseEntity.ok(memberService.changeMemberPassword(request.getExPassword(), request.getNewPassword()));
     }
 
-    //TODO: 삭제 완료 이후 토큰으로 가입됨.
+    //TODO: 삭제 완료 이후 토큰으로 가입됨.나중에 확인
+
+    /**
+     * 계정 삭제
+     * @param request password
+     * @return Status.RED
+     */
     @PostMapping("/myinfo")
     public HttpEntity<MemberStatusOkResponseDto> setMemberDelete(@RequestBody DeleteMemberRequestDto request) {
         return ResponseEntity.ok(memberService.deleteMember(request.getPassword()));
     }
 
-
+    /**
+     * 아이디 찾기
+     * @param phone 연락처
+     * @param smscode 인증번호
+     * @param phoneauth 인증확인
+     * @return
+     */
     @GetMapping("/check")
     public HttpEntity<MemberIdFindResopnseDto> getMemberEmail(String phone , String smscode, Phoneauth phoneauth){
         return ResponseEntity.ok(memberService.getMemberEmail(phone,smscode,phoneauth));
     }
 
-
+    /**
+     * 비밀번호 찾기
+     * @param phone 연락처
+     * @param smscode 인증번호
+     * @param phoneauth Phoneauth Y,N
+     * @return 임시비밀번호 문자로 발송
+     */
     @PostMapping("/check")
     public HttpEntity<MemberStatusOkResponseDto> getNewPassword(String phone , String smscode, Phoneauth phoneauth){
         return ResponseEntity.ok(memberService.getNewPassword(phone, smscode, phoneauth));
     }
 
-
-
+    /**
+     * 아이디 중복체크
+     * @param email 이메일
+     * @return OK,FAIL
+     */
     @GetMapping("/excheck")
     public HttpEntity<MemberStatusOkResponseDto> exEmail(String email){
         String result = memberService.exEmailCheck(email);
@@ -97,23 +139,23 @@ public class MemberRestController {
 
     }
 
-    //비밀번호 찾기 이후 비밀번호 재설정
-//    @PostMapping("/find/password/change")
-//    public HttpEntity<MemberResponseDto> getPasswordChange(@RequestBody ChangePasswordRequestDto){
-//
-//    }
-
-
+    /**
+     * 학원학생 시험 응시
+     * @param request name ,birth , phone
+     * @return OK,FAIL  member.id
+     */
     @PostMapping("/academy/exam")
     public HttpEntity<AcademyMemberResponseDto> academyMember(@RequestBody AcademyMemberRequestDto request){
         return ResponseEntity.ok(memberService.setAcademyMember(request));
     }
 
+    /**
+     * 사용자 이름
+     * @return name
+     */
     @GetMapping("/name")
-    public HttpEntity<MemberNameResopnseDto> setMemberName() {
+    public HttpEntity<MemberNameResopnseDto> getMemberName() {
         return ResponseEntity.ok(memberService.memberName());
     }
 
-
-
-}
+    }

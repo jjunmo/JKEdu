@@ -77,7 +77,6 @@ public class AuthService {
             }
         }
 
-
         member.setStatus(Status.GREEN);
         memberRepository.save(member);
         return MemberStatusOkResponseDto.statusOk();
@@ -86,7 +85,6 @@ public class AuthService {
 
     @Transactional
     public TokenDto login(MemberRequestDto requestDto) {
-
 
         Optional<Member> memberOptional = memberRepository.findByEmailAndStatusIn(requestDto.getEmail(), List.of(Status.GREEN ,Status.YELLOW));
         if (memberOptional.isEmpty()) {
@@ -106,10 +104,8 @@ public class AuthService {
             throw new MyInternalServerException("정지 대상입니다.");
         }
 
-
         UsernamePasswordAuthenticationToken authenticationToken = requestDto.toAuthentication();
         Authentication authentication = managerBuilder.getObject().authenticate(authenticationToken);
-
 
         return tokenProvider.generateTokenDto(authentication);
 

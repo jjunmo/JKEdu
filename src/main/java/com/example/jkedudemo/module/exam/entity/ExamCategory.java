@@ -14,5 +14,4 @@ public class ExamCategory extends BaseTime {
     @Enumerated(EnumType.STRING)
     private Exam exam;
 
-
 }

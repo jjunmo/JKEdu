@@ -51,6 +51,4 @@ public class Member extends BaseTime {
     private Integer testCount;
 
     //TODO: 약관동의 체크
-
-
 }
