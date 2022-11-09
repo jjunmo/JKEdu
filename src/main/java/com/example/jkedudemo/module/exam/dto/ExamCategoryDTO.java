@@ -18,23 +18,28 @@ public class ExamCategoryDTO {
 //JSON
 //{
 //    id: 1
-//    examType: "Speaking",
+//    EXAM: SPEAKING ,READING ,LISTENING, GRAMMAR, WRITING
 //    memberExamQuestDTOList: [
 //        {
 //            id:1
-//            questType : MULTIPLE_CHODICE , DESCRIPTIVE_FORM
+//            quest : DESCRIPTIVE,MULTIPLE
+//            question :
+//            subQuestion :
+//            imgUrl :
+//            videoUrl :
+//            speakUrl :
 //        },
 //        {
 //            id:2
-//            questType : MULTIPLE_CHODICE , DESCRIPTIVE_FORM
+//            questType : DESCRIPTIVE,MULTIPLE
 //            MULTIPLE_CHODICE : [
 //                {
-//                    quest: 1,
-//                    title: flisajelf
+//                    questNumber: 1,
+//                    questContent: flisajelf
 //                },
 //                {
-//                    sort: 2,
-//                    title: asljeflsejf
+//                    questNumber: 2,
+//                    questContent: asljeflsejf
 //                }
 //            ]
 //        }

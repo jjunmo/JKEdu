@@ -1,5 +1,5 @@
 package com.example.jkedudemo.module.common.enums;
 
-public enum QuestType {
+public enum Quest {
     DESCRIPTIVE,MULTIPLE
 }

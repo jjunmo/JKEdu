@@ -23,7 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
-import static com.example.jkedudemo.module.common.util.Cer.getCerNum;
+import static com.example.jkedudemo.module.common.util.Cer.getCerNum;import static com.example.jkedudemo.module.common.util.Cer.getStrStrCerNum;
 
 @Service
 @Slf4j
@@ -44,20 +44,16 @@ public class MemberService {
 
     //TODO : 회원 삭제 후 재 회원가입에 대한 Status 상태값 체크 필요.
 
-    /**
-     *
-     * @param phone
-     * @param phoneauth
-     * @return
-     */
+
     @Transactional
     public String certifiedPhone(String phone, Phoneauth phoneauth) {
 
         StringBuilder cerNum = getCerNum(phone);
+        //인증요청시 연락처 유효성 체크
         if(phoneauth.equals(Phoneauth.JOIN)) {
             Optional<Member> memberOptional = memberRepository.findByPhoneAndStatusIn(phone, List.of(Status.GREEN, Status.YELLOW));
             if (memberOptional.isPresent()) {
-                throw new MyInternalServerException("이미 존재하는 이메일 입니다.");
+                throw new MyInternalServerException("이미 가입된 회원 입니다.");
             }
         }
 
@@ -78,6 +74,7 @@ public class MemberService {
             JSONObject obj = (JSONObject) coolsms.send(params);
             System.out.println(obj.toString());
 
+            //해당 휴대전화로 인증요청이 없을경우 있을경우도 동일한 코드로 확인됨.
             Optional<MemberPhoneAuth> optional = memberPhoneAuthRepository.findByPhoneAndPhoneauth(phone, phoneauth);
             if (optional.isEmpty()) {
                 memberPhoneAuthRepository.save( new MemberPhoneAuth(
@@ -99,43 +96,33 @@ public class MemberService {
         throw new MyInternalServerException("운영자에게 문의 부탁드립니다.");
     }
 
-    /**
-     *
-     * @param phone
-     * @param smscode
-     * @param phoneauth
-     * @return
-     */
+
     @Transactional
     public String certifiedPhoneCheck(String phone ,String smscode , Phoneauth phoneauth){
+
         Optional<MemberPhoneAuth> optional = memberPhoneAuthRepository.findByPhoneAndSmscodeAndPhoneauth(phone, smscode, phoneauth);
         if(optional.isEmpty()){
             throw new MyInternalServerException("인증번호가 일치하지 않습니다.");
         }else{
             MemberPhoneAuth memberPhoneAuth = optional.get();
             memberPhoneAuth.setCheckYn(YN.Y);
+
             log.info("인증"+memberPhoneAuth.getCheckYn().toString());
+            log.info("인증유형"+memberPhoneAuth.getPhoneauth().toString());
+
             return "OK";
         }
     }
 
 
-    /**
-     *
-     * @return
-     */
+
     public MemberMyInfoResponseDto getMyInfoBySecurity() {
         return memberRepository.findById(SecurityUtil.getCurrentMemberId())
                 .map(MemberMyInfoResponseDto::myInfo)
                 .orElseThrow(() -> new MyInternalServerException("로그인 유저 정보가 없습니다"));
     }
 
-    /**
-     *
-     * @param exPassword
-     * @param newPassword
-     * @return
-     */
+
     @Transactional
     public MemberStatusOkResponseDto changeMemberPassword(String exPassword, String newPassword) {
         Member member = isMemberCurrent();
@@ -148,11 +135,7 @@ public class MemberService {
         return MemberStatusOkResponseDto.statusOk();
     }
 
-    /**
-     *
-     * @param password
-     * @return
-     */
+
     @Transactional
     public MemberStatusOkResponseDto deleteMember(String password) {
         Member member = isMemberCurrent();
@@ -173,11 +156,7 @@ public class MemberService {
         return MemberNameResopnseDto.name(member);
     }
 
-    /**
-     *
-     * @param phone
-     * @return
-     */
+
     @Transactional
     public MemberIdFindResopnseDto getMemberEmail(String phone , String smscode, Phoneauth phoneauth) {
 
@@ -190,6 +169,7 @@ public class MemberService {
             if(memberOptional.isEmpty()){
                 throw new MyInternalServerException("해당 정보로 가입된 아이디가 없습니다.");
             }
+
             Optional<MemberPhoneAuth> memberPhoneAuthOptional = memberPhoneAuthRepository.findByPhoneAndPhoneauth(phone,Phoneauth.ID);
             if(memberPhoneAuthOptional.isEmpty()){
                 throw new MyInternalServerException("휴대폰 인증을 완료하세요.");
@@ -197,7 +177,6 @@ public class MemberService {
             MemberPhoneAuth memberPhoneAuth = memberPhoneAuthOptional.get();
             Member member=memberOptional.get();
             memberPhoneAuth.setMember(member);
-            memberPhoneAuth.setCheckYn(YN.Y);
 
             return MemberIdFindResopnseDto.idFind(member);
              }
@@ -221,79 +200,89 @@ public class MemberService {
 //    }
 
 
-    /**
-     * 학원 학생 시험보
-     * @param requestDto 기름 , 연락처 ,생일
-     * @return AcademyId , ROLE_ACADEMY_STUDENT 를 가진 멤버 생성
-     */
+
     @Transactional
-    public com.example.jkedudemo.module.member.dto.response.AcademyMemberResponseDto setAcademyMember(AcademyMemberRequestDto requestDto) {
+    public AcademyMemberResponseDto setAcademyMember(AcademyMemberRequestDto requestDto) {
         Member member = isMemberCurrent();
         if(!member.getRole().equals(Role.ROLE_ACADEMY))
-            throw new MyInternalServerException("학원계정이 아닙니다.");
-        return com.example.jkedudemo.module.member.dto.response.AcademyMemberResponseDto.academyExamId(memberRepository.save(new Member(null, null, requestDto.getName(), requestDto.getBirth(), null, requestDto.getPhone(), member.getAcademyId(), Role.ROLE_ACADEMY_STUDENT, null, 0)));
+            throw new MyInternalServerException("잘못된 요청입니다.");
+        return AcademyMemberResponseDto.academyExamId(memberRepository.save(new Member(null, null, requestDto.getName(), requestDto.getBirth(), null, requestDto.getPhone(), member.getAcademyId(), Role.ROLE_ACADEMY_STUDENT, null, 0)));
         }
 
-    /**
-     * 이메일 중복체크
-     * @param email
-     * @return
-     */
+
     public String exEmailCheck(String email){
-        Optional<Member> member = memberRepository.findByEmail(email);
+        Optional<Member> member = memberRepository.findByEmailAndStatusIn(email,List.of(Status.GREEN,Status.YELLOW));
         if(member.isEmpty()){
-            return "YES";
+            return "OK";
         }else{
-            return "NO";
+            throw new MyInternalServerException("이미 가입된 아이디 입니다.");
         }
 
         }
 
-    //    //TODO:비밀번호 찾기 안됨.
-//    @Transactional
-//    public TokenDto getPassword(@RequestBody FindPasswordRequestDto request){
-//
-//        String result = memberService.certifiedPhoneCheck(request.getPhone(),request.getSmscode(),request.getPhoneauth());
-//
-//
-//        if(result.equals("OK")){
-//            Optional<Member> memberOptional = memberRepository.findByPhoneAndStatusIn(request.getPhone(),List.of(Status.GREEN,Status.YELLOW));
-//            if(memberOptional.isEmpty()){
-//                throw new MyInternalServerException("해당 정보로 가입된 아이디가 없습니다.");
-//            }
-//
-//            Optional<MemberPhoneAuth> memberPhoneAuthOptional = memberPhoneAuthRepository.findByPhoneAndPhoneauth(request.getPhone(),Phoneauth.PW);
-//            if(memberPhoneAuthOptional.isEmpty()){
-//                throw new MyInternalServerException("휴대폰 인증을 완료하세요.");
-//            }
-//
-//            MemberPhoneAuth memberPhoneAuth = memberPhoneAuthOptional.get();
-//            Member member=memberOptional.get();
-//            memberPhoneAuth.setMember(member);
-//            memberPhoneAuth.setCheckYn(YN.Y);
-//
-//
-//
-//            MemberRequestDto requestDto =new MemberRequestDto(member.getEmail(),member.getPassword());
-//
-//            return login(requestDto);
-//
-//        }
-//
-//        throw new MyInternalServerException("인증이 실패하였습니다.");
-//
-//    }
 
-    /**
-     *
-      * @return
-     */
+    @Transactional
+    public MemberStatusOkResponseDto getNewPassword(String phone ,String smscode ,Phoneauth phoneauth){
+
+        String result = certifiedPhoneCheck(phone,smscode,phoneauth);
+
+        if(result.equals("OK")){
+            Optional<Member> memberOptional = memberRepository.findByPhoneAndStatusIn(phone,List.of(Status.GREEN,Status.YELLOW));
+            if(memberOptional.isEmpty()){
+                throw new MyInternalServerException("해당 정보로 가입된 아이디가 없습니다.");
+            }
+
+            Member member=memberOptional.get();
+
+            Optional<MemberPhoneAuth> memberPhoneAuthOptional = memberPhoneAuthRepository.findByPhoneAndCheckYnAndPhoneauth(phone,YN.Y, Phoneauth.PW);
+
+            if(memberPhoneAuthOptional.isEmpty()){
+                throw new MyInternalServerException("인증을 완료하세요");
+            }
+
+            memberPhoneAuthOptional.get().setMember(member);
+
+            //TODO:임시 비밀번호 문자로 발급 후 데이터베이스에 비밀번호 임시비밀번호로 저장
+
+            StringBuilder cerNum = getStrStrCerNum(phone);
+
+            //collSMS 등록된 사용자
+            String api_key = "NCSFXG0SLI1M6IP8";
+            String api_secret = "LSMCMXB2HEIL4LHFZTCKU4PAHGBECFSX";
+            Message coolsms = new Message(api_key, api_secret);
+
+            // 4 params(to, from, type, text) are mandatory. must be filled
+            HashMap<String, String> params = new HashMap<String, String>();
+            params.put("to", phone);    // 수신전화번호
+            params.put("from", "010-8948-8846");    // 발신전화번호. 테스트시에는 발신,수신 둘다 본인 번호로 하면 됨
+            params.put("type", "SMS");
+            params.put("text", " 변경된 임시비밀번호는 " + "["+cerNum+"]" + "입니다.");
+            params.put("app_version", "test app 1.2"); // application name and version
+
+            try {
+                JSONObject obj = (JSONObject) coolsms.send(params);
+                System.out.println(obj.toString());
+                member.setPassword(passwordEncoder.encode(cerNum));
+
+                return MemberStatusOkResponseDto.statusOk();
+                //인증코드 발송
+            } catch (CoolsmsException e) {
+
+                System.out.println(e.getMessage());
+                System.out.println(e.getCode());
+            }
+
+        }
+
+        throw new MyInternalServerException("인증이 실패하였습니다.");
+
+    }
+
     public Member setTestMember(){
         return memberRepository.save(
                 new Member(
                         null,"1111","aaaa",null,"1111","1111","1111",null,null,0
                 )
         );
-
-     }
     }
+}

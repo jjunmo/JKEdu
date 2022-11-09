@@ -38,11 +38,6 @@ public class TokenProvider {
     }
 
 
-    /**
-     * 토큰 생성
-     * @param authentication
-     * @return TokenDto에 해당 토큰정보 저장
-     */
     public TokenDto generateTokenDto(Authentication authentication) {
 
         String authorities = authentication.getAuthorities().stream()
@@ -72,11 +67,7 @@ public class TokenProvider {
                 .build();
     }
 
-    /**
-     * 토큰의 인증 확인
-     * @param accessToken 토큰정보
-     * @return 토큰 정보와 인가
-     */
+
     public Authentication getAuthentication(String accessToken) {
         Claims claims = parseClaims(accessToken);
 
@@ -95,11 +86,7 @@ public class TokenProvider {
         return new UsernamePasswordAuthenticationToken(principal, "", authorities);
     }
 
-    /**
-     * 토큰 검증
-     * @param token 토큰정보
-     * @return
-     */
+
     public boolean validateToken(String token) {
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
@@ -116,11 +103,6 @@ public class TokenProvider {
         return false;
     }
 
-    /**
-     *
-     * @param accessToken 토큰정보
-     * @return 토큰을 Claims 형으로 변환
-     */
     private Claims parseClaims(String accessToken) {
         try {
             return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken).getBody();

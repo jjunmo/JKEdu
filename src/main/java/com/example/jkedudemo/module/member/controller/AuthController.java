@@ -17,22 +17,14 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
     private final AuthService authService;
 
-    /**
-     *
-     * @param requestDto
-     * @return
-     */
+
     @PostMapping("/member/register")
     public HttpEntity<MemberStatusOkResponseDto> signup(@RequestBody MemberRequestDto requestDto) {
 
         return ResponseEntity.ok(authService.signup(requestDto));
     }
 
-    /**
-     *
-     * @param requestDto
-     * @return
-     */
+
     @PostMapping("/member/login")
     public HttpEntity<TokenDto> login(@RequestBody MemberRequestDto requestDto) {
         return ResponseEntity.ok(authService.login(requestDto));

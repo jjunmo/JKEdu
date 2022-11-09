@@ -19,12 +19,7 @@ import java.util.Collections;
 public class CustomUserDetailsService implements UserDetailsService {
     private final MemberRepository memberRepository;
 
-    /**
-     *
-     * @param username 로그인시 사용하는 email
-     * @return email 이 존재하면 해당 정보를 가지고옴
-     * @throws UsernameNotFoundException 존재하지 않는 이메일
-     */
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return memberRepository.findByEmail(username)

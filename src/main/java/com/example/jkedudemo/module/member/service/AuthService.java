@@ -63,14 +63,14 @@ public class AuthService {
 
         //계정 상태 체크
         if (memberRepository.existsByPhoneAndStatus(requestDto.getPhone(), Status.YELLOW)) {
-            throw new MyInternalServerException("정지대상입니다 고객센터에 문의하세요.");
+            throw new MyInternalServerException("회원가입이 정지된 고객정보입니다. 고객센터에 문의하세요.");
         }else {
             memberPhoneAuthOptional.get().setMember(member);
         }
 
         //학원 학생인지 확인 (학원코드 발행)
         if (member.getRole().equals(Role.ROLE_ACADEMY)) {
-            String academyId = Cer.getCerStrNum(requestDto.getPhone());
+            String academyId = Cer.getStrCerNum(requestDto.getPhone());
             Optional<Member> academyIdCheck = memberRepository.findByAcademyId(academyId);
             if (academyIdCheck.isEmpty()) {
                 member.setAcademyId(academyId);
@@ -88,14 +88,21 @@ public class AuthService {
     public TokenDto login(MemberRequestDto requestDto) {
 
 
-        Optional<Member> memberOptional = memberRepository.findByEmail(requestDto.getEmail());
-        if(memberOptional.isEmpty()){
+        Optional<Member> memberOptional = memberRepository.findByEmailAndStatusIn(requestDto.getEmail(), List.of(Status.GREEN ,Status.YELLOW));
+        if (memberOptional.isEmpty()) {
             throw new MyInternalServerException("존재하지 않는 회원입니다.");
         }
+        Member reqMember = memberOptional.get();
+
+        if (!passwordEncoder.matches(requestDto.getPassword(), reqMember.getPassword())) {
+            throw new MyInternalServerException("비밀번호가 틀렸습니다");
+        }
+
+        //TODO: 비밀번호 유효성 체크 , 토큰이 남아있음.
 
         //Status 체크
-        Member reqMember = memberOptional.get();
-        if(reqMember.getStatus().equals(Status.YELLOW)){
+
+        if (reqMember.getStatus().equals(Status.YELLOW)) {
             throw new MyInternalServerException("정지 대상입니다.");
         }
 
@@ -105,9 +112,7 @@ public class AuthService {
 
 
         return tokenProvider.generateTokenDto(authentication);
+
     }
-
-
-
 
 }

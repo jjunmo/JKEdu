@@ -8,10 +8,7 @@ public class SecurityUtil {
 
     private SecurityUtil() { }
 
-    /**
-     *
-     * @return 인증된 Member의 id(PK) 반환
-     */
+
     public static Long getCurrentMemberId() {
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 

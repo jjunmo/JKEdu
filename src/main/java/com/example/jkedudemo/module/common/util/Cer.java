@@ -5,9 +5,17 @@ import java.util.Random;
 public class Cer {
 
     // A~Z 임의의 문자 1개 생성
-    public static StringBuilder getCerStr(){
+    public static StringBuilder getCerStrA(){
         StringBuilder cerStr = new StringBuilder();
         char ch = (char) ((Math.random() * 26) + 65);
+        cerStr.append(ch);
+        return cerStr;
+    }
+
+    // a~z 임의의 문자 1개 생성
+    public static StringBuilder getCerStra(){
+        StringBuilder cerStr = new StringBuilder();
+        char ch = (char) ((Math.random() * 26) + 97);
         cerStr.append(ch);
         return cerStr;
     }
@@ -28,8 +36,15 @@ public class Cer {
         return cerNum;
     }
 
-    public static String getCerStrNum(String phone){
-       return String.valueOf(Cer.getCerStr().append(Cer.getCerNum(phone)));
+
+    //AcademyId
+    public static String getStrCerNum(String phone){
+       return String.valueOf(Cer.getCerStrA().append(Cer.getCerNum(phone)));
+    }
+
+    //임시 비밀번호
+    public static StringBuilder getStrStrCerNum(String phone){
+        return new StringBuilder(Cer.getCerStra().append(Cer.getCerStra()).append(Cer.getCerNum(phone)));
     }
 
 

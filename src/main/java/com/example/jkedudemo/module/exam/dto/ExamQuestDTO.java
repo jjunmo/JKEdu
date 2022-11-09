@@ -1,6 +1,6 @@
 package com.example.jkedudemo.module.exam.dto;
 
-import com.example.jkedudemo.module.common.enums.QuestType;
+import com.example.jkedudemo.module.common.enums.Quest;
 import lombok.Data;
 
 import java.util.List;
@@ -8,7 +8,7 @@ import java.util.List;
 @Data
 public class ExamQuestDTO {
     private Long id;
-    private QuestType type;
+    private Quest type;
     private String question;
     private String subQuestion;
     private String imgUrl;
