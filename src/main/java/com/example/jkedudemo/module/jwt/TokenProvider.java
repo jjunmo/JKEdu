@@ -47,9 +47,8 @@ public class TokenProvider {
                 .collect(Collectors.joining(","));
 
         long now = (new Date()).getTime();
-        Claims claims = Jwts.claims();
-        claims.put("role", authorities);
-        claims.put("name", name);
+        Claims claim = Jwts.claims();
+        claim.put("name", name);
 
 
         Date tokenExpiresIn = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
@@ -58,7 +57,8 @@ public class TokenProvider {
 
         String accessToken = Jwts.builder()
                 .setSubject(authentication.getName())
-                .setClaims(claims)
+                .claim(AUTHORITIES_ROLE,authorities)
+                .setClaims(claim)
                 .setExpiration(tokenExpiresIn)
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
