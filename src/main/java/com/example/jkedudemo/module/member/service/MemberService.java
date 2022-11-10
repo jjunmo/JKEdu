@@ -52,7 +52,7 @@ public class MemberService {
         if(phoneauth.equals(Phoneauth.JOIN)) {
             Optional<Member> memberOptional = memberRepository.findByPhoneAndStatusIn(phone, List.of(Status.GREEN, Status.YELLOW));
             if (memberOptional.isPresent()) {
-                throw new MyInternalServerException("이미 가입된 회원 입니다.");
+                throw new MyInternalServerException("이미 사용중인 전화번호 입니다.");
             }
         }
 
@@ -204,7 +204,7 @@ public class MemberService {
         if(member.isEmpty()){
             return "OK";
         }else{
-            throw new MyInternalServerException("이미 가입된 아이디 입니다.");
+            throw new MyInternalServerException("이미 가입된 이메일 입니다.");
         }
 
         }

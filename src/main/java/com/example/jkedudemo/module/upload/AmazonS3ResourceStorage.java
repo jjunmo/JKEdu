@@ -19,6 +19,7 @@ public class AmazonS3ResourceStorage {
     private String bucket;
     private final AmazonS3Client amazonS3Client;
 
+    //TODO: MediaType 녹음파일 기능 업로드 할시 수정필요.
     public void store(String fullPath, MultipartFile multipartFile) {
         ObjectMetadata metadata =new ObjectMetadata();
         metadata.setContentType(MediaType.ALL_VALUE);
