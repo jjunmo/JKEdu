@@ -25,7 +25,9 @@ import java.util.stream.Collectors;
 @Component
 public class TokenProvider {
     //토큰 검증 및 생성
-    private static final String AUTHORITIES_KEY = "auth";
+    private static final String AUTHORITIES_ROLE = "role";
+
+    private static final String AUTHORITIES_NAME = "name";
     private static final String BEARER_TYPE = "bearer";
     //토큰 만료시간
     private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 30;
@@ -38,13 +40,16 @@ public class TokenProvider {
     }
 
 
-    public TokenDto generateTokenDto(Authentication authentication) {
+    public TokenDto generateTokenDto(Authentication authentication,String name) {
 
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
 
         long now = (new Date()).getTime();
+        Claims claims = Jwts.claims();
+        claims.put("role", authorities);
+        claims.put("name", name);
 
 
         Date tokenExpiresIn = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
@@ -53,7 +58,7 @@ public class TokenProvider {
 
         String accessToken = Jwts.builder()
                 .setSubject(authentication.getName())
-                .claim(AUTHORITIES_KEY, authorities)
+                .setClaims(claims)
                 .setExpiration(tokenExpiresIn)
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
@@ -71,13 +76,13 @@ public class TokenProvider {
     public Authentication getAuthentication(String accessToken) {
         Claims claims = parseClaims(accessToken);
 
-        if (claims.get(AUTHORITIES_KEY) == null) {
+        if (claims.get(AUTHORITIES_ROLE) == null) {
             throw new MyInternalServerException("권한 정보가 없는 토큰입니다.");
         }
 
 
         Collection<? extends GrantedAuthority> authorities =
-                Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
+                Arrays.stream(claims.get(AUTHORITIES_ROLE).toString().split(","))
                         .map(SimpleGrantedAuthority::new)
                         .collect(Collectors.toList());
 
