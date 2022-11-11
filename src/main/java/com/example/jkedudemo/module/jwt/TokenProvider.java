@@ -27,8 +27,6 @@ import java.util.stream.Collectors;
 public class TokenProvider {
     //토큰 검증 및 생성
     private static final String AUTHORITIES_ROLE = "auth";
-
-    private static final String AUTHORITIES_NAME = "name";
     private static final String BEARER_TYPE = "bearer";
     //토큰 만료시간
     private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 30;
@@ -53,13 +51,9 @@ public class TokenProvider {
 
         System.out.println(tokenExpiresIn);
 
-        Claims claims = Jwts.claims();
-                claims.put(AUTHORITIES_NAME,authentication.getName());
-                claims.put(AUTHORITIES_ROLE,authorities);
-
-
         String accessToken = Jwts.builder()
-                .setClaims(claims)
+                .setSubject(authentication.getName())
+                .claim(AUTHORITIES_ROLE,authorities)
                 .setExpiration(tokenExpiresIn)
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
@@ -87,7 +81,7 @@ public class TokenProvider {
                         .map(SimpleGrantedAuthority::new)
                         .collect(Collectors.toList());
 
-        UserDetails principal = new User(claims.get(AUTHORITIES_NAME).toString(),"", authorities);
+        UserDetails principal = new User(claims.getSubject(), "", authorities);
 
         return new UsernamePasswordAuthenticationToken(principal, "", authorities);
     }
