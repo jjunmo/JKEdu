@@ -16,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
+import java.security.Principal;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
@@ -26,6 +27,8 @@ import java.util.stream.Collectors;
 public class TokenProvider {
     //토큰 검증 및 생성
     private static final String AUTHORITIES_ROLE = "auth";
+
+    private static final String AUTHORITIES_NAME = "name";
     private static final String BEARER_TYPE = "bearer";
     //토큰 만료시간
     private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 30;
@@ -50,9 +53,13 @@ public class TokenProvider {
 
         System.out.println(tokenExpiresIn);
 
+        Claims claims = Jwts.claims();
+                claims.put(AUTHORITIES_NAME,authentication.getName());
+                claims.put(AUTHORITIES_ROLE,authorities);
+
+
         String accessToken = Jwts.builder()
-                .claim("name",authentication.getName())
-                .claim(AUTHORITIES_ROLE,authorities)
+                .setClaims(claims)
                 .setExpiration(tokenExpiresIn)
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
@@ -80,7 +87,7 @@ public class TokenProvider {
                         .map(SimpleGrantedAuthority::new)
                         .collect(Collectors.toList());
 
-        UserDetails principal = new User(claims.getId(), "", authorities);
+        UserDetails principal = new User(claims.get(AUTHORITIES_NAME).toString(),"", authorities);
 
         return new UsernamePasswordAuthenticationToken(principal, "", authorities);
     }
