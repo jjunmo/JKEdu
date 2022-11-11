@@ -80,7 +80,7 @@ public class TokenProvider {
                         .map(SimpleGrantedAuthority::new)
                         .collect(Collectors.toList());
 
-        UserDetails principal = new User(claims.getSubject(), "", authorities);
+        UserDetails principal = new User(claims.getId(), "", authorities);
 
         return new UsernamePasswordAuthenticationToken(principal, "", authorities);
     }
