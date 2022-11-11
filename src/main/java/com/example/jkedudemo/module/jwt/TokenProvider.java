@@ -51,7 +51,7 @@ public class TokenProvider {
         System.out.println(tokenExpiresIn);
 
         String accessToken = Jwts.builder()
-                .setSubject(authentication.getName())
+                .claim("name",authentication.getName())
                 .claim(AUTHORITIES_ROLE,authorities)
                 .setExpiration(tokenExpiresIn)
                 .signWith(key, SignatureAlgorithm.HS512)
