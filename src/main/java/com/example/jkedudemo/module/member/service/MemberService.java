@@ -198,7 +198,7 @@ public class MemberService {
         if(requestDto.getBirth().equals("")||requestDto.getPhone().equals("")||requestDto.getName().equals("")){
             throw new MyInternalServerException("비어있는 칸이 있습니다.");
         }
-        return AcademyMemberResponseDto.academyExamId(memberRepository.save(new Member(null, null, requestDto.getName(), requestDto.getBirth(), null, requestDto.getPhone(), member.getAcademyId(), Role.ROLE_ACADEMY_STUDENT, null, 0)));
+        return AcademyMemberResponseDto.academyExamId(memberRepository.save(new Member(null, null, requestDto.getName(), requestDto.getBirth(), null, requestDto.getPhone(), member.getAcademyId(), Role.ROLE_ACADEMY_STUDENT, null,null)));
         }
 
 

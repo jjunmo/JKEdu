@@ -26,7 +26,7 @@ public class AmazonS3ResourceStorage {
         metadata.setContentLength(multipartFile.getSize());
         try {
             amazonS3Client.putObject(new PutObjectRequest(bucket, fullPath, multipartFile.getInputStream(),metadata)
-                    .withCannedAcl(CannedAccessControlList.PublicRead));
+                          .withCannedAcl(CannedAccessControlList.PublicRead));
             amazonS3Client.getResourceUrl(bucket,fullPath);
         } catch (Exception e) {
             e.printStackTrace();

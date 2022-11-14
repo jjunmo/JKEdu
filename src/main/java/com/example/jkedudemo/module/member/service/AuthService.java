@@ -37,8 +37,6 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final TokenProvider tokenProvider;
 
-    private final MemberService memberService;
-
 
     @Transactional
     public MemberStatusOkResponseDto signup(MemberRequestDto requestDto) {
