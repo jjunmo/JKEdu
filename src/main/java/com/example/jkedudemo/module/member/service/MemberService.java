@@ -210,27 +210,34 @@ public class MemberService {
         }
 
     @Transactional
-    public MemberStatusOkResponseDto getNewPassword(String phone ,String smscode ,Phoneauth phoneauth){
+    public MemberStatusOkResponseDto getNewPassword(String email,String phone ,String smscode ,Phoneauth phoneauth){
 
+        if(email.isEmpty()){
+            throw new MyInternalServerException("이메일을 입력하세요.");
+        }
+
+        //인증번호 확인
         String result = certifiedPhoneCheck(phone,smscode,phoneauth);
 
-        if(result.equals("OK")){
-            Optional<Member> memberOptional = memberRepository.findByPhoneAndStatusIn(phone,List.of(Status.GREEN,Status.YELLOW));
-            if(memberOptional.isEmpty()){
-                throw new MyInternalServerException("해당 정보로 가입된 아이디가 없습니다.");
-            }
+        Optional<Member> memberOptional = memberRepository.findByPhoneAndStatusIn(phone,List.of(Status.GREEN,Status.YELLOW));
 
-            Member member=memberOptional.get();
+        if(memberOptional.isEmpty()) {
+            throw new MyInternalServerException("해당 정보로 가입된 아이디가 없습니다.");
+        }
 
-            Optional<MemberPhoneAuth> memberPhoneAuthOptional = memberPhoneAuthRepository.findByPhoneAndCheckYnAndPhoneauth(phone,YN.Y, Phoneauth.PW);
+        Member member=memberOptional.get();
 
-            if(memberPhoneAuthOptional.isEmpty()){
-                throw new MyInternalServerException("인증을 완료하세요");
-            }
+        if(!member.getEmail().equals(email)){
+            throw new MyInternalServerException("해당 정보로 가입된 아이디가 없습니다.");
+        }
+
+        Optional<MemberPhoneAuth> memberPhoneAuthOptional = memberPhoneAuthRepository.findByPhoneAndCheckYnAndPhoneauth(phone,YN.Y, Phoneauth.PW);
+
+        if(memberPhoneAuthOptional.isEmpty()){
+            throw new MyInternalServerException("인증을 완료하세요");
+        }
 
             memberPhoneAuthOptional.get().setMember(member);
-
-            //TODO:임시 비밀번호 문자로 발급 후 데이터베이스에 비밀번호 임시비밀번호로 저장
 
             StringBuilder cerNum = getStrStrCerNum(phone);
 
@@ -255,12 +262,9 @@ public class MemberService {
                 return MemberStatusOkResponseDto.statusOk();
                 //인증코드 발송
             } catch (CoolsmsException e) {
-
                 System.out.println(e.getMessage());
                 System.out.println(e.getCode());
             }
-
-        }
 
         throw new MyInternalServerException("인증이 실패하였습니다.");
 

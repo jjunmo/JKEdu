@@ -119,8 +119,8 @@ public class MemberRestController {
      * @return 임시비밀번호 문자로 발송
      */
     @PostMapping("/check")
-    public HttpEntity<MemberStatusOkResponseDto> getNewPassword(String phone , String smscode, Phoneauth phoneauth){
-        return ResponseEntity.ok(memberService.getNewPassword(phone, smscode, phoneauth));
+    public HttpEntity<MemberStatusOkResponseDto> getNewPassword(String email ,String phone , String smscode, Phoneauth phoneauth){
+        return ResponseEntity.ok(memberService.getNewPassword(email,phone, smscode, phoneauth));
     }
 
     /**

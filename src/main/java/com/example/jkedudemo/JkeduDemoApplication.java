@@ -4,7 +4,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
-
 // Spring S3 업로드
 
 // 생활코딩 docker
@@ -15,9 +14,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 @EnableJpaAuditing
 public class JkeduDemoApplication {
 
-    //TODO: ResponseDto 수정 상태코드 적용
+    //TODO: JWT 토큰에 name 받기
     public static void main(String[] args) {
         SpringApplication.run(JkeduDemoApplication.class, args);
     }
-
 }

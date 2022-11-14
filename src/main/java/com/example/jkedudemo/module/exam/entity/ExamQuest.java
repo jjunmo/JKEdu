@@ -14,7 +14,7 @@ public class ExamQuest extends BaseTime {
     @ManyToOne
     private ExamCategory category;
 
-    //주관식 , 객관식 DESCRIPTIVE_FORM, MULTIPLECHOICE
+    //주관식 , 객관식 DESCRIPTIVE, MULTIPLE
     @Enumerated(EnumType.STRING)
     private Quest type;
 

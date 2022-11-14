@@ -16,14 +16,11 @@ public class FindPasswordRequestDto {
 
     private String smscode;
     private Phoneauth phoneauth;
-
     public void setPhoneauth(String phoneauth) {
         this.phoneauth = Phoneauth.valueOf(phoneauth.toUpperCase());
     }
-
     public Phoneauth getPhoneauth() {
         return phoneauth;
     }
-
 
 }

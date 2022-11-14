@@ -17,23 +17,17 @@ public class MemberRequestDto {
     private String name;
     private Role role;
     private String academyId;
-
     public MemberRequestDto(String email, String password) {
         this.email=email;
         this.password=password;
     }
-
     //Roletype 바인딩 처리
     public void setRole(String role) {
         this.role = Role.valueOf("ROLE_"+role.toUpperCase());
     }
-
     public Role getRole() {
         return role;
     }
-
-
-
     public Member toMember(PasswordEncoder passwordEncoder) {
         return Member.builder()
                 .phone(phone)
@@ -44,10 +38,7 @@ public class MemberRequestDto {
                 .role(getRole())
                 .build();
     }
-
-
     public UsernamePasswordAuthenticationToken toAuthentication() {
         return new UsernamePasswordAuthenticationToken(email, password);
     }
-
 }
