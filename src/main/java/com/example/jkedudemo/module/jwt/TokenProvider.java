@@ -2,6 +2,7 @@ package com.example.jkedudemo.module.jwt;
 
 import com.example.jkedudemo.module.handler.MyInternalServerException;
 import com.example.jkedudemo.module.member.dto.TokenDto;
+import com.example.jkedudemo.module.member.service.UserCustom;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -28,6 +29,7 @@ public class TokenProvider {
     //토큰 검증 및 생성
     private static final String AUTHORITIES_ROLE = "auth";
     private static final String BEARER_TYPE = "bearer";
+    private static final String AUTHORITIES_NAME = "name";
     //토큰 만료시간
     private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 30;
     private final Key key;
