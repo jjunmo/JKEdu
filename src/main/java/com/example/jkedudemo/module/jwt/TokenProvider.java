@@ -2,7 +2,6 @@ package com.example.jkedudemo.module.jwt;
 
 import com.example.jkedudemo.module.handler.MyInternalServerException;
 import com.example.jkedudemo.module.member.dto.TokenDto;
-import com.example.jkedudemo.module.member.service.UserCustom;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -15,9 +14,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
-
 import java.security.Key;
-import java.security.Principal;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;

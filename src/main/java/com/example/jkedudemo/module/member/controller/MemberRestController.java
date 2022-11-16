@@ -1,21 +1,17 @@
 package com.example.jkedudemo.module.member.controller;
 
-
-
 import com.example.jkedudemo.module.common.enums.Phoneauth;
 import com.example.jkedudemo.module.handler.MyInternalServerException;
 import com.example.jkedudemo.module.member.dto.request.*;
 import com.example.jkedudemo.module.member.dto.response.*;
 
 import com.example.jkedudemo.module.member.entity.Member;
-import com.example.jkedudemo.module.member.service.AuthService;
 import com.example.jkedudemo.module.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 
 @RestController
 @RequiredArgsConstructor

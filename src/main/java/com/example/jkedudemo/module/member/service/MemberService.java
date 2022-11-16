@@ -196,12 +196,11 @@ public class MemberService {
         if(!member.getRole().equals(Role.ROLE_ACADEMY))
             throw new MyInternalServerException("잘못된 요청입니다.");
 
-        Optional<Member> memberOptional=memberRepository.findByPhoneAndStatusIn(member.getPhone(),List.of(Status.GREEN,Status.YELLOW));
+        // 해당 휴대전화로 시험친 학생이 있는지.
+        Optional<Member> memberOptional=memberRepository.findByPhoneAndStatusIn(requestDto.getPhone(),List.of(Status.GREEN,Status.YELLOW));
+
 
         if(memberOptional.isEmpty()) {
-            if (requestDto.getBirth().equals("") || requestDto.getPhone().equals("") || requestDto.getName().equals("")) {
-                throw new MyInternalServerException("비어있는 칸이 있습니다.");
-            }
             return AcademyMemberResponseDto.academyExamId(memberRepository.save(new Member(null, null, requestDto.getName(), requestDto.getBirth(), null, requestDto.getPhone(), member.getAcademyId(), Role.ROLE_ACADEMY_STUDENT, null,null)));
         }else{
             Member member1=memberOptional.get();
