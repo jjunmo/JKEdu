@@ -102,7 +102,7 @@ public class AuthService {
         UsernamePasswordAuthenticationToken authenticationToken = requestDto.toAuthentication();
         Authentication authentication = managerBuilder.getObject().authenticate(authenticationToken);
 
-        return tokenProvider.generateTokenDto(authentication);
+        return tokenProvider.generateTokenDto(authentication,reqMember.getName());
 
     }
 

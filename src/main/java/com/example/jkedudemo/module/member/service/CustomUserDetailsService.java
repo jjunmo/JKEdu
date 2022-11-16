@@ -34,10 +34,11 @@ public class CustomUserDetailsService implements UserDetailsService {
     private User createUserDetails(Member member) {
         GrantedAuthority grantedAuthority = new SimpleGrantedAuthority(member.getRole().toString());
         //TODO: 정보담기
-        return new User(
+        return new CustomUser(
                 String.valueOf(member.getId()),
                 member.getPassword(),
-                Collections.singleton(grantedAuthority)
+                Collections.singleton(grantedAuthority),
+                member.getName()
         );
     }
 }
