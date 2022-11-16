@@ -8,7 +8,6 @@ public class SecurityUtil {
 
     private SecurityUtil() { }
 
-
     public static Long getCurrentMemberId() {
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
