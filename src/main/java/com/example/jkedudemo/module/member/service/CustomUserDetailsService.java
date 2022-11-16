@@ -31,11 +31,11 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException(username + " 로 회원가입된 정보가 없습니다."));
     }
 
-    private UserDetails createUserDetails(Member member) {
+    private User createUserDetails(Member member) {
         GrantedAuthority grantedAuthority = new SimpleGrantedAuthority(member.getRole().toString());
         //TODO: 정보담기
         return new User(
-                String.valueOf(member.getId()),
+                member.getName(),
                 member.getPassword(),
                 Collections.singleton(grantedAuthority)
         );

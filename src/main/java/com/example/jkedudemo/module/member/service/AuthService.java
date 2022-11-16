@@ -41,10 +41,8 @@ public class AuthService {
     @Transactional
     public MemberStatusOkResponseDto signup(MemberRequestDto requestDto) {
 
-        //TODO:이미 가입된 휴대전화 ,재인증 ,인증요청 횟수
-
-        if (memberRepository.existsByEmailAndStatusIn(requestDto.getEmail(), List.of(Status.GREEN,Status.YELLOW))) {
-            throw new MyInternalServerException("이미 가입되어 있는 유저입니다");
+        if (memberRepository.findByEmail(requestDto.getEmail()).isPresent()) {
+            throw new MyInternalServerException("이미 가입되어 있는 회원입니다");
         }
 
         //비밀번호 인코딩
@@ -76,7 +74,6 @@ public class AuthService {
         }
 
         member.setStatus(Status.GREEN);
-        memberRepository.save(member);
         return MemberStatusOkResponseDto.statusOk();
 
     }
