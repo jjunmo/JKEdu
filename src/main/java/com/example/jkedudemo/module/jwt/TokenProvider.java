@@ -52,8 +52,10 @@ public class TokenProvider {
         System.out.println(tokenExpiresIn);
 
         String accessToken = Jwts.builder()
+                //member.getId() -> getCurrentMemberId에 사용
                 .setSubject(authentication.getName())
                 .claim(AUTHORITIES_ROLE,authorities)
+                //member.getName -> JWT 토큰 { aud : member.getName }
                 .setAudience(name)
                 .setExpiration(tokenExpiresIn)
                 .signWith(key, SignatureAlgorithm.HS512)
