@@ -16,7 +16,6 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@DynamicInsert
 @Table(name = "member")
 public class Member extends BaseTime {
 
@@ -47,8 +46,7 @@ public class Member extends BaseTime {
     @ColumnDefault("'GREEN'")
     private Status status;
 
-    @ColumnDefault("0")
-    private Integer testCount;
+    private int testCount;
 
     //TODO: 약관동의 체크
 

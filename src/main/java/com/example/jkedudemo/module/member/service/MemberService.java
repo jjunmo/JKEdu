@@ -201,7 +201,7 @@ public class MemberService {
 
 
         if(memberOptional.isEmpty()) {
-            return AcademyMemberResponseDto.academyExamId(memberRepository.save(new Member(null, null, requestDto.getName(), requestDto.getBirth(), null, requestDto.getPhone(), member.getAcademyId(), Role.ROLE_ACADEMY_STUDENT, null,null)));
+            return AcademyMemberResponseDto.academyExamId(memberRepository.save(new Member(null, null, requestDto.getName(), requestDto.getBirth(), null, requestDto.getPhone(), member.getAcademyId(), Role.ROLE_ACADEMY_STUDENT, null,0)));
         }else{
             Member member1=memberOptional.get();
             return new AcademyMemberResponseDto("200","OK",member1.getId());
@@ -284,7 +284,7 @@ public class MemberService {
     public Member setTestMember(){
         return memberRepository.save(
                 new Member(
-                        null,"1111","aaaa",null,"1111","1111","1111",null,null,0
+                        null,"1111","aaaa",null,"1111","1111","1111",null,null,1
                 )
         );
     }
