@@ -1,4 +1,4 @@
-package com.example.jkedudemo.module.common.enums;
+package com.example.jkedudemo.module.common.enums.exam;
 
 public enum Exam {
     //ExamCategory

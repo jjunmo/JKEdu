@@ -1,6 +1,6 @@
 package com.example.jkedudemo.module.member.dto.request;
 
-import com.example.jkedudemo.module.common.enums.Status;
+import com.example.jkedudemo.module.common.enums.member.Status;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

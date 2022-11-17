@@ -1,6 +1,6 @@
 package com.example.jkedudemo.module.member.repository;
 
-import com.example.jkedudemo.module.common.enums.Phoneauth;
+import com.example.jkedudemo.module.common.enums.member.Phoneauth;
 import com.example.jkedudemo.module.common.enums.YN;
 import com.example.jkedudemo.module.member.entity.MemberPhoneAuth;
 import org.springframework.data.jpa.repository.JpaRepository;

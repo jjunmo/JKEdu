@@ -1,6 +1,6 @@
 package com.example.jkedudemo.module.member.dto.request;
 
-import com.example.jkedudemo.module.common.enums.Role;
+import com.example.jkedudemo.module.common.enums.member.Role;
 import com.example.jkedudemo.module.member.entity.Member;
 import lombok.*;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

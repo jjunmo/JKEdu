@@ -16,9 +16,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import java.security.Key;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Date;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -27,7 +25,6 @@ public class TokenProvider {
     //토큰 검증 및 생성
     private static final String AUTHORITIES_ROLE = "auth";
     private static final String BEARER_TYPE = "bearer";
-    private static final String AUTHORITIES_NAME = "name";
     //토큰 만료시간
     private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 30;
     private final Key key;
@@ -50,11 +47,12 @@ public class TokenProvider {
         Date tokenExpiresIn = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
 
         System.out.println(tokenExpiresIn);
+        int idx = authorities.indexOf("_");
 
         String accessToken = Jwts.builder()
                 //member.getId() -> getCurrentMemberId에 사용
                 .setSubject(authentication.getName())
-                .claim(AUTHORITIES_ROLE,authorities)
+                .claim(AUTHORITIES_ROLE,authorities.substring(idx+1))
                 //member.getName -> JWT 토큰 { aud : member.getName }
                 .setAudience(name)
                 .setExpiration(tokenExpiresIn)

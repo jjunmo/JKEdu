@@ -1,7 +1,7 @@
 package com.example.jkedudemo.module.member.entity;
 
 import com.example.jkedudemo.module.common.util.BaseTime;
-import com.example.jkedudemo.module.common.enums.Phoneauth;
+import com.example.jkedudemo.module.common.enums.member.Phoneauth;
 import com.example.jkedudemo.module.common.enums.YN;
 import lombok.*;
 

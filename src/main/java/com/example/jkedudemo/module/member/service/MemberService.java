@@ -1,9 +1,9 @@
 package com.example.jkedudemo.module.member.service;
 
 import com.example.jkedudemo.module.handler.MyInternalServerException;
-import com.example.jkedudemo.module.common.enums.Phoneauth;
-import com.example.jkedudemo.module.common.enums.Role;
-import com.example.jkedudemo.module.common.enums.Status;
+import com.example.jkedudemo.module.common.enums.member.Phoneauth;
+import com.example.jkedudemo.module.common.enums.member.Role;
+import com.example.jkedudemo.module.common.enums.member.Status;
 import com.example.jkedudemo.module.common.enums.YN;
 import com.example.jkedudemo.module.config.SecurityUtil;
 import com.example.jkedudemo.module.member.dto.request.AcademyMemberRequestDto;

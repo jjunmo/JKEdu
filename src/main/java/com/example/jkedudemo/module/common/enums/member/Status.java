@@ -1,4 +1,4 @@
-package com.example.jkedudemo.module.common.enums;
+package com.example.jkedudemo.module.common.enums.member;
 
 public enum Status {
     //계정 상태

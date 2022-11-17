@@ -1,11 +1,9 @@
 package com.example.jkedudemo.module.member.dto.request;
 
-import com.example.jkedudemo.module.common.enums.Phoneauth;
-import com.example.jkedudemo.module.common.enums.Role;
+import com.example.jkedudemo.module.common.enums.member.Phoneauth;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 @Getter
 @AllArgsConstructor

@@ -1,6 +1,6 @@
 package com.example.jkedudemo.module.exam.dto;
 
-import com.example.jkedudemo.module.common.enums.Exam;
+import com.example.jkedudemo.module.common.enums.exam.Exam;
 import lombok.Data;
 
 import java.util.List;

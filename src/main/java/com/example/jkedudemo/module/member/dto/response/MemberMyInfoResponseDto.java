@@ -2,13 +2,10 @@ package com.example.jkedudemo.module.member.dto.response;
 
 
 import com.example.jkedudemo.module.member.entity.Member;
-import com.example.jkedudemo.module.common.enums.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.util.Date;
 
 @Getter
 @AllArgsConstructor
