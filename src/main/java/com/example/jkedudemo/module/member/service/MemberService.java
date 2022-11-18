@@ -202,12 +202,12 @@ public class MemberService {
             Member member1=memberOptional.get();
             return new AcademyMemberResponseDto("200","already",member1.getId());
         }
+        Member member1 = new Member(requestDto.getPhone(),requestDto.getName(),requestDto.getBirth(),Role.ROLE_ACADEMY_STUDENT, member.getAcademyId());
 
-        if(requestDto.getName().length()==0){
-            return new AcademyMemberResponseDto("200", "ready",null);
+        if(requestDto.getName()==null){
+            return new AcademyMemberResponseDto("200", "ready");
         }else{
-            // birth , name  null 확인
-            Member member1 = new Member(requestDto.getPhone(),requestDto.getName(),requestDto.getBirth(),Role.ROLE_ACADEMY_STUDENT, member.getAcademyId());
+            // name 유효성 체크
             memberRepository.save(member1);
             return new AcademyMemberResponseDto("200", "go", member1.getId());
         }

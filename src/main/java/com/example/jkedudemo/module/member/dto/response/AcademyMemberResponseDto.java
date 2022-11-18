@@ -15,6 +15,11 @@ public class AcademyMemberResponseDto {
     private String condition;
     private Long id;
 
+    public AcademyMemberResponseDto(String status, String condition) {
+        this.status=status;
+        this.condition=condition;
+    }
+
     public static AcademyMemberResponseDto academyExamId(Member member){
         return AcademyMemberResponseDto.builder()
                 .status("200")
@@ -22,4 +27,5 @@ public class AcademyMemberResponseDto {
                 .id(member.getId())
                 .build();
     }
+
 }

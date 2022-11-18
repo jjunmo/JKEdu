@@ -13,8 +13,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 @SpringBootApplication
 @EnableJpaAuditing
 public class JkeduDemoApplication {
-
-    //TODO: JWT 토큰에 name 받기
     public static void main(String[] args) {
         SpringApplication.run(JkeduDemoApplication.class, args);
     }
