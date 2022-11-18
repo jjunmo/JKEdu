@@ -48,6 +48,15 @@ public class Member extends BaseTime {
 
     private int testCount;
 
+    //학원 학생
+    public Member(String phone, String name, Date birth, Role role, String academyId) {
+        this.phone=phone;
+        this.name=name;
+        this.birth=birth;
+        this.role=role;
+        this.academyId=academyId;
+    }
+
     //TODO: 약관동의 체크
 
 }

@@ -12,13 +12,13 @@ import lombok.NoArgsConstructor;
 @Builder
 public class AcademyMemberResponseDto {
     private String status;
-    private String message;
+    private String condition;
     private Long id;
 
     public static AcademyMemberResponseDto academyExamId(Member member){
         return AcademyMemberResponseDto.builder()
                 .status("200")
-                .message("OK")
+                .condition("")
                 .id(member.getId())
                 .build();
     }

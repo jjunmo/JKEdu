@@ -196,19 +196,20 @@ public class MemberService {
         if(!member.getRole().equals(Role.ROLE_ACADEMY))
             throw new MyInternalServerException("잘못된 요청입니다.");
 
-        // 해당 휴대전화로 시험친 학생이 있는지.
-        Optional<Member> memberOptional=memberRepository.findByPhoneAndStatusIn(requestDto.getPhone(),List.of(Status.GREEN,Status.YELLOW));
+        Optional<Member> memberOptional = memberRepository.findByPhoneAndRoleAndAcademyId(requestDto.getPhone(), Role.ROLE_ACADEMY_STUDENT, member.getAcademyId());
 
-
-        if(memberOptional.isEmpty()) {
-            return AcademyMemberResponseDto.academyExamId(memberRepository.save(new Member(null, null, requestDto.getName(), requestDto.getBirth(), null, requestDto.getPhone(), member.getAcademyId(), Role.ROLE_ACADEMY_STUDENT, null,0)));
-        }else{
+        if(memberOptional.isPresent()){
             Member member1=memberOptional.get();
-            return new AcademyMemberResponseDto("200","OK",member1.getId());
-            }
-
+            return new AcademyMemberResponseDto("200","already",member1.getId());
         }
-
+        if(!requestDto.getName().equals("")){
+            //TODO : birth , name  null 확인
+            Member member1 = new Member(requestDto.getPhone(),requestDto.getName(),requestDto.getBirth(),Role.ROLE_ACADEMY_STUDENT, member.getAcademyId());
+            memberRepository.save(member1);
+            return new AcademyMemberResponseDto("200", "new", member1.getId());
+        }
+        throw new MyInternalServerException("잘못된 요청입니다.");
+    }
 
     public String exEmailCheck(String email){
         Optional<Member> member = memberRepository.findByEmailAndStatusIn(email,List.of(Status.GREEN,Status.YELLOW));
