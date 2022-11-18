@@ -202,13 +202,16 @@ public class MemberService {
             Member member1=memberOptional.get();
             return new AcademyMemberResponseDto("200","already",member1.getId());
         }
-        if(!requestDto.getName().equals("")){
-            //TODO : birth , name  null 확인
+
+        if(requestDto.getName().length()==0){
+            return new AcademyMemberResponseDto("200", "ready",null);
+        }else{
+            // birth , name  null 확인
             Member member1 = new Member(requestDto.getPhone(),requestDto.getName(),requestDto.getBirth(),Role.ROLE_ACADEMY_STUDENT, member.getAcademyId());
             memberRepository.save(member1);
-            return new AcademyMemberResponseDto("200", "new", member1.getId());
+            return new AcademyMemberResponseDto("200", "go", member1.getId());
         }
-        throw new MyInternalServerException("잘못된 요청입니다.");
+
     }
 
     public String exEmailCheck(String email){
