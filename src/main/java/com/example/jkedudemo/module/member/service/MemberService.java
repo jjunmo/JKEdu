@@ -204,7 +204,7 @@ public class MemberService {
         }
         Member member1 = new Member(requestDto.getPhone(),requestDto.getName(),requestDto.getBirth(),Role.ROLE_ACADEMY_STUDENT, member.getAcademyId());
 
-        if(requestDto.getName()==null){
+        if(requestDto.getName().isBlank()||requestDto.getName()==null){
             return new AcademyMemberResponseDto("200", "ready");
         }else{
             // name 유효성 체크
