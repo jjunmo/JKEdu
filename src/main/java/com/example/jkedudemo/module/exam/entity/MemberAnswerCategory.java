@@ -16,6 +16,6 @@ public class MemberAnswerCategory extends BaseTime {
 
     //문제 유형
     @ManyToOne
-    private ExamCategory category;
+    private ExamCategory examCategory;
 
 }

@@ -12,11 +12,11 @@ public class MemberAnswer extends BaseTime {
 
 
     @ManyToOne
-    private MemberAnswerCategory category;
+    private MemberAnswerCategory memberAnswerCategory;
 
     //문제
     @ManyToOne
-    private ExamQuest quest;
+    private ExamQuest examQuest;
 
     //내가 입력한 답
     private String myAnswer;

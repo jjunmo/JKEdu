@@ -23,7 +23,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
-import static com.example.jkedudemo.module.common.util.Cer.getCerNum;import static com.example.jkedudemo.module.common.util.Cer.getStrStrCerNum;
+import static com.example.jkedudemo.module.common.util.Cer.getCerNum;
+import static com.example.jkedudemo.module.common.util.Cer.getStrStrCerNum;
+import static com.example.jkedudemo.module.common.util.MemberCurrent.*;
 
 @Service
 @Slf4j
@@ -37,10 +39,6 @@ public class MemberService {
     private final MemberPhoneAuthRepository memberPhoneAuthRepository;
 
     //토큰확인
-    public Member isMemberCurrent() {
-        return memberRepository.findById(SecurityUtil.getCurrentMemberId())
-                .orElseThrow(() -> new MyInternalServerException("로그인 유저 정보가 없습니다"));
-    }
 
     //TODO : 회원 삭제 후 재 회원가입에 대한 Status 상태값 체크 필요.
 

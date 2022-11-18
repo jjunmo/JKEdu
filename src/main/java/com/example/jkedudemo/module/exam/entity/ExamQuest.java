@@ -1,6 +1,6 @@
 package com.example.jkedudemo.module.exam.entity;
 
-import com.example.jkedudemo.module.common.enums.exam.Level;
+import com.example.jkedudemo.module.common.enums.Level;
 import com.example.jkedudemo.module.common.util.BaseTime;
 import com.example.jkedudemo.module.common.enums.exam.Quest;
 
@@ -13,11 +13,11 @@ public class ExamQuest extends BaseTime {
 
     //시험 유형
     @ManyToOne
-    private ExamCategory category;
+    private ExamCategory examCategory;
 
     //주관식 , 객관식 DESCRIPTIVE, MULTIPLE
     @Enumerated(EnumType.STRING)
-    private Quest type;
+    private Quest quest;
 
     @Enumerated(EnumType.STRING)
     private Level level;

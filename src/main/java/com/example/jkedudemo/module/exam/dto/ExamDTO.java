@@ -3,15 +3,13 @@ package com.example.jkedudemo.module.exam.dto;
 import com.example.jkedudemo.module.common.enums.exam.Exam;
 import lombok.Data;
 
-import java.util.List;
-
 @Data
-public class ExamCategoryDTO {
+public class ExamDTO {
     private Long id;
 
     private Exam exam;
 
-    private List<ExamQuestDTO> examQuestDTOList;
+    private ExamQuestDTO examQuestDTO;
 
 }
 
@@ -19,19 +17,28 @@ public class ExamCategoryDTO {
 //{
 //    id: 1
 //    EXAM: SPEAKING ,READING ,LISTENING, GRAMMAR, WRITING
-//    memberExamQuestDTOList: [
+//    ExamQuest
 //        {
 //            id:1
-//            quest : DESCRIPTIVE,MULTIPLE
+//            quest : DESCRIPTIVE
 //            question :
 //            subQuestion :
 //            imgUrl :
 //            videoUrl :
 //            speakUrl :
-//        },
+//            level :
+//        }
+
 //        {
-//            id:2
-//            questType : DESCRIPTIVE,MULTIPLE
+//            id:1
+//            quest : MultipleChoice
+//            question :
+//            subQuestion :
+//            imgUrl :
+//            videoUrl :
+//            speakUrl :
+//            level :
+//
 //            MULTIPLE_CHODICE : [
 //                {
 //                    questNumber: 1,
