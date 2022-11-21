@@ -1,5 +1,6 @@
 package com.example.jkedudemo.module.member.entity;
 
+import com.example.jkedudemo.module.common.enums.Level;
 import com.example.jkedudemo.module.common.util.BaseTime;
 import com.example.jkedudemo.module.common.enums.member.Role;
 import com.example.jkedudemo.module.common.enums.member.Status;
@@ -41,6 +42,9 @@ public class Member extends BaseTime {
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @Enumerated(EnumType.STRING)
+    private Level level;
 
     @Enumerated(EnumType.STRING)
     @ColumnDefault("'GREEN'")

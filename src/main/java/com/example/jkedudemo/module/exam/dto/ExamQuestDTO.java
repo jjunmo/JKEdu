@@ -2,8 +2,10 @@ package com.example.jkedudemo.module.exam.dto;
 
 import com.example.jkedudemo.module.common.enums.Level;
 import com.example.jkedudemo.module.common.enums.exam.Quest;
+import com.example.jkedudemo.module.exam.entity.ExamMultipleChoice;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -18,6 +20,8 @@ public class ExamQuestDTO {
     private Level level;
 
     // 객관식일때만 있음
-    List<ExamMultipleChoiceDTO> MultipleChoice;
+    List<ExamMultipleChoiceDTO> MultipleChoice = new ArrayList<>();
+
+
 
 }

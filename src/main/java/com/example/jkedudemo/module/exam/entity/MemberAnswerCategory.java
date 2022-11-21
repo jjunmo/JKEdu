@@ -11,11 +11,11 @@ public class MemberAnswerCategory extends BaseTime {
     private Long id;
 
     //멤버 정보
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Member member;
 
     //문제 유형
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private ExamCategory examCategory;
 
 }

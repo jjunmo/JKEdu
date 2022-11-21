@@ -23,7 +23,8 @@ public class MemberRestController {
 
     /**
      * 문자발송
-     * @param phone 연락처
+     *
+     * @param phone     연락처
      * @param phoneauth JOIN , ID ,PW
      * @return SMS 발송
      */
@@ -39,42 +40,35 @@ public class MemberRestController {
 
     /**
      * 인증하기
-     * @param phone 연락처
-     * @param smscode 인증번호
+     *
+     * @param phone     연락처
+     * @param smscode   인증번호
      * @param phoneauth JOIN ,ID ,PW
      * @return 인증여부
      */
     @GetMapping("/cert/ex")
-    public HttpEntity<MemberStatusOkResponseDto> sendSMSCheck(@RequestParam("phone") String phone , @RequestParam("smscode") String smscode, @RequestParam("phoneauth") Phoneauth phoneauth){
-        String result = memberService.certifiedPhoneCheck(phone,smscode, phoneauth);
-        if(result.equals("OK")) {
+    public HttpEntity<MemberStatusOkResponseDto> sendSMSCheck(@RequestParam("phone") String phone, @RequestParam("smscode") String smscode, @RequestParam("phoneauth") Phoneauth phoneauth) {
+        String result = memberService.certifiedPhoneCheck(phone, smscode, phoneauth);
+        if (result.equals("OK")) {
             return ResponseEntity.ok(MemberStatusOkResponseDto.statusOk());
-        }else {
+        } else {
             throw new MyInternalServerException("인증실패");
         }
     }
 
     /**
-     *
-     * @return 테스트 멤버 생성
-     */
-    @PostMapping("/testmember")
-    public HttpEntity<Member> testMember(){
-        return ResponseEntity.ok(memberService.setTestMember());
-
-    }
-
-    /**
      * 내 정보
+     *
      * @return 정보 확인
      */
     @GetMapping("/myinfo")
-    public HttpEntity<MemberMyInfoResponseDto> MemberInfo(){
+    public HttpEntity<MemberMyInfoResponseDto> MemberInfo() {
         return ResponseEntity.ok(memberService.getMyInfoBySecurity());
     }
 
     /**
      * 비밀번호 변경
+     *
      * @param request exPassword , newPassword
      * @return 비밀번호 변경
      */
@@ -87,6 +81,7 @@ public class MemberRestController {
 
     /**
      * 계정 삭제
+     *
      * @param request password
      * @return Status.RED
      */
@@ -97,61 +92,74 @@ public class MemberRestController {
 
     /**
      * 아이디 찾기
-     * @param phone 연락처
-     * @param smscode 인증번호
+     *
+     * @param phone     연락처
+     * @param smscode   인증번호
      * @param phoneauth 인증확인
      * @return
      */
     @GetMapping("/check")
-    public HttpEntity<MemberIdFindResopnseDto> getMemberEmail(String phone , String smscode, Phoneauth phoneauth){
-        return ResponseEntity.ok(memberService.getMemberEmail(phone,smscode,phoneauth));
+    public HttpEntity<MemberIdFindResopnseDto> getMemberEmail(String phone, String smscode, Phoneauth phoneauth) {
+        return ResponseEntity.ok(memberService.getMemberEmail(phone, smscode, phoneauth));
     }
 
     /**
      * 비밀번호 찾기
-     * @param phone 연락처
-     * @param smscode 인증번호
+     *
+     * @param phone     연락처
+     * @param smscode   인증번호
      * @param phoneauth Phoneauth Y,N
      * @return 임시비밀번호 문자로 발송
      */
     @PostMapping("/check")
-    public HttpEntity<MemberStatusOkResponseDto> getNewPassword(String email ,String phone , String smscode, Phoneauth phoneauth){
-        return ResponseEntity.ok(memberService.getNewPassword(email,phone, smscode, phoneauth));
+    public HttpEntity<MemberStatusOkResponseDto> getNewPassword(String email, String phone, String smscode, Phoneauth phoneauth) {
+        return ResponseEntity.ok(memberService.getNewPassword(email, phone, smscode, phoneauth));
     }
 
     /**
      * 아이디 중복체크
+     *
      * @param email 이메일
-     * @return OK,FAIL
+     * @return OK, FAIL
      */
     @GetMapping("/excheck")
-    public HttpEntity<MemberStatusOkResponseDto> exEmail(String email){
+    public HttpEntity<MemberStatusOkResponseDto> exEmail(String email) {
         String result = memberService.exEmailCheck(email);
-        if(result.equals("OK")) {
+        if (result.equals("OK")) {
             return ResponseEntity.ok(MemberStatusOkResponseDto.statusOk());
-        }else {
+        } else {
             throw new MyInternalServerException("이미 존재하는 아이디입니다.");
         }
 
     }
 
     /**
-     * 학원학생 시험 응시
-     * @param request name ,birth , phone
-     * @return OK,FAIL  member.id
+     * @return testCount
      */
-    @PostMapping("/academy/exam")
-    public HttpEntity<AcademyMemberResponseDto> academyMember(@RequestBody AcademyMemberRequestDto request){
-        return ResponseEntity.ok(memberService.setAcademyMember(request));
+    @GetMapping("/exam")
+    public HttpEntity<TestCountResopnseDto> getTestCount() {
+        return ResponseEntity.ok(memberService.getTestCount());
     }
 
     /**
-     * 사용자 이름
-     * @return name
+     * 학원학생 시험 응시
+     *
+     * @param request name ,birth , phone
+     * @return OK, FAIL  member.id
      */
-    @GetMapping("/name")
-    public HttpEntity<MemberNameResopnseDto> getMemberName() {
-        return ResponseEntity.ok(memberService.memberName());
+    @PostMapping("/academy/exam")
+    public HttpEntity<AcademyMemberResponseDto> academyMember(@RequestBody AcademyMemberRequestDto request) {
+        return ResponseEntity.ok(memberService.setAcademyMember(request));
     }
+}
 
-    }
+//    /**
+//     * 사용자 이름
+//     * @return name
+//     */
+//    @GetMapping("/name")
+//    public HttpEntity<MemberNameResopnseDto> getMemberName() {
+//        return ResponseEntity.ok(memberService.memberName());
+//    }
+//
+//    }

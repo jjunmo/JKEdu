@@ -6,13 +6,10 @@ import com.example.jkedudemo.module.member.entity.Member;
 import com.example.jkedudemo.module.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
+@Deprecated
 public class MemberCurrent {
 
-    private static MemberRepository memberRepository;
+    private MemberRepository memberRepository;
 
-    public static Member isMemberCurrent() {
-        return memberRepository.findById(SecurityUtil.getCurrentMemberId())
-                .orElseThrow(() -> new MyInternalServerException("로그인 유저 정보가 없습니다"));
-    }
+
 }

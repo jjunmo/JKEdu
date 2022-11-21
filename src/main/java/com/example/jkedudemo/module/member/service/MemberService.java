@@ -1,5 +1,6 @@
 package com.example.jkedudemo.module.member.service;
 
+import com.example.jkedudemo.module.common.util.MemberCurrent;
 import com.example.jkedudemo.module.handler.MyInternalServerException;
 import com.example.jkedudemo.module.common.enums.member.Phoneauth;
 import com.example.jkedudemo.module.common.enums.member.Role;
@@ -41,6 +42,11 @@ public class MemberService {
     //토큰확인
 
     //TODO : 회원 삭제 후 재 회원가입에 대한 Status 상태값 체크 필요.
+
+    public Member isMemberCurrent() {
+        return memberRepository.findById(SecurityUtil.getCurrentMemberId())
+                .orElseThrow(() -> new MyInternalServerException("로그인 유저 정보가 없습니다"));
+    }
 
     @Transactional
     public String certifiedPhone(String phone, Phoneauth phoneauth) {
@@ -111,9 +117,8 @@ public class MemberService {
     }
 
     public MemberMyInfoResponseDto getMyInfoBySecurity() {
-        return memberRepository.findById(SecurityUtil.getCurrentMemberId())
-                .map(MemberMyInfoResponseDto::myInfo)
-                .orElseThrow(() -> new MyInternalServerException("로그인 유저 정보가 없습니다"));
+        Member member =isMemberCurrent();
+        return MemberMyInfoResponseDto.myInfo(member);
     }
 
 
@@ -121,7 +126,7 @@ public class MemberService {
     public MemberStatusOkResponseDto changeMemberPassword(String exPassword, String newPassword) {
         Member member = isMemberCurrent();
         if (!passwordEncoder.matches(exPassword, member.getPassword())) {
-            throw new MyInternalServerException("비밀번호가 맞지 않습니다");
+            throw new MyInternalServerException("현재 비밀번호가 옳지 않습니다.");
         }
 
         member.setPassword(passwordEncoder.encode((newPassword)));
@@ -283,11 +288,12 @@ public class MemberService {
 
     }
 
-    public Member setTestMember(){
-        return memberRepository.save(
-                new Member(
-                        null,"1111","aaaa",null,"1111","1111","1111",null,null,1
-                )
-        );
+    /**
+     *
+     * @return testCount
+     */
+    public TestCountResopnseDto getTestCount(){
+        Member member = isMemberCurrent();
+        return TestCountResopnseDto.testCount(member);
     }
 }

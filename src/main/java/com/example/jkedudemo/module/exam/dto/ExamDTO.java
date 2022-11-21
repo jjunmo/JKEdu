@@ -1,15 +1,28 @@
 package com.example.jkedudemo.module.exam.dto;
 
 import com.example.jkedudemo.module.common.enums.exam.Exam;
-import lombok.Data;
+import com.example.jkedudemo.module.member.dto.response.MemberNameResopnseDto;
+import com.example.jkedudemo.module.member.entity.Member;
+import lombok.*;
 
 @Data
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class ExamDTO {
     private Long id;
 
     private Exam exam;
 
     private ExamQuestDTO examQuestDTO;
+
+    public static ExamDTO examDTO(ExamQuestDTO examQuestDTO,Exam exam){
+        return ExamDTO.builder()
+                .exam(exam)
+                .examQuestDTO(examQuestDTO)
+                .build();
+    }
 
 }
 
