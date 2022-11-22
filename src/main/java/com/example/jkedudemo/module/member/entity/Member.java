@@ -17,7 +17,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "member")
+@Table(name = "MEMBER")
 public class Member extends BaseTime {
 
     @Id

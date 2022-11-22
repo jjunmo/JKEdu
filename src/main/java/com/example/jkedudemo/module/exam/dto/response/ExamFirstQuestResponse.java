@@ -1,8 +1,7 @@
-package com.example.jkedudemo.module.exam.dto;
+package com.example.jkedudemo.module.exam.dto.response;
 
 import com.example.jkedudemo.module.common.enums.exam.Exam;
-import com.example.jkedudemo.module.member.dto.response.MemberNameResopnseDto;
-import com.example.jkedudemo.module.member.entity.Member;
+import com.example.jkedudemo.module.exam.dto.ExamQuestDTO;
 import lombok.*;
 
 @Data
@@ -10,16 +9,23 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ExamDTO {
+public class ExamFirstQuestResponse {
     private Long id;
 
     private Exam exam;
 
     private ExamQuestDTO examQuestDTO;
 
-    public static ExamDTO examDTO(ExamQuestDTO examQuestDTO,Exam exam){
-        return ExamDTO.builder()
+    private String status;
+
+    private String message;
+
+
+    public static ExamFirstQuestResponse examDTO(ExamQuestDTO examQuestDTO, Exam exam){
+        return ExamFirstQuestResponse.builder()
                 .exam(exam)
+                .status("200")
+                .message("OK")
                 .examQuestDTO(examQuestDTO)
                 .build();
     }

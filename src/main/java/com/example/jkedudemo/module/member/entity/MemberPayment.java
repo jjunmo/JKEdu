@@ -11,7 +11,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "member_payment")
+@Table(name = "MEMBER_PAYMENT")
 public class MemberPayment  extends BaseTime {
 
     @Id

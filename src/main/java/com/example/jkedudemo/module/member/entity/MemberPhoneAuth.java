@@ -13,7 +13,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "member_phone_auth")
+@Table(name = "MEMBER_PHONE_AUTH")
 public class MemberPhoneAuth extends BaseTime {
 
     @Id

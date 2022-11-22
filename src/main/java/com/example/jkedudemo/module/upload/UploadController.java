@@ -22,4 +22,6 @@ public class UploadController {
             @RequestPart("file") MultipartFile multipartFile) {
         return ResponseEntity.ok(fileUploadService.save(multipartFile));
     }
+
+
 }

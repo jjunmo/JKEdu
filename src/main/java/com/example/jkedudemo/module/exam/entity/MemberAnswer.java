@@ -2,10 +2,17 @@ package com.example.jkedudemo.module.exam.entity;
 
 import com.example.jkedudemo.module.common.util.BaseTime;
 import com.example.jkedudemo.module.common.enums.YN;
+import lombok.*;
 
 import javax.persistence.*;
 
-@Entity(name = "MEMBER_EXAM_ANSWER")
+@Setter
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@Entity
+@Table(name = "MEMBER_EXAM_ANSWER")
 public class MemberAnswer extends BaseTime {
     @Id
     private Long id;

@@ -3,7 +3,6 @@ package com.example.jkedudemo.module.exam.entity;
 import com.example.jkedudemo.module.common.enums.Level;
 import com.example.jkedudemo.module.common.util.BaseTime;
 import com.example.jkedudemo.module.common.enums.exam.Quest;
-import com.example.jkedudemo.module.exam.dto.ExamDTO;
 import com.example.jkedudemo.module.exam.dto.ExamMultipleChoiceDTO;
 import com.example.jkedudemo.module.exam.dto.ExamQuestDTO;
 import lombok.*;
