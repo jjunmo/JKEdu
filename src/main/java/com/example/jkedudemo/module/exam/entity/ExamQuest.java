@@ -23,7 +23,7 @@ public class ExamQuest extends BaseTime {
 
     //시험 유형
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "MEMBER_EXAM_CATEGORY")
+    @JoinColumn(name = "EXAM_CATEGORY")
     private ExamCategory examCategory;
 
     //주관식 , 객관식 DESCRIPTIVE, MULTIPLE

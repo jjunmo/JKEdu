@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-@Entity(name = "MEMBER_EXAM_CATEGORY")
+@Entity(name = "EXAM_CATEGORY")
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder

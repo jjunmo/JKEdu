@@ -22,8 +22,8 @@ public class ExamRestController {
         return ResponseEntity.ok(examService.ExamFirstQuest(request));
     }
 
-    @PostMapping("/next")
-    public HttpEntity<ExamNextQuestResponse> getNextQuest(){
-        return ResponseEntity.ok(new ExamNextQuestResponse());
-    }
+//    @PostMapping("/next")
+//    public HttpEntity<ExamNextQuestResponse> getNextQuest(@RequestBody){
+//        return ResponseEntity.ok(new ExamNextQuestResponse());
+//    }
 }

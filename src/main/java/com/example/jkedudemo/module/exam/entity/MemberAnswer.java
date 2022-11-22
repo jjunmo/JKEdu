@@ -15,6 +15,7 @@ import javax.persistence.*;
 @Table(name = "MEMBER_EXAM_ANSWER")
 public class MemberAnswer extends BaseTime {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
 

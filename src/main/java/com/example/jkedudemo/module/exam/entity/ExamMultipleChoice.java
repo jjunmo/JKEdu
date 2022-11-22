@@ -13,7 +13,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Entity(name = "MEMBER_EXAM_QUEST_MULTIPLE_CHOICE")
+@Entity(name = "EXAM_MULTIPLE_CHOICE")
 public class ExamMultipleChoice extends BaseTime {
     @Id
     private Long id;
