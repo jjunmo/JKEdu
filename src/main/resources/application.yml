@@ -12,26 +12,26 @@ spring:
       hibernate:
         format_sql: 'true'
         show_sql: 'true'
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/jkedu?serverTimezone=Asia/Seoul
-    username: jkedu
-    password: a123456
-root:
-  key: AnyKeyYouWantTo
-server:
-  port: '8080'
-#  h2:
-#    console:
-#      enabled: true
-#      settings:
-#        web-allow-others: true
-#      path: /db
 #  datasource:
-#    url: jdbc:h2:mem:test
-#    username: sa
-#    password:
-#    driver-class-name: org.h2.Driver
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://localhost:3306/jkedu?serverTimezone=Asia/Seoul
+#    username: jkedu
+#    password: a123456
+#root:
+#  key: AnyKeyYouWantTo
+#server:
+#  port: '8080'
+  h2:
+    console:
+      enabled: true
+      settings:
+        web-allow-others: true
+      path: /db
+  datasource:
+    url: jdbc:h2:mem:test
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
 jwt:
   secret: c3ByaW5nLWJvb3Qtc2VjdXJpdHktand0LXR1dG9yaWFsLWppd29vbi1zcHJpbmctYm9vdC1zZWN1cml0eS1qd3QtdHV0b3JpYWwK
 cloud:

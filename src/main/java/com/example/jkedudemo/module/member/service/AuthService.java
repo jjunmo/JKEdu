@@ -1,5 +1,6 @@
 package com.example.jkedudemo.module.member.service;
 
+import com.example.jkedudemo.module.common.enums.Level;
 import com.example.jkedudemo.module.common.enums.member.Role;
 import com.example.jkedudemo.module.common.util.Cer;
 import com.example.jkedudemo.module.common.enums.member.Phoneauth;
@@ -75,6 +76,7 @@ public class AuthService {
 
         member.setStatus(Status.GREEN);
         member.setTestCount(0);
+        member.setLevel(Level.A1);
         return MemberStatusOkResponseDto.statusOk();
 
     }

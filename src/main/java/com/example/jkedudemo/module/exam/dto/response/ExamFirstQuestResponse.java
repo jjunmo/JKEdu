@@ -10,20 +10,17 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 public class ExamFirstQuestResponse {
-    private Long id;
-
-    private Exam exam;
-
-    private ExamQuestDTO examQuestDTO;
 
     private String status;
 
     private String message;
 
+    private ExamQuestDTO examQuestDTO;
 
-    public static ExamFirstQuestResponse examDTO(ExamQuestDTO examQuestDTO, Exam exam){
+
+
+    public static ExamFirstQuestResponse examDTO(ExamQuestDTO examQuestDTO){
         return ExamFirstQuestResponse.builder()
-                .exam(exam)
                 .status("200")
                 .message("OK")
                 .examQuestDTO(examQuestDTO)
@@ -34,9 +31,9 @@ public class ExamFirstQuestResponse {
 
 //JSON
 //{
-//    id: 1
-//    EXAM: SPEAKING ,READING ,LISTENING, GRAMMAR, WRITING
-//    ExamQuest
+//    status : 200
+//    message : OK
+//    examQuestDTO
 //        {
 //            id:1
 //            quest : DESCRIPTIVE

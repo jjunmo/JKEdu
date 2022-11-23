@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/exam")
 @Slf4j
 public class ExamRestController {
+
     private final ExamService examService;
 
     @PostMapping

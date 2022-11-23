@@ -18,7 +18,6 @@ public class MemberAnswer extends BaseTime {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
     @ManyToOne(cascade = CascadeType.ALL)
     private MemberAnswerCategory memberAnswerCategory;
 

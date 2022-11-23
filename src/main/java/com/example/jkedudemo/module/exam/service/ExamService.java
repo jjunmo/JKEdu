@@ -6,7 +6,7 @@ import com.example.jkedudemo.module.exam.dto.response.ExamFirstQuestResponse;
 import com.example.jkedudemo.module.exam.dto.ExamMultipleChoiceDTO;
 import com.example.jkedudemo.module.exam.dto.ExamQuestDTO;
 import com.example.jkedudemo.module.exam.dto.request.QuestRequest;
-import com.example.jkedudemo.module.exam.entity.ExamCategory;
+import com.example.jkedudemo.module.exam.entity.ExamMultipleChoice;
 import com.example.jkedudemo.module.exam.entity.ExamQuest;
 import com.example.jkedudemo.module.exam.entity.MemberAnswer;
 import com.example.jkedudemo.module.exam.entity.MemberAnswerCategory;
@@ -55,27 +55,29 @@ public class ExamService {
         }
 
         //로그인된 유저의 레벨에 맞는 문제 List
-        List<ExamQuest> examQuestList = examQuestRepository.findByExamCategory_ExamAndLevel(questRequest.getExam(), member.getLevel());
+        List<ExamQuest> examQuestList = examQuestRepository.findByExamCategory_ExamAndLevel(questRequest.getExam(),member.getLevel());
         //조회된 문제의 갯수
         int examQuestListSize = examQuestList.size();
         // 조회된 문제중 하나의 문제를 가져옴
         ExamQuest examQuestRandomElement = examQuestList.get(rand.nextInt(examQuestListSize));
         //DTO 담기
-        ExamQuestDTO examQuestDTO=examQuestRandomElement.entityToDto();
+
 
         //객관식 문제의 경우 객관식 항목을 다 담기
-        if(examQuestDTO.getQuest().equals(Quest.MULTIPLE)){
-            List<ExamMultipleChoiceDTO> examMultipleChoiceDTOList=examQuestDTO.getMultipleChoice();
-            examQuestRandomElement.entityToMultipleDto(examMultipleChoiceDTOList);
+        if(examQuestRandomElement.getQuest().equals(Quest.MULTIPLE)){
+            List<ExamMultipleChoice> examMultipleChoice=examMultipleChoiceRepository.findByQuest_id(examQuestRandomElement.getId());
+            return ExamFirstQuestResponse.examDTO(examQuestRandomElement.entityToMultipleDto(examMultipleChoice));
         }
 
-        MemberAnswerCategory memberAnswerCategory = new MemberAnswerCategory(null,member,new ExamCategory(questRequest.getExam()));
-        memberAnswerCategoryRepository.save(memberAnswerCategory);
+//        MemberAnswerCategory memberAnswerCategory = new MemberAnswerCategory(null,member,questRequest.getExamCategory());
+//        memberAnswerCategoryRepository.save(memberAnswerCategory);
+//
+//        MemberAnswer memberAnswer=new MemberAnswer(null,memberAnswerCategory,examQuestRandomElement,null,null);
+//        memberAnswerRepository.save(memberAnswer);
 
-        MemberAnswer memberAnswer=new MemberAnswer(null,memberAnswerCategory,examQuestRandomElement,null,null);
-        memberAnswerRepository.save(memberAnswer);
+        return ExamFirstQuestResponse.examDTO(examQuestRandomElement.entityToDto());
+        //TODO: 테스트 필요
 
-        return ExamFirstQuestResponse.examDTO(examQuestDTO, questRequest.getExam());
     }
 
 }

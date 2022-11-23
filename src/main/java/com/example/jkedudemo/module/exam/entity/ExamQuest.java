@@ -5,10 +5,13 @@ import com.example.jkedudemo.module.common.util.BaseTime;
 import com.example.jkedudemo.module.common.enums.exam.Quest;
 import com.example.jkedudemo.module.exam.dto.ExamMultipleChoiceDTO;
 import com.example.jkedudemo.module.exam.dto.ExamQuestDTO;
+import com.example.jkedudemo.module.exam.dto.response.ExamFirstQuestResponse;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collector;
 
 @Entity
 @Setter
@@ -19,6 +22,7 @@ import java.util.List;
 @Table(name = "EXAM_QUEST")
 public class ExamQuest extends BaseTime {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     //시험 유형
@@ -47,9 +51,10 @@ public class ExamQuest extends BaseTime {
     //음성파일 URL
     private String speakUrl;
 
-    public ExamQuestDTO entityToMultipleDto (List<ExamMultipleChoiceDTO> examMultipleChoiceList) {
+    public ExamQuestDTO entityToMultipleDto (List<ExamMultipleChoice> examMultipleChoiceList) {
         ExamQuestDTO examQuestDTO=new ExamQuestDTO();
-        examQuestDTO.setMultipleChoice(examMultipleChoiceList);
+
+        examQuestDTO.setId(this.id);
         examQuestDTO.setQuest(this.quest);
         examQuestDTO.setLevel(this.level);
         examQuestDTO.setQuestion(this.question);
@@ -57,11 +62,24 @@ public class ExamQuest extends BaseTime {
         examQuestDTO.setImgUrl(this.imgUrl);
         examQuestDTO.setVideoUrl(this.videoUrl);
         examQuestDTO.setSpeakUrl(this.speakUrl);
+
+        List<ExamMultipleChoiceDTO> examMultipleChoiceDTOList = new ArrayList<>();
+
+        examMultipleChoiceList.forEach(
+                examMultipleChoice -> {
+                    ExamMultipleChoiceDTO examMultipleChoiceDTO = new ExamMultipleChoiceDTO();
+                    examMultipleChoiceDTO.setQuestNumber(examMultipleChoice.getQuestNumber());
+                    examMultipleChoiceDTO.setQuestContent(examMultipleChoice.getQuestContent());
+                    examMultipleChoiceDTOList.add(examMultipleChoiceDTO);
+                }
+        );
+                examQuestDTO.setMultipleChoice(examMultipleChoiceDTOList);
         return examQuestDTO;
     }
 
     public ExamQuestDTO entityToDto () {
         ExamQuestDTO examQuestDTO=new ExamQuestDTO();
+        examQuestDTO.setId(id);
         examQuestDTO.setQuest(this.quest);
         examQuestDTO.setLevel(this.level);
         examQuestDTO.setQuestion(this.question);
