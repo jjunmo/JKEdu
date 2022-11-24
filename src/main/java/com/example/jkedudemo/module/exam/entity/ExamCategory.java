@@ -17,11 +17,14 @@ import javax.persistence.*;
 public class ExamCategory extends BaseTime {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     //시험 유형
     @Enumerated(EnumType.STRING)
     private Exam exam;
 
+    public ExamCategory(String id, String exam) {
+        this.id=Long.parseLong(id);
+        this.exam= Exam.valueOf(exam);
+    }
 }

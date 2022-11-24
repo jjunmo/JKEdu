@@ -76,7 +76,6 @@ public class ExamService {
 //        memberAnswerRepository.save(memberAnswer);
 
         return ExamFirstQuestResponse.examDTO(examQuestRandomElement.entityToDto());
-        //TODO: 테스트 필요
 
     }
 

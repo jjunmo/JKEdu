@@ -15,6 +15,8 @@ public class ExamFirstQuestResponse {
 
     private String message;
 
+    private int number;
+
     private ExamQuestDTO examQuestDTO;
 
 
@@ -23,6 +25,7 @@ public class ExamFirstQuestResponse {
         return ExamFirstQuestResponse.builder()
                 .status("200")
                 .message("OK")
+                .number(1)
                 .examQuestDTO(examQuestDTO)
                 .build();
     }
@@ -37,23 +40,23 @@ public class ExamFirstQuestResponse {
 //        {
 //            id:1
 //            quest : DESCRIPTIVE
-//            question :
-//            subQuestion :
+//            question : 문제
+//            subQuestion : 부제
 //            imgUrl :
 //            videoUrl :
 //            speakUrl :
-//            level :
+//            level : PRE_A1,A1,A2,B1,B2,C1
 //        }
-
+//
 //        {
 //            id:1
-//            quest : MultipleChoice
-//            question :
-//            subQuestion :
+//            quest : MULTIPLE
+//            question : 문제
+//            subQuestion : 부제
 //            imgUrl :
 //            videoUrl :
 //            speakUrl :
-//            level :
+//            level : PRE_A1,A1,A2,B1,B2,C1
 //
 //            MULTIPLE_CHODICE : [
 //                {
