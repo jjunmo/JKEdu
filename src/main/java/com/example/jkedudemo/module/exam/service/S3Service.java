@@ -5,7 +5,11 @@ import com.amazonaws.services.s3.model.GetObjectRequest;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import com.example.jkedudemo.module.exam.entity.ExamCategory;
+import com.example.jkedudemo.module.exam.entity.ExamMultipleChoice;
 import com.example.jkedudemo.module.exam.entity.ExamQuest;
+
+import com.example.jkedudemo.module.exam.repository.ExamCategoryRepository;
+import com.example.jkedudemo.module.exam.repository.ExamQuestRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -16,6 +20,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.Optional;
+
 
 @Service
 @Transactional(readOnly = true)
@@ -23,6 +29,8 @@ import java.nio.charset.StandardCharsets;
 public class S3Service {
     private final AmazonS3 amazonS3;
     private final EntityManager em;
+    private final ExamCategoryRepository examCategoryRepository;
+    private final ExamQuestRepository examQuestRepository;
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
@@ -36,20 +44,43 @@ public class S3Service {
         S3ObjectInputStream ois = null;
         BufferedReader br = null;
 
-        // Read the CSV one line at a time and process it.
+        // Read the CSV
         try {
             ois = o.getObjectContent();
             System.out.println ("ois = " + ois);
             br = new BufferedReader (new InputStreamReader(ois, StandardCharsets.UTF_8));
 
             String line;
+
             while ((line = br.readLine()) != null) {
-                // Store 1 record in an array separated by commas
+
                 String[] data = line.split(",", 0);
 
-                ExamCategory examCategory = new ExamCategory(data[0], data[1]);
-                ExamQuest examQuest=new ExamQuest(data[])
-                em.persist(examCategory);
+                if(storedFileName.contains("Category")) {
+                    ExamCategory examCategory = new ExamCategory(data[0], data[1]);
+                    em.persist(examCategory);
+                }
+
+                if(storedFileName.contains("Quest")) {
+                    Optional<ExamCategory> examCategory = examCategoryRepository.findById(Long.parseLong(data[1]));
+                    ExamCategory examCategory1 = null;
+                    if (examCategory.isPresent()) {
+                        examCategory1 = examCategory.get();
+                    }
+                    ExamQuest examQuest = new ExamQuest(data[0], examCategory1, data[2], data[3], data[4], data[5], data[6], data[7], data[8], data[9]);
+                    em.persist(examQuest);
+                }
+
+                if(storedFileName.contains("Multiple")) {
+                    Optional<ExamQuest> examQuest = examQuestRepository.findById(Long.parseLong(data[1]));
+                    ExamQuest examQuest1 = null;
+                    if (examQuest.isPresent()) {
+                        examQuest1 = examQuest.get();
+                    }
+                    ExamMultipleChoice examMultipleChoice= new ExamMultipleChoice(data[0],examQuest1,data[2],data[3]);
+                    em.persist(examMultipleChoice);
+                }
+
             }
         } finally {
             if(ois != null){

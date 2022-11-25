@@ -6,10 +6,8 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
 
@@ -21,7 +19,11 @@ public class S3Controller {
 
     @PostMapping
     public HttpEntity<String> read() throws IOException {
-        s3Service.readObject("jkeduexam/examCategory.csv");
+        String folder = "jkeduexam/";
+        String csv = ".csv";
+        s3Service.readObject(folder+"examCategory"+csv);
+        s3Service.readObject(folder+"examQuest"+csv);
+        s3Service.readObject(folder+"examMultiple"+csv);
         return new ResponseEntity<>("success", HttpStatus.OK);
     }
 }

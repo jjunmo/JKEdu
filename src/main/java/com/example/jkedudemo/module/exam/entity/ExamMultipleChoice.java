@@ -17,10 +17,9 @@ import java.util.List;
 @Entity(name = "EXAM_MULTIPLE_CHOICE")
 public class ExamMultipleChoice{
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     @JoinColumn(name = "EXAM_QUEST")
     private ExamQuest quest;
     //문항
@@ -28,4 +27,10 @@ public class ExamMultipleChoice{
 
     private String questContent;
 
+    public ExamMultipleChoice(String id, ExamQuest quest, String questNumber, String questContent) {
+        this.id=Long.parseLong(id);
+        this.quest=quest;
+        this.questNumber=Integer.parseInt(questNumber);
+        this.questContent=questContent;
+    }
 }
