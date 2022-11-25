@@ -44,13 +44,15 @@ public class Member extends BaseTime {
     private Role role;
 
     @Enumerated(EnumType.STRING)
-    private Level level;
-
-    @Enumerated(EnumType.STRING)
     @ColumnDefault("'GREEN'")
     private Status status;
 
     private int testCount;
+
+    @Enumerated(EnumType.STRING)
+    private Level level;
+
+    private int levelScore=0;
 
     //학원 학생
     public Member(String phone, String name, Date birth, Role role, String academyId) {

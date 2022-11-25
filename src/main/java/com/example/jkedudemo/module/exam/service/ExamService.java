@@ -1,15 +1,14 @@
 package com.example.jkedudemo.module.exam.service;
 
+import com.example.jkedudemo.module.common.enums.Level;
+import com.example.jkedudemo.module.common.enums.YN;
 import com.example.jkedudemo.module.common.enums.exam.Quest;
 import com.example.jkedudemo.module.config.SecurityUtil;
+import com.example.jkedudemo.module.exam.dto.request.NextQuestRequest;
 import com.example.jkedudemo.module.exam.dto.response.ExamFirstQuestResponse;
-import com.example.jkedudemo.module.exam.dto.ExamMultipleChoiceDTO;
-import com.example.jkedudemo.module.exam.dto.ExamQuestDTO;
 import com.example.jkedudemo.module.exam.dto.request.QuestRequest;
-import com.example.jkedudemo.module.exam.entity.ExamMultipleChoice;
-import com.example.jkedudemo.module.exam.entity.ExamQuest;
-import com.example.jkedudemo.module.exam.entity.MemberAnswer;
-import com.example.jkedudemo.module.exam.entity.MemberAnswerCategory;
+import com.example.jkedudemo.module.exam.dto.response.ExamNextQuestResponse;
+import com.example.jkedudemo.module.exam.entity.*;
 import com.example.jkedudemo.module.exam.repository.*;
 import com.example.jkedudemo.module.handler.MyInternalServerException;
 import com.example.jkedudemo.module.member.entity.Member;
@@ -20,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 @Service
@@ -31,7 +31,6 @@ public class ExamService {
     private final MemberRepository memberRepository;
     private final ExamQuestRepository examQuestRepository;
     private final ExamMultipleChoiceRepository examMultipleChoiceRepository;
-    private final ExamCategoryRepository examCategoryRepository;
     private final MemberAnswerRepository memberAnswerRepository;
     private final MemberAnswerCategoryRepository memberAnswerCategoryRepository;
 
@@ -43,11 +42,11 @@ public class ExamService {
     }
 
     @Transactional
-    public ExamFirstQuestResponse ExamFirstQuest(QuestRequest questRequest){
+    public ExamFirstQuestResponse ExamFirstQuest(QuestRequest request){
         //로그인 정보
         Member member = isMemberCurrent();
 
-        if(member.getTestCount()==0){
+        if(member.getTestCount()<=0){
             throw new MyInternalServerException("테스트 횟수가 없습니다.");
         }else{
             member.setTestCount(member.getTestCount()-1);
@@ -55,28 +54,64 @@ public class ExamService {
         }
 
         //로그인된 유저의 레벨에 맞는 문제 List
-        List<ExamQuest> examQuestList = examQuestRepository.findByExamCategory_ExamAndLevel(questRequest.getExam(),member.getLevel());
+        List<ExamQuest> examQuestList = examQuestRepository.findByExamCategory_ExamAndLevel(request.getExam(),member.getLevel());
         //조회된 문제의 갯수
         int examQuestListSize = examQuestList.size();
         // 조회된 문제중 하나의 문제를 가져옴
         ExamQuest examQuestRandomElement = examQuestList.get(rand.nextInt(examQuestListSize));
         //DTO 담기
 
-
         //객관식 문제의 경우 객관식 항목을 다 담기
         if(examQuestRandomElement.getQuest().equals(Quest.MULTIPLE)){
             List<ExamMultipleChoice> examMultipleChoice=examMultipleChoiceRepository.findByQuest_id(examQuestRandomElement.getId());
             return ExamFirstQuestResponse.examDTO(examQuestRandomElement.entityToMultipleDto(examMultipleChoice));
         }
-
-//        MemberAnswerCategory memberAnswerCategory = new MemberAnswerCategory(null,member,questRequest.getExamCategory());
-//        memberAnswerCategoryRepository.save(memberAnswerCategory);
-//
-//        MemberAnswer memberAnswer=new MemberAnswer(null,memberAnswerCategory,examQuestRandomElement,null,null);
-//        memberAnswerRepository.save(memberAnswer);
-
         return ExamFirstQuestResponse.examDTO(examQuestRandomElement.entityToDto());
+    }
 
+    @Transactional
+    public ExamNextQuestResponse examNextQuestResponse(NextQuestRequest request){
+        Member member = isMemberCurrent();
+        Level[] levels=Level.values();
+        Level level =member.getLevel();
+        int levelCheck = level.ordinal();
+
+        Optional<ExamQuest> examQuestOptional = examQuestRepository.findById(request.getId());
+
+        if(examQuestOptional.isPresent()){
+            ExamQuest examQuest = examQuestOptional.get();
+            MemberAnswerCategory memberAnswerCategory=new MemberAnswerCategory(null,member,examQuest.getExamCategory());
+            memberAnswerCategoryRepository.save(memberAnswerCategory);
+            if(examQuest.getRightAnswer().equals(request.getMyAnswer())){
+                //임시로 멤버의 등급 조정
+                if(level.ordinal() != 5){
+                    member.setLevel(levels[levelCheck+1]);
+                }
+                MemberAnswer memberAnswer=new MemberAnswer(null,memberAnswerCategory,examQuest, request.getMyAnswer(), YN.Y);
+                memberAnswerRepository.save(memberAnswer);
+            }else{
+                if(level.ordinal() != 0){
+                    member.setLevel(levels[levelCheck-1]);
+                }
+                MemberAnswer memberAnswer=new MemberAnswer(null,memberAnswerCategory,examQuest, request.getMyAnswer(), YN.N);
+                memberAnswerRepository.save(memberAnswer);
+            }
+        }
+
+        List<ExamQuest> examQuestList = examQuestRepository.findByExamCategory_ExamAndLevel(request.getExam(),member.getLevel());
+        //조회된 문제의 갯수
+        int examQuestListSize = examQuestList.size();
+        // 조회된 문제중 하나의 문제를 가져옴
+        ExamQuest examQuestRandomElement = examQuestList.get(rand.nextInt(examQuestListSize));
+        //DTO 담기
+
+        //객관식 문제의 경우 객관식 항목을 다 담기
+        if(examQuestRandomElement.getQuest().equals(Quest.MULTIPLE)){
+            List<ExamMultipleChoice> examMultipleChoice=examMultipleChoiceRepository.findByQuest_id(examQuestRandomElement.getId());
+            return ExamNextQuestResponse.examDTO(examQuestRandomElement.entityToMultipleDto(examMultipleChoice),request.getNumber());
+        }
+
+        return ExamNextQuestResponse.examDTO(examQuestRandomElement.entityToDto(), request.getNumber());
     }
 
 }

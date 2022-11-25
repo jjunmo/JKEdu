@@ -1,5 +1,6 @@
 package com.example.jkedudemo.module.exam.controller;
 
+import com.example.jkedudemo.module.exam.dto.request.NextQuestRequest;
 import com.example.jkedudemo.module.exam.dto.response.ExamFirstQuestResponse;
 import com.example.jkedudemo.module.exam.dto.request.QuestRequest;
 import com.example.jkedudemo.module.exam.dto.response.ExamNextQuestResponse;
@@ -23,8 +24,8 @@ public class ExamRestController {
         return ResponseEntity.ok(examService.ExamFirstQuest(request));
     }
 
-//    @PostMapping("/next")
-//    public HttpEntity<ExamNextQuestResponse> getNextQuest(@RequestBody){
-//        return ResponseEntity.ok(new ExamNextQuestResponse());
-//    }
+    @PostMapping("/next")
+    public HttpEntity<ExamNextQuestResponse> getNextQuest(@RequestBody NextQuestRequest request){
+            return ResponseEntity.ok(examService.examNextQuestResponse(request));
+    }
 }

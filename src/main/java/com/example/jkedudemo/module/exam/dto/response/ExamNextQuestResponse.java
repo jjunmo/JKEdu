@@ -12,13 +12,29 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class ExamNextQuestResponse {
-    private Long id;
-
-    private Exam exam;
-
-    private ExamQuestDTO examQuestDTO;
 
     private String status;
 
     private String message;
+
+    private String number;
+
+    private ExamQuestDTO examQuestDTO;
+
+    public static ExamNextQuestResponse examDTO(ExamQuestDTO examQuestDTO,String number){
+        return ExamNextQuestResponse.builder()
+                .status("200")
+                .message("OK")
+                .number(Integer.toString(Integer.parseInt(number)+1))
+                .examQuestDTO(examQuestDTO)
+                .build();
+    }
+
+    public static ExamNextQuestResponse examDTO2(){
+        return ExamNextQuestResponse.builder()
+                .status("200")
+                .message("END")
+                .build();
+    }
+
 }

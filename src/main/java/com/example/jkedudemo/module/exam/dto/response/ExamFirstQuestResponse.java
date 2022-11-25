@@ -15,7 +15,7 @@ public class ExamFirstQuestResponse {
 
     private String message;
 
-    private int number;
+    private String number;
 
     private ExamQuestDTO examQuestDTO;
 
@@ -25,7 +25,7 @@ public class ExamFirstQuestResponse {
         return ExamFirstQuestResponse.builder()
                 .status("200")
                 .message("OK")
-                .number(1)
+                .number("1")
                 .examQuestDTO(examQuestDTO)
                 .build();
     }

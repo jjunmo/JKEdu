@@ -19,10 +19,12 @@ public class MemberAnswer extends BaseTime {
     private Long id;
 
     @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "MEMBER_EXAM_ANSWER_CATEGORY")
     private MemberAnswerCategory memberAnswerCategory;
 
     //문제
     @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "EXAM_QUEST")
     private ExamQuest examQuest;
 
     //내가 입력한 답

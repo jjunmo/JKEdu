@@ -6,8 +6,7 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper=false)
-public class ExamMultipleChoiceDTO extends BaseTime {
-    private Long id;
+public class ExamMultipleChoiceDTO{
     //문항
     private Integer questNumber;
     private String questContent;

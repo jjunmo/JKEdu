@@ -13,4 +13,6 @@ public interface ExamQuestRepository extends JpaRepository<ExamQuest,Long> {
 
     List<ExamQuest> findByExamCategory_ExamAndLevel(Exam examCategory_exam, Level level);
 
+    List<ExamQuest> findByExamCategory_ExamAndLevelAndIdNot(Exam examCategory_exam,Level level , Long id);
+
 }
