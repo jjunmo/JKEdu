@@ -49,9 +49,6 @@ public class Member extends BaseTime {
 
     private int testCount;
 
-    @Enumerated(EnumType.STRING)
-    private Level level;
-
     private int levelScore=0;
 
     //학원 학생

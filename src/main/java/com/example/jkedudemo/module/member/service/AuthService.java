@@ -76,7 +76,6 @@ public class AuthService {
 
         member.setStatus(Status.GREEN);
         member.setTestCount(0);
-        member.setLevel(Level.A1);
         return MemberStatusOkResponseDto.statusOk();
 
     }
