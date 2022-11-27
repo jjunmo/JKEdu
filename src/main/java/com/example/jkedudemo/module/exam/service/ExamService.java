@@ -54,7 +54,7 @@ public class ExamService {
         }
 
         //로그인된 유저의 레벨에 맞는 문제 List
-        List<ExamQuest> examQuestList = examQuestRepository.findByExamCategory_ExamAndLevel(request.getExam(),member.getLevel());
+        List<ExamQuest> examQuestList = examQuestRepository.findByExamCategory_ExamAndLevel(request.getExam(),Level.PRE_A1);
         //조회된 문제의 갯수
         int examQuestListSize = examQuestList.size();
         // 조회된 문제중 하나의 문제를 가져옴
@@ -73,9 +73,12 @@ public class ExamService {
     public ExamNextQuestResponse examNextQuestResponse(NextQuestRequest request){
         Member member = isMemberCurrent();
         Level[] levels=Level.values();
-        Level level =member.getLevel();
+        Level level =request.getLevel();
         int levelCheck = level.ordinal();
 
+        Level changeLevel=null;
+
+        //시험에 나온문제 확인
         Optional<ExamQuest> examQuestOptional = examQuestRepository.findById(request.getId());
 
         if(examQuestOptional.isPresent()){
@@ -84,34 +87,40 @@ public class ExamService {
             memberAnswerCategoryRepository.save(memberAnswerCategory);
             if(examQuest.getRightAnswer().equals(request.getMyAnswer())){
                 //임시로 멤버의 등급 조정
-                if(level.ordinal() != 5){
-                    member.setLevel(levels[levelCheck+1]);
+                if(levelCheck != 5){
+                    changeLevel= levels[levelCheck + 1];
                 }
                 MemberAnswer memberAnswer=new MemberAnswer(null,memberAnswerCategory,examQuest, request.getMyAnswer(), YN.Y);
                 memberAnswerRepository.save(memberAnswer);
             }else{
                 if(level.ordinal() != 0){
-                    member.setLevel(levels[levelCheck-1]);
+                    changeLevel=(levels[levelCheck-1]);
                 }
                 MemberAnswer memberAnswer=new MemberAnswer(null,memberAnswerCategory,examQuest, request.getMyAnswer(), YN.N);
                 memberAnswerRepository.save(memberAnswer);
             }
+
+            List<ExamQuest> examQuestList = examQuestRepository.findByExamCategory_ExamAndLevel(examQuest.getExamCategory().getExam(),changeLevel);
+
+            int examQuestListSize = examQuestList.size();
+
+            // 조회된 문제중 하나의 문제를 가져옴
+            ExamQuest examQuestRandomElement = examQuestList.get(rand.nextInt(examQuestListSize));
+            //DTO 담기
+
+            //객관식 문제의 경우 객관식 항목을 다 담기
+            if(examQuestRandomElement.getQuest().equals(Quest.MULTIPLE)){
+                List<ExamMultipleChoice> examMultipleChoice=examMultipleChoiceRepository.findByQuest_id(examQuestRandomElement.getId());
+                return ExamNextQuestResponse.examDTO(examQuestRandomElement.entityToMultipleDto(examMultipleChoice),request.getNumber());
+            }
+
+            return ExamNextQuestResponse.examDTO(examQuestRandomElement.entityToDto(), request.getNumber());
+
         }
 
-        List<ExamQuest> examQuestList = examQuestRepository.findByExamCategory_ExamAndLevel(request.getExam(),member.getLevel());
-        //조회된 문제의 갯수
-        int examQuestListSize = examQuestList.size();
-        // 조회된 문제중 하나의 문제를 가져옴
-        ExamQuest examQuestRandomElement = examQuestList.get(rand.nextInt(examQuestListSize));
-        //DTO 담기
+        // 이전 문제가 조회되지 않음.
+        throw new MyInternalServerException("잘못된 접근입니다.");
 
-        //객관식 문제의 경우 객관식 항목을 다 담기
-        if(examQuestRandomElement.getQuest().equals(Quest.MULTIPLE)){
-            List<ExamMultipleChoice> examMultipleChoice=examMultipleChoiceRepository.findByQuest_id(examQuestRandomElement.getId());
-            return ExamNextQuestResponse.examDTO(examQuestRandomElement.entityToMultipleDto(examMultipleChoice),request.getNumber());
-        }
-
-        return ExamNextQuestResponse.examDTO(examQuestRandomElement.entityToDto(), request.getNumber());
     }
 
 }

@@ -41,14 +41,15 @@ public class ExamQuest {
     private Level level;
 
     //해당문제의 정답
-    @Column(name = "RIGHTANSWER")
+    @Column(name = "RIGHTANSWER",columnDefinition = "LONGTEXT")
     private String rightAnswer;
 
     // 질문
-    @Column(name = "QUESTION")
+    @Lob
+    @Column(name = "QUESTION",columnDefinition = "LONGTEXT")
     private String question;
     //부가 질문
-    @Column(name = "SUBQUESTION")
+    @Column(name = "SUBQUESTION",columnDefinition = "LONGTEXT")
     private String subQuestion;
     //img URL
     private String imgUrl;

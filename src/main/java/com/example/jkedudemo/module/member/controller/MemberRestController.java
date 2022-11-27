@@ -5,7 +5,6 @@ import com.example.jkedudemo.module.handler.MyInternalServerException;
 import com.example.jkedudemo.module.member.dto.request.*;
 import com.example.jkedudemo.module.member.dto.response.*;
 
-import com.example.jkedudemo.module.member.entity.Member;
 import com.example.jkedudemo.module.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
