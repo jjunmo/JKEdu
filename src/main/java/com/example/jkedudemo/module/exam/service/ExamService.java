@@ -73,34 +73,48 @@ public class ExamService {
     public ExamNextQuestResponse examNextQuestResponse(NextQuestRequest request){
         Member member = isMemberCurrent();
         Level[] levels=Level.values();
-        Level level =request.getLevel();
-        int levelCheck = level.ordinal();
 
-        Level changeLevel=null;
+
+
+
 
         //시험에 나온문제 확인
         Optional<ExamQuest> examQuestOptional = examQuestRepository.findById(request.getId());
 
         if(examQuestOptional.isPresent()){
             ExamQuest examQuest = examQuestOptional.get();
+
+            Level level = examQuest.getLevel();
+            int levelCheck = level.ordinal();
+            Level changeLevel;
+
+
             MemberAnswerCategory memberAnswerCategory=new MemberAnswerCategory(null,member,examQuest.getExamCategory());
             memberAnswerCategoryRepository.save(memberAnswerCategory);
+
             if(examQuest.getRightAnswer().equals(request.getMyAnswer())){
-                //임시로 멤버의 등급 조정
-                if(levelCheck != 5){
+
+                if(levelCheck < 5){
                     changeLevel= levels[levelCheck + 1];
+                }else{
+                    changeLevel=levels[levelCheck];
                 }
+
                 MemberAnswer memberAnswer=new MemberAnswer(null,memberAnswerCategory,examQuest, request.getMyAnswer(), YN.Y);
                 memberAnswerRepository.save(memberAnswer);
             }else{
-                if(level.ordinal() != 0){
+                if(levelCheck == 0){
+                    changeLevel=(levels[levelCheck]);
+                }else{
                     changeLevel=(levels[levelCheck-1]);
                 }
+
                 MemberAnswer memberAnswer=new MemberAnswer(null,memberAnswerCategory,examQuest, request.getMyAnswer(), YN.N);
                 memberAnswerRepository.save(memberAnswer);
             }
 
             List<ExamQuest> examQuestList = examQuestRepository.findByExamCategory_ExamAndLevel(examQuest.getExamCategory().getExam(),changeLevel);
+
 
             int examQuestListSize = examQuestList.size();
 

@@ -13,19 +13,10 @@ import lombok.NoArgsConstructor;
 public class NextQuestRequest {
     private Long id;
 
-    //뺴도 될듯
-    private Exam exam;
-
     private String myAnswer;
 
     private String number;
 
     private Level level;
 
-    public void setExam(String exam) {
-        this.exam = Exam.valueOf(exam.toUpperCase());
-    }
-    public Exam getExam() {
-        return exam;
-    }
 }

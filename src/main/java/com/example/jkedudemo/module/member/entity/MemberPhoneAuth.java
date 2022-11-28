@@ -21,7 +21,7 @@ public class MemberPhoneAuth extends BaseTime {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "member")
+    @JoinColumn(name = "MEMBER")
     private Member member;
 
     private String phone;
