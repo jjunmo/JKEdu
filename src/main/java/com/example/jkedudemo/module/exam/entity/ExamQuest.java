@@ -25,25 +25,14 @@ import java.util.stream.Collector;
 public class ExamQuest {
     @Id
     private Long id;
-
     //시험 유형
     @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     @JoinColumn(name = "EXAM_CATEGORY")
     private ExamCategory examCategory;
-
     //주관식 , 객관식 DESCRIPTIVE, MULTIPLE
     @Enumerated(EnumType.STRING)
     @Column(name = "QUEST")
     private Quest quest;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "LEVEL")
-    private Level level;
-
-    //해당문제의 정답
-    @Column(name = "RIGHTANSWER",columnDefinition = "LONGTEXT")
-    private String rightAnswer;
-
     // 질문
     @Lob
     @Column(name = "QUESTION",columnDefinition = "LONGTEXT")
@@ -51,12 +40,19 @@ public class ExamQuest {
     //부가 질문
     @Column(name = "SUBQUESTION",columnDefinition = "LONGTEXT")
     private String subQuestion;
+    //해당문제의 정답
+    @Column(name = "RIGHTANSWER",columnDefinition = "LONGTEXT")
+    private String rightAnswer;
     //img URL
     private String imgUrl;
     //video URL
     private String videoUrl;
     //음성파일 URL
     private String speakUrl;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "LEVEL")
+    private Level level;
 
     public ExamQuest(String id, ExamCategory examCategory, String quest,  String question, String subQuestion,String rightAnswer,String imgUrl, String videoUrl, String speakUrl, String level) {
         this.id=Long.parseLong(id);

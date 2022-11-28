@@ -53,7 +53,6 @@ public class S3Service {
             String line;
 
             while ((line = br.readLine()) != null) {
-
                 String[] data = line.split(",", 0);
 
                 if(storedFileName.contains("Category")) {
@@ -67,7 +66,14 @@ public class S3Service {
                     if (examCategory.isPresent()) {
                         examCategory1 = examCategory.get();
                     }
-                    ExamQuest examQuest = new ExamQuest(data[0], examCategory1, data[2], data[3], data[4], data[5], data[6], data[7], data[8], data[9]);
+                    data[0]=data[0].replace("\uFEFF", "");
+
+                    ExamQuest examQuest = new ExamQuest(data[0],
+                            examCategory1, data[2],
+                            data[3].replace("*",","),
+                            data[4].replace("*",","),
+                            data[5].replace("*",","),
+                            data[6], data[7], data[8], data[9]);
                     em.persist(examQuest);
                 }
 
