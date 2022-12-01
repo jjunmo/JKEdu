@@ -26,6 +26,10 @@ public class ExamRestController {
 
     @PostMapping("/next")
     public HttpEntity<ExamNextQuestResponse> getNextQuest(@RequestBody NextQuestRequest request){
-            return ResponseEntity.ok(examService.examNextQuestResponse(request));
+        String nextEnd = examService.nextEnd(request.getExamId(), request.getNumber());
+
+        if(nextEnd.equals("NEXT")) return ResponseEntity.ok(examService.examNextQuestResponse(request));
+
+        else return ResponseEntity.ok(ExamNextQuestResponse.examDTO2());
     }
 }

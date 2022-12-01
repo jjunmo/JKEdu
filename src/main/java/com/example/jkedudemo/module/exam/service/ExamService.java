@@ -2,6 +2,7 @@ package com.example.jkedudemo.module.exam.service;
 
 import com.example.jkedudemo.module.common.enums.Level;
 import com.example.jkedudemo.module.common.enums.YN;
+import com.example.jkedudemo.module.common.enums.exam.Exam;
 import com.example.jkedudemo.module.common.enums.exam.Quest;
 import com.example.jkedudemo.module.common.enums.member.Role;
 import com.example.jkedudemo.module.config.SecurityUtil;
@@ -75,6 +76,7 @@ public class ExamService {
         return ExamFirstQuestResponse.examDTO(examQuestRandomElement.entityToDto(),examPaper);
     }
 
+
     @Transactional
     public ExamNextQuestResponse examNextQuestResponse(NextQuestRequest request){
         //일반유저인지 학원유저인지 확인
@@ -144,10 +146,36 @@ public class ExamService {
             return ExamNextQuestResponse.examDTO(examQuestRandomElement.entityToDto(),examPaper, request.getNumber(), request.getStudentId());
 
         }
-
         // 이전 문제가 조회되지 않음.
         throw new MyInternalServerException("잘못된 접근입니다.");
 
+    }
+
+    public String nextEnd(Long examId , String number){
+        Optional<ExamQuest> examQuestOptional = examQuestRepository.findById(examId);
+        if(examQuestOptional.isEmpty()){
+            throw new MyInternalServerException("유형을 알수없는 문제입니다.");
+        }
+        Exam exam = examQuestOptional.get().getExamCategory().getExam();
+
+        if(exam.equals(Exam.READING)){
+            if(Integer.parseInt(number)<35) return "NEXT";
+            else return "END";
+        } else if (exam.equals(Exam.GRAMMAR)) {
+            if(Integer.parseInt(number)<35) return "NEXT";
+            else return "END";
+        } else if (exam.equals(Exam.LISTENING)) {
+            if(Integer.parseInt(number)<35) return "NEXT";
+            else return "END";
+        } else if (exam.equals(Exam.SPEAKING)) {
+            if(Integer.parseInt(number)<35) return "NEXT";
+            else return "END";
+        } else if (exam.equals(Exam.WRITING)) {
+            if(Integer.parseInt(number)<35) return "NEXT";
+            else return "END";
+        }
+
+        throw new MyInternalServerException("확인 할수없는 유형입니다.");
     }
 
 }
