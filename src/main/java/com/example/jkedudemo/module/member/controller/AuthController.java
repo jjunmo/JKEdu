@@ -1,7 +1,7 @@
 package com.example.jkedudemo.module.member.controller;
 
 
-import com.example.jkedudemo.module.member.dto.TokenDto;
+import com.example.jkedudemo.module.jwt.dto.TokenDto;
 import com.example.jkedudemo.module.member.dto.request.MemberRequestDto;
 import com.example.jkedudemo.module.member.dto.response.*;
 import com.example.jkedudemo.module.member.service.AuthService;

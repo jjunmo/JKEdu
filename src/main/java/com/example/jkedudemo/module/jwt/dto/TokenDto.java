@@ -1,4 +1,4 @@
-package com.example.jkedudemo.module.member.dto;
+package com.example.jkedudemo.module.jwt.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,7 +15,7 @@ public class TokenDto {
 
     private String accessToken;
 
-    private Long tokenExpiresIn;
+    private String refreshToken;
 
     private String status;
 

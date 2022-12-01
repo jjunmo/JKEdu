@@ -1,6 +1,5 @@
 package com.example.jkedudemo.module.member.service;
 
-import com.example.jkedudemo.module.common.util.MemberCurrent;
 import com.example.jkedudemo.module.handler.MyInternalServerException;
 import com.example.jkedudemo.module.common.enums.member.Phoneauth;
 import com.example.jkedudemo.module.common.enums.member.Role;

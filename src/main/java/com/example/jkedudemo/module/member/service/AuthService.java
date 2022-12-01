@@ -1,6 +1,5 @@
 package com.example.jkedudemo.module.member.service;
 
-import com.example.jkedudemo.module.common.enums.Level;
 import com.example.jkedudemo.module.common.enums.member.Role;
 import com.example.jkedudemo.module.common.util.Cer;
 import com.example.jkedudemo.module.common.enums.member.Phoneauth;
@@ -8,7 +7,7 @@ import com.example.jkedudemo.module.common.enums.member.Status;
 import com.example.jkedudemo.module.common.enums.YN;
 import com.example.jkedudemo.module.handler.MyInternalServerException;
 import com.example.jkedudemo.module.jwt.TokenProvider;
-import com.example.jkedudemo.module.member.dto.TokenDto;
+import com.example.jkedudemo.module.jwt.dto.TokenDto;
 import com.example.jkedudemo.module.member.dto.request.MemberRequestDto;
 import com.example.jkedudemo.module.member.dto.response.*;
 import com.example.jkedudemo.module.member.entity.Member;
@@ -85,12 +84,12 @@ public class AuthService {
 
         Optional<Member> memberOptional = memberRepository.findByEmailAndStatusIn(requestDto.getEmail(), List.of(Status.GREEN ,Status.YELLOW));
         if (memberOptional.isEmpty()) {
-            throw new MyInternalServerException("존재하지 않는 회원입니다.");
+            throw new MyInternalServerException("아이디 혹은 비밀번호가 일치하지 않습니다.");
         }
         Member reqMember = memberOptional.get();
 
         if (!passwordEncoder.matches(requestDto.getPassword(), reqMember.getPassword())) {
-            throw new MyInternalServerException("비밀번호가 틀렸습니다");
+            throw new MyInternalServerException("아이디 혹은 비밀번호가 일치하지 않습니다.");
         }
 
         //TODO: 비밀번호 유효성 체크 , 토큰이 남아있음.

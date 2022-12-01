@@ -21,7 +21,7 @@ public class MemberRequestDto {
         this.email=email;
         this.password=password;
     }
-    //Roletype 바인딩 처리
+    //Roletype 바인딩
     public void setRole(String role) {
         this.role = Role.valueOf("ROLE_"+role.toUpperCase());
     }

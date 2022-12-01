@@ -15,14 +15,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @AutoConfigureMockMvc
 @ExtendWith(SpringExtension.class)
-class MemberRestControllerTest {
+@SpringBootTest
+public class MemberRestControllerTest {
     @Autowired
     private MockMvc mockMvc;
+
+    private final String URL = "/member";
 
     @Test
     @DisplayName("문자 인증 테스트")
     public void sendSMSTest()throws Exception{
-        this.mockMvc.perform(get("/member/sendsms"))
+        this.mockMvc.perform(get(URL+"/cert"))
                 .andExpect(status().isOk());
 
     }

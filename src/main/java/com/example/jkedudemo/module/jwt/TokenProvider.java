@@ -1,7 +1,8 @@
 package com.example.jkedudemo.module.jwt;
 
 import com.example.jkedudemo.module.handler.MyInternalServerException;
-import com.example.jkedudemo.module.member.dto.TokenDto;
+import com.example.jkedudemo.module.jwt.dto.TokenDto;
+import com.example.jkedudemo.module.jwt.entity.RefreshToken;
 import com.example.jkedudemo.module.member.service.CustomUser;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
@@ -12,7 +13,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import java.security.Key;
@@ -45,6 +45,7 @@ public class TokenProvider {
         long now = (new Date()).getTime();
 
         Date tokenExpiresIn = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
+        Date refreshTokenExpiresIn = new Date(now + ACCESS_TOKEN_EXPIRE_TIME*5);
 
         System.out.println(tokenExpiresIn);
         int idx = authorities.indexOf("_");
@@ -59,12 +60,22 @@ public class TokenProvider {
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
 
+        String refreshToken = Jwts.builder()
+                //member.getId() -> getCurrentMemberId에 사용
+                .setSubject(authentication.getName())
+                .claim(AUTHORITIES_ROLE,authorities.substring(idx+1))
+                //member.getName -> JWT 토큰 { aud : member.getName }
+                .setAudience(name)
+                .setExpiration(refreshTokenExpiresIn)
+                .signWith(key, SignatureAlgorithm.HS512)
+                .compact();
+
         return TokenDto.builder()
                 .status("200")
                 .message("OK")
                 .grantType(BEARER_TYPE)
                 .accessToken(accessToken)
-                .tokenExpiresIn(tokenExpiresIn.getTime())
+                .refreshToken(refreshToken)
                 .build();
     }
 
@@ -103,6 +114,51 @@ public class TokenProvider {
         }
         return false;
     }
+
+    //Refresh 유효성 검사
+    public String validateRefreshToken(RefreshToken refreshTokenObj){
+
+        // refresh 객체에서 refreshToken 추출
+        String refreshToken = refreshTokenObj.getRefreshToken();
+
+        try {
+            // 검증
+            Claims claims =parseClaims(refreshToken);
+
+            //refresh 토큰의 만료시간이 지나지 않았을 경우, 새로운 access 토큰을 생성합니다.
+            if (!claims.getExpiration().before(new Date())) {
+                return recreationAccessToken(claims.getSubject(), claims.get(AUTHORITIES_ROLE).toString(),claims.getAudience());
+            }
+        }catch (Exception e) {
+
+            //refresh 토큰이 만료되었을 경우, 로그인이 필요합니다.
+            return null;
+
+        }
+
+        return null;
+    }
+
+    //액세스 토큰 재발급
+    public String recreationAccessToken(String id, String auth,String name){
+
+        // 정보는 key / value 쌍으로 저장된다.
+        long now = (new Date()).getTime();
+        Date tokenExpiresIn = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
+
+        //Access Token
+        String accessToken = Jwts.builder()
+                .setSubject(id)
+                .claim(AUTHORITIES_ROLE,auth)// 정보 저장
+                .setAudience(name) // 토큰 발행 시간 정보
+                .setExpiration(tokenExpiresIn) // set Expire Time
+                .signWith(key, SignatureAlgorithm.HS512)  // 사용할 암호화 알고리즘과
+                // signature 에 들어갈 secret값 세팅
+                .compact();
+
+        return accessToken;
+    }
+
 
     private Claims parseClaims(String accessToken) {
         try {

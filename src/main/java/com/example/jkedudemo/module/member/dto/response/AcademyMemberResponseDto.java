@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 public class AcademyMemberResponseDto {
     private String status;
     private String condition;
-    private Long id;
+    private Long studentId;
 
     public AcademyMemberResponseDto(String status, String condition) {
         this.status=status;
@@ -24,7 +24,7 @@ public class AcademyMemberResponseDto {
         return AcademyMemberResponseDto.builder()
                 .status("200")
                 .condition("")
-                .id(member.getId())
+                .studentId(member.getId())
                 .build();
     }
 

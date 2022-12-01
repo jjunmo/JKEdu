@@ -13,7 +13,7 @@ import javax.persistence.*;
 @Builder
 @Entity
 @Table(name = "MEMBER_EXAM_ANSWER")
-public class MemberAnswer extends BaseTime {
+public class MemberAnswer{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

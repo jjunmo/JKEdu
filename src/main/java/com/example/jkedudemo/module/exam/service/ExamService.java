@@ -3,6 +3,7 @@ package com.example.jkedudemo.module.exam.service;
 import com.example.jkedudemo.module.common.enums.Level;
 import com.example.jkedudemo.module.common.enums.YN;
 import com.example.jkedudemo.module.common.enums.exam.Quest;
+import com.example.jkedudemo.module.common.enums.member.Role;
 import com.example.jkedudemo.module.config.SecurityUtil;
 import com.example.jkedudemo.module.exam.dto.request.NextQuestRequest;
 import com.example.jkedudemo.module.exam.dto.response.ExamFirstQuestResponse;
@@ -33,6 +34,7 @@ public class ExamService {
     private final ExamMultipleChoiceRepository examMultipleChoiceRepository;
     private final MemberAnswerRepository memberAnswerRepository;
     private final MemberAnswerCategoryRepository memberAnswerCategoryRepository;
+    private final MemberResultRepository memberResultRepository;
 
     Random rand = new Random();
 
@@ -46,12 +48,16 @@ public class ExamService {
         //로그인 정보
         Member member = isMemberCurrent();
 
+
+
         if(member.getTestCount()<=0){
             throw new MyInternalServerException("테스트 횟수가 없습니다.");
         }else{
             member.setTestCount(member.getTestCount()-1);
             memberRepository.save(member);
         }
+
+        ExamPaper examPaper =memberResultRepository.save(new ExamPaper());
 
         //로그인된 유저의 레벨에 맞는 문제 List
         List<ExamQuest> examQuestList = examQuestRepository.findByExamCategory_ExamAndLevel(request.getExam(),Level.PRE_A1);
@@ -64,22 +70,30 @@ public class ExamService {
         //객관식 문제의 경우 객관식 항목을 다 담기
         if(examQuestRandomElement.getQuest().equals(Quest.MULTIPLE)){
             List<ExamMultipleChoice> examMultipleChoice=examMultipleChoiceRepository.findByQuest_id(examQuestRandomElement.getId());
-            return ExamFirstQuestResponse.examDTO(examQuestRandomElement.entityToMultipleDto(examMultipleChoice));
+            return ExamFirstQuestResponse.examDTO(examQuestRandomElement.entityToMultipleDto(examMultipleChoice),examPaper);
         }
-        return ExamFirstQuestResponse.examDTO(examQuestRandomElement.entityToDto());
+        return ExamFirstQuestResponse.examDTO(examQuestRandomElement.entityToDto(),examPaper);
     }
 
     @Transactional
     public ExamNextQuestResponse examNextQuestResponse(NextQuestRequest request){
-        Member member = isMemberCurrent();
+        //일반유저인지 학원유저인지 확인
+        Member member=isMemberCurrent();
+        if(member.getRole().equals(Role.ROLE_ACADEMY)) {
+            Optional<Member> memberOptional = memberRepository.findById(request.getStudentId());
+            member = memberOptional.orElseGet(this::isMemberCurrent);
+        }
+        //등급을 배열로
         Level[] levels=Level.values();
 
-
-
-
+        Optional<ExamPaper> examPaperOptional=memberResultRepository.findById(request.getExamPaper());
+        if(examPaperOptional.isEmpty()){
+            throw new MyInternalServerException("잘못된 접근입니다.");
+        }
+        ExamPaper examPaper = examPaperOptional.get();
 
         //시험에 나온문제 확인
-        Optional<ExamQuest> examQuestOptional = examQuestRepository.findById(request.getId());
+        Optional<ExamQuest> examQuestOptional = examQuestRepository.findById(request.getExamId());
 
         if(examQuestOptional.isPresent()){
             ExamQuest examQuest = examQuestOptional.get();
@@ -88,8 +102,7 @@ public class ExamService {
             int levelCheck = level.ordinal();
             Level changeLevel;
 
-
-            MemberAnswerCategory memberAnswerCategory=new MemberAnswerCategory(null,member,examQuest.getExamCategory());
+            MemberAnswerCategory memberAnswerCategory=new MemberAnswerCategory(null,member,examQuest.getExamCategory(),examPaper);
             memberAnswerCategoryRepository.save(memberAnswerCategory);
 
             if(examQuest.getRightAnswer().equals(request.getMyAnswer())){
@@ -125,10 +138,10 @@ public class ExamService {
             //객관식 문제의 경우 객관식 항목을 다 담기
             if(examQuestRandomElement.getQuest().equals(Quest.MULTIPLE)){
                 List<ExamMultipleChoice> examMultipleChoice=examMultipleChoiceRepository.findByQuest_id(examQuestRandomElement.getId());
-                return ExamNextQuestResponse.examDTO(examQuestRandomElement.entityToMultipleDto(examMultipleChoice),request.getNumber());
+                return ExamNextQuestResponse.examDTO(examQuestRandomElement.entityToMultipleDto(examMultipleChoice),examPaper,request.getNumber(), request.getStudentId());
             }
 
-            return ExamNextQuestResponse.examDTO(examQuestRandomElement.entityToDto(), request.getNumber());
+            return ExamNextQuestResponse.examDTO(examQuestRandomElement.entityToDto(),examPaper, request.getNumber(), request.getStudentId());
 
         }
 

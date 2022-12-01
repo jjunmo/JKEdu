@@ -1,7 +1,7 @@
 package com.example.jkedudemo.module.exam.dto.response;
 
-import com.example.jkedudemo.module.common.enums.exam.Exam;
 import com.example.jkedudemo.module.exam.dto.ExamQuestDTO;
+import com.example.jkedudemo.module.exam.entity.ExamPaper;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,14 +17,20 @@ public class ExamNextQuestResponse {
 
     private String message;
 
+    private Long examPaper;
+
+    private Long studentId;
+
     private String number;
 
     private ExamQuestDTO examQuestDTO;
 
-    public static ExamNextQuestResponse examDTO(ExamQuestDTO examQuestDTO,String number){
+    public static ExamNextQuestResponse examDTO(ExamQuestDTO examQuestDTO, ExamPaper examPaper, String number, Long studentId){
         return ExamNextQuestResponse.builder()
                 .status("200")
-                .message("OK")
+                .message("NEXT")
+                .examPaper(examPaper.getId())
+                .studentId(studentId)
                 .number(Integer.toString(Integer.parseInt(number)+1))
                 .examQuestDTO(examQuestDTO)
                 .build();
