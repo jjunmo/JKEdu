@@ -28,7 +28,7 @@ public class MemberAnswerCategory {
     private ExamCategory examCategory;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "MEMBER_EXAM_RESULT")
-    private ExamPaper memberResult;
+    @JoinColumn(name = "MEMBER_EXAM_PAPER")
+    private ExamPaper examPaper;
 
 }

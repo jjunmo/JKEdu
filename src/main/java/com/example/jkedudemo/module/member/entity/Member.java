@@ -49,7 +49,7 @@ public class Member extends BaseTime {
 
     private int testCount;
 
-    private int levelScore=0;
+//    private int levelScore=0;
 
     //학원 학생
     public Member(String phone, String name, Date birth, Role role, String academyId) {

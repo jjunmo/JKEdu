@@ -35,7 +35,7 @@ public class ExamService {
     private final ExamMultipleChoiceRepository examMultipleChoiceRepository;
     private final MemberAnswerRepository memberAnswerRepository;
     private final MemberAnswerCategoryRepository memberAnswerCategoryRepository;
-    private final MemberResultRepository memberResultRepository;
+    private final ExamPaperRepository examPaperRepository;
 
     Random rand = new Random();
 
@@ -58,7 +58,7 @@ public class ExamService {
             memberRepository.save(member);
         }
 
-        ExamPaper examPaper =memberResultRepository.save(new ExamPaper());
+        ExamPaper examPaper =examPaperRepository.save(new ExamPaper());
 
         //로그인된 유저의 레벨에 맞는 문제 List
         List<ExamQuest> examQuestList = examQuestRepository.findByExamCategory_ExamAndLevel(request.getExam(),Level.PRE_A1);
@@ -88,7 +88,7 @@ public class ExamService {
         //등급을 배열로
         Level[] levels=Level.values();
 
-        Optional<ExamPaper> examPaperOptional=memberResultRepository.findById(request.getExamPaper());
+        Optional<ExamPaper> examPaperOptional=examPaperRepository.findById(request.getExamPaper());
         if(examPaperOptional.isEmpty()){
             throw new MyInternalServerException("잘못된 접근입니다.");
         }
@@ -151,31 +151,30 @@ public class ExamService {
 
     }
 
-    public String nextEnd(Long examId , String number){
+    @Transactional
+    public String nextEnd(Long examId , String number,Long examPaperId){
         Optional<ExamQuest> examQuestOptional = examQuestRepository.findById(examId);
+        Optional<ExamPaper> examPaperOptional= examPaperRepository.findById(examPaperId);
         if(examQuestOptional.isEmpty()){
             throw new MyInternalServerException("유형을 알수없는 문제입니다.");
         }
-        Exam exam = examQuestOptional.get().getExamCategory().getExam();
-
-        if(exam.equals(Exam.READING)){
-            if(Integer.parseInt(number)<35) return "NEXT";
-            else return "END";
-        } else if (exam.equals(Exam.GRAMMAR)) {
-            if(Integer.parseInt(number)<35) return "NEXT";
-            else return "END";
-        } else if (exam.equals(Exam.LISTENING)) {
-            if(Integer.parseInt(number)<35) return "NEXT";
-            else return "END";
-        } else if (exam.equals(Exam.SPEAKING)) {
-            if(Integer.parseInt(number)<35) return "NEXT";
-            else return "END";
-        } else if (exam.equals(Exam.WRITING)) {
-            if(Integer.parseInt(number)<35) return "NEXT";
-            else return "END";
+        if(examPaperOptional.isEmpty()){
+            throw new MyInternalServerException("시험을 다시 시작하세요.");
         }
+        ExamPaper examPaper = examPaperOptional.get();
+        ExamQuest examQuest = examQuestOptional.get();
+        Exam exam=examQuest.getExamCategory().getExam();
 
-        throw new MyInternalServerException("확인 할수없는 유형입니다.");
+
+            if(Integer.parseInt(number)<exam.getValue()) return "NEXT";
+            else {
+
+               List<MemberAnswer> memberAnswerList=memberAnswerRepository.findByMemberAnswerCategory_ExamPaperAndAnswerYN(examPaper,YN.Y);
+                double sum = memberAnswerList.stream().mapToInt(memberAnswer->memberAnswer.getExamQuest().getLevel().getValue()).sum();
+                examPaper.setLevel(Level.PRE_A1.getLevel(sum));
+                return "END";
+            }
+
     }
 
 }

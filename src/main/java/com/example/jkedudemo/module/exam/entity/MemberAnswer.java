@@ -18,7 +18,7 @@ public class MemberAnswer{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     @JoinColumn(name = "MEMBER_EXAM_ANSWER_CATEGORY")
     private MemberAnswerCategory memberAnswerCategory;
 
@@ -32,6 +32,6 @@ public class MemberAnswer{
 
     // 정답 여부
     @Enumerated(EnumType.STRING)
-    private YN AnswerYN;
+    private YN answerYN;
 
 }

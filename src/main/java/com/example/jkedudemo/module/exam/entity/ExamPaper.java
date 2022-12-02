@@ -12,7 +12,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "MEMBER_EXAM_RESULT")
+@Table(name = "MEMBER_EXAM_PAPER")
 public class ExamPaper extends BaseTime {
 
     @Id
