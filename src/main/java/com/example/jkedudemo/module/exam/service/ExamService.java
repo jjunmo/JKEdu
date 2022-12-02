@@ -166,7 +166,7 @@ public class ExamService {
         Exam exam=examQuest.getExamCategory().getExam();
 
 
-            if(Integer.parseInt(number)<exam.getValue()) return "NEXT";
+            if(Integer.parseInt(number)<=exam.getValue()) return "NEXT";
             else {
 
                List<MemberAnswer> memberAnswerList=memberAnswerRepository.findByMemberAnswerCategory_ExamPaperAndAnswerYN(examPaper,YN.Y);
