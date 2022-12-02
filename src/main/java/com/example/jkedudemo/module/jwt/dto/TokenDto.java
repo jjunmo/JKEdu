@@ -21,4 +21,6 @@ public class TokenDto {
 
     private String message;
 
+    private String keyId;
+
 }

@@ -1,15 +1,13 @@
 package com.example.jkedudemo.module.jwt.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
-@Deprecated
 @Builder
 @Getter
+@Setter
+@Entity
 @Table(name = "REFRESH_TOKEN")
 @NoArgsConstructor
 @AllArgsConstructor
@@ -18,11 +16,15 @@ public class RefreshToken {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "REFRESH_TOKEN_ID", nullable = false)
-    private Long refreshTokenId;
+    private Long id;
 
     @Column(name = "REFRESH_TOKEN", nullable = false)
     private String refreshToken;
 
-    @Column(name = "KEY_EMAIL", nullable = false)
-    private String keyEmail;
+
+    @Column(name = "KEY_ID", nullable = false)
+    private String keyId;
+
+    @Column(name ="USER_AGENT", nullable = false)
+    private String userAgent;
 }

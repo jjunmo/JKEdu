@@ -7,7 +7,11 @@ import com.example.jkedudemo.module.common.enums.member.Status;
 import com.example.jkedudemo.module.common.enums.YN;
 import com.example.jkedudemo.module.handler.MyInternalServerException;
 import com.example.jkedudemo.module.jwt.TokenProvider;
+import com.example.jkedudemo.module.jwt.dto.RefreshApiResponseMessage;
 import com.example.jkedudemo.module.jwt.dto.TokenDto;
+import com.example.jkedudemo.module.jwt.entity.RefreshToken;
+import com.example.jkedudemo.module.jwt.repository.RefreshTokenRepository;
+import com.example.jkedudemo.module.jwt.service.JwtService;
 import com.example.jkedudemo.module.member.dto.request.MemberRequestDto;
 import com.example.jkedudemo.module.member.dto.response.*;
 import com.example.jkedudemo.module.member.entity.Member;
@@ -16,14 +20,21 @@ import com.example.jkedudemo.module.member.repository.MemberPhoneAuthRepository;
 import com.example.jkedudemo.module.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -34,8 +45,10 @@ public class AuthService {
     private final AuthenticationManagerBuilder managerBuilder;
     private final MemberRepository memberRepository;
     private final MemberPhoneAuthRepository memberPhoneAuthRepository;
+    private final RefreshTokenRepository refreshTokenRepository;
     private final PasswordEncoder passwordEncoder;
     private final TokenProvider tokenProvider;
+
 
 
     @Transactional
@@ -80,7 +93,8 @@ public class AuthService {
     }
 
     @Transactional
-    public TokenDto login(MemberRequestDto requestDto) {
+    public TokenDto login(MemberRequestDto requestDto,String userAgent) {
+
 
         Optional<Member> memberOptional = memberRepository.findByEmailAndStatusIn(requestDto.getEmail(), List.of(Status.GREEN ,Status.YELLOW));
         if (memberOptional.isEmpty()) {
@@ -103,8 +117,27 @@ public class AuthService {
         UsernamePasswordAuthenticationToken authenticationToken = requestDto.toAuthentication();
         Authentication authentication = managerBuilder.getObject().authenticate(authenticationToken);
 
-        return tokenProvider.generateTokenDto(authentication,reqMember.getName());
+        TokenDto tokenDto=tokenProvider.generateTokenDto(authentication,reqMember.getName());
 
+        RefreshToken refreshToken = RefreshToken.builder()
+                .keyId(tokenDto.getKeyId())
+                .refreshToken(tokenDto.getRefreshToken())
+                .userAgent(userAgent)
+                .build();
+        String loginUserId = refreshToken.getKeyId();
+        Optional<RefreshToken> refreshTokenOptional=refreshTokenRepository.findByKeyIdAndUserAgent(loginUserId,userAgent);
+
+        if(refreshTokenOptional.isEmpty()){
+            refreshTokenRepository.save(refreshToken);
+        }else{
+            RefreshToken refreshToken1 = refreshTokenOptional.get();
+            refreshToken1.setRefreshToken(tokenDto.getRefreshToken());
+            refreshTokenRepository.save(refreshToken1);
+        }
+
+        return tokenDto;
     }
+
+
 
 }

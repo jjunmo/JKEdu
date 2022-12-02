@@ -1,2 +1,110 @@
-### 처음
-POST http://localhost:8080/member/testMember
+###회원가입
+POST http://localhost:8080/auth/member/register
+Content-Type: application/json
+
+{
+  "email" : "aaaa",
+  "password" : "1234",
+  "name" : "asfd",
+  "phone" : "01091097122",
+  "role" : "user"
+}
+
+<> 2022-12-02T164945.200.json
+<> 2022-12-02T163907.500.json
+
+###로그인
+
+POST http://localhost:8080/auth/member/login
+Content-Type: application/json
+
+{
+  "email" : "aaaa",
+  "password" : "1234"
+}
+
+<> 2022-12-02T164948.200.json
+<> 2022-12-02T163914.500.json
+
+###토큰 재발급
+POST http://localhost:8080/auth/refresh
+Content-Type: application/json
+
+{"refreshToken": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwiYXV0aCI6IlVTRVIiLCJhdWQiOiJhc2ZkIiwiZXhwIjoxNjY5OTc2Mzg4fQ.UPzQzNxMLpl38MD5Ort2FuyjcpVNerduUOO8wizKDFfetYqcRstbY4aa88TobX9GGdpDrsutcmLAA2HQ8Za1yQ"}
+
+<> 2022-12-02T165047.200.json
+<> 2022-12-02T164044.500.json
+
+###인증번호 발송
+GET http://localhost:8080/member/cert?phone=01091097122&phoneauth=JOIN
+Accept: application/json
+
+<> 2022-12-02T164904.200.json
+
+###인증번호 확인
+GET http://localhost:8080/member/cert/ex?phone=01091097122&smscode=5236&phoneauth=join
+Accept: application/json
+
+<> 2022-12-02T164937.200.json
+<> 2022-12-02T164855.500.json
+
+
+###내 정보
+GET http://localhost:8080/member/myinfo
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwiYXV0aCI6IlVTRVIiLCJhdWQiOiJhc2ZkIiwiZXhwIjoxNjY5OTY5MjQ3fQ.4OTJv0iGM3JRVbwtFPzzUcWrQVMketR3YKJpriJuRfq7RK_FfaAZdzaVOj7jQtvg0SMPzUJ0xZ9Bz9aqv9LiYg
+
+<> 2022-12-02T165133.200.json
+<> 2022-12-02T164848.500.json
+
+
+
+###비빌번호 변경
+PUT http://localhost:8080/member/myinfo
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwiYXV0aCI6IlVTRVIiLCJhdWQiOiJhc2ZkIiwiZXhwIjoxNjY5OTY5MjQ3fQ.4OTJv0iGM3JRVbwtFPzzUcWrQVMketR3YKJpriJuRfq7RK_FfaAZdzaVOj7jQtvg0SMPzUJ0xZ9Bz9aqv9LiYg
+
+{
+  "exPassword" : "1234",
+  "newPassword" : "12345"
+}
+
+<> 2022-12-02T165316.200.json
+
+###회원 삭제
+POST http://localhost:8080/member/myinfo
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwiYXV0aCI6IlVTRVIiLCJhdWQiOiJhc2ZkIiwiZXhwIjoxNjY5OTY5MjQ3fQ.4OTJv0iGM3JRVbwtFPzzUcWrQVMketR3YKJpriJuRfq7RK_FfaAZdzaVOj7jQtvg0SMPzUJ0xZ9Bz9aqv9LiYg
+
+{"password" : "12345"}
+
+<> 2022-12-02T165501.200.json
+
+###이메일 찾기
+GET http://localhost:8080/member/check?phone=01091097122&smscode=4653&phoneauth=id
+
+###아이디 중복체크
+GET http://localhost:8080/member/excheck?email=aaaa
+
+<> 2022-12-02T165804.200.json
+<> 2022-12-02T165744.200.json
+
+
+### 테스트 횟수 확인
+GET http://localhost:8080/member/exam
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwiYXV0aCI6IlVTRVIiLCJhdWQiOiJhc2ZkIiwiZXhwIjoxNjY5OTY5MjQ3fQ.4OTJv0iGM3JRVbwtFPzzUcWrQVMketR3YKJpriJuRfq7RK_FfaAZdzaVOj7jQtvg0SMPzUJ0xZ9Bz9aqv9LiYg
+
+<> 2022-12-02T165859.200.json
+
+###학원학셍 시험응시
+POST http://localhost:8080/member/academy/exam
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwiYXV0aCI6IlVTRVIiLCJhdWQiOiJhc2ZkIiwiZXhwIjoxNjY5OTY5MjQ3fQ.4OTJv0iGM3JRVbwtFPzzUcWrQVMketR3YKJpriJuRfq7RK_FfaAZdzaVOj7jQtvg0SMPzUJ0xZ9Bz9aqv9LiYg
+
+{
+  "name":"aaa",
+  "birth":"12121212",
+  "phone":"12341234"
+}
+
+<> 2022-12-02T170029.500.json
+<> 2022-12-02T170025.500.json

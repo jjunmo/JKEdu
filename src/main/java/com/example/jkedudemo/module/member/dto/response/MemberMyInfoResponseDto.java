@@ -31,12 +31,4 @@ public class MemberMyInfoResponseDto {
                 .testCount(member.getTestCount())
                 .build();
     }
-
-
-
-
-
-
-
-
 }
