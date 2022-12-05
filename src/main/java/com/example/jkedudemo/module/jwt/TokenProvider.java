@@ -155,7 +155,7 @@ public class TokenProvider {
                 .setSubject(id)
                 .claim(AUTHORITIES_ROLE,auth)// 정보 저장
                 .setAudience(name) // 토큰 발행 시간 정보
-                .setExpiration(tokenExpiresIn) // set Expire Time
+                .setExpiration(new Date(now + 1000*60)) // set Expire Time
                 .signWith(key, SignatureAlgorithm.HS512)  // 사용할 암호화 알고리즘과
                 // signature 에 들어갈 secret값 세팅
                 .compact();
