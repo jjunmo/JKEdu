@@ -53,6 +53,7 @@ public class S3Service {
             String line;
 
             while ((line = br.readLine()) != null) {
+                
                 String[] data = line.split(",", 0);
 
                 if(storedFileName.contains("Category")) {

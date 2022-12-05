@@ -1,6 +1,5 @@
 package com.example.jkedudemo.module.handler;
 
-import io.jsonwebtoken.ExpiredJwtException;
 import lombok.Getter;
 
 @Getter
@@ -11,4 +10,3 @@ public class MyForbiddenException extends RuntimeException {
         super(message);
     }
 }
-

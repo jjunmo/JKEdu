@@ -12,6 +12,15 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class MyControllerAdvice extends ResponseEntityExceptionHandler {
 
     @ResponseBody
+    @ExceptionHandler(MyUnAuthorizedException.class)
+    public ResponseEntity<MyErrorBody> handleForbiddenException(MyUnAuthorizedException e) {
+        return new ResponseEntity<>(
+                new MyErrorBody(e.getMessage(),"401"),
+                HttpStatus.UNAUTHORIZED
+        );
+    }
+
+    @ResponseBody
     @ExceptionHandler(MyForbiddenException.class)
     public ResponseEntity<MyErrorBody> handleForbiddenException(MyForbiddenException e) {
         return new ResponseEntity<>(
@@ -19,6 +28,7 @@ public class MyControllerAdvice extends ResponseEntityExceptionHandler {
                 HttpStatus.FORBIDDEN
         );
     }
+
     @Deprecated
     @ResponseBody
     @ExceptionHandler(MyNotFoundException.class)

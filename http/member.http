@@ -30,7 +30,7 @@ Content-Type: application/json
 POST http://localhost:8080/auth/refresh
 Content-Type: application/json
 
-{"refreshToken": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwiYXV0aCI6IlVTRVIiLCJhdWQiOiJhc2ZkIiwiZXhwIjoxNjY5OTc2Mzg4fQ.UPzQzNxMLpl38MD5Ort2FuyjcpVNerduUOO8wizKDFfetYqcRstbY4aa88TobX9GGdpDrsutcmLAA2HQ8Za1yQ"}
+{"refreshToken": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXVkIjoiYXNmZCIsImV4cCI6MTY3MDIyNjIzMX0.JcmLhfPfx-1n1w_bEK86BY4yTJyXFtB1OpFdVoeofUes57yu9tFI5N_wQNxMiEUpBkVoDz-dgaXL3xJy1qdgZQ"}
 
 <> 2022-12-02T165047.200.json
 <> 2022-12-02T164044.500.json
@@ -42,7 +42,7 @@ Accept: application/json
 <> 2022-12-02T164904.200.json
 
 ###인증번호 확인
-GET http://localhost:8080/member/cert/ex?phone=01091097122&smscode=6471&phoneauth=join
+GET http://localhost:8080/member/cert/ex?phone=01091097122&smscode=0980&phoneauth=join
 Accept: application/json
 
 <> 2022-12-02T164937.200.json
@@ -51,7 +51,7 @@ Accept: application/json
 
 ###내 정보
 GET http://localhost:8080/member/myinfo
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlVTRVIiLCJhdWQiOiJhc2ZkIiwiZXhwIjoxNjY5OTc0MDE5fQ.meZiG5jslwk4bITtU3avOEOJ9Z6KV127PzRCNgWalqyPXkHiOnlSNeM6xgCHHpQaflcUE1HG-by032N3gaOXhQ
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXVkIjoiYXNmZCIsImV4cCI6MTY3MDIyNjIzMX0.JcmLhfPfx-1n1w_bEK86BY4yTJyXFtB1OpFdVoeofUes57yu9tFI5N_wQNxMiEUpBkVoDz-dgaXL3xJy1qdgZQ
 
 <> 2022-12-02T165133.200.json
 <> 2022-12-02T164848.500.json

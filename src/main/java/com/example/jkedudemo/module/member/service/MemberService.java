@@ -149,10 +149,10 @@ public class MemberService {
         return MemberStatusOkResponseDto.statusOk();
     }
 
-    public MemberNameResopnseDto memberName(){
-        Member member = isMemberCurrent();
-        return MemberNameResopnseDto.name(member);
-    }
+//    public MemberNameResopnseDto memberName(){
+//        Member member = isMemberCurrent();
+//        return MemberNameResopnseDto.name(member);
+//    }
 
 
     @Transactional

@@ -1,5 +1,5 @@
 ###S3 CSV 파일 읽어 DB에 저장
-POST http://localhost:8080/csv_read
+POST http://3.35.153.95:8080/csv_read
 
 <> 2022-12-02T170210.200.txt
 
