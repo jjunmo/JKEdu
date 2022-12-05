@@ -1,5 +1,14 @@
 package com.example.jkedudemo.module.handler;
-@Deprecated
+
+import io.jsonwebtoken.ExpiredJwtException;
+import lombok.Getter;
+
+@Getter
 public class MyForbiddenException extends RuntimeException {
-    public MyForbiddenException(String message) {super(message);}
+
+    private final String status="403";
+    public MyForbiddenException(String message) {
+        super(message);
+    }
 }
+

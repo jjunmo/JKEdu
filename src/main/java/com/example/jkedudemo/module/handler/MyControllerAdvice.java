@@ -1,5 +1,6 @@
 package com.example.jkedudemo.module.handler;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -9,12 +10,12 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 @RestControllerAdvice
 public class MyControllerAdvice extends ResponseEntityExceptionHandler {
-    @Deprecated
+
     @ResponseBody
     @ExceptionHandler(MyForbiddenException.class)
     public ResponseEntity<MyErrorBody> handleForbiddenException(MyForbiddenException e) {
         return new ResponseEntity<>(
-                new MyErrorBody(e.getMessage()),
+                new MyErrorBody(e.getMessage(),"403"),
                 HttpStatus.FORBIDDEN
         );
     }
