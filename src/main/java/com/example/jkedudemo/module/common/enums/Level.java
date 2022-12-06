@@ -10,10 +10,10 @@ public enum Level {
     B2(65, 1000),
     C(85, 1200);
 
-    private final double value;
+    private final int value;
     private final int cut;
 
-    Level(double value, int cut) {
+    Level(int value, int cut) {
         this.value = value;
         this.cut = cut;
     }
