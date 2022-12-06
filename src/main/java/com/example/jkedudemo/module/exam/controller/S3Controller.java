@@ -21,9 +21,9 @@ public class S3Controller {
     public HttpEntity<String> read() throws IOException {
         String folder = "jkeduexam/";
         String csv = ".csv";
-        s3Service.readObject(folder+"examCategory"+csv);
+        //s3Service.readObject(folder+"examCategory"+csv);
         s3Service.readObject(folder+"examQuest"+csv);
-        s3Service.readObject(folder+"examMultiple"+csv);
+        //s3Service.readObject(folder+"examMultiple"+csv);
         return new ResponseEntity<>("success", HttpStatus.OK);
     }
 }
