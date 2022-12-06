@@ -49,8 +49,6 @@ public class ExamService {
         //로그인 정보
         Member member = isMemberCurrent();
 
-
-
         if(member.getTestCount()<=0){
             throw new MyInternalServerException("테스트 횟수가 없습니다.");
         }else{
@@ -99,6 +97,10 @@ public class ExamService {
 
         if(examQuestOptional.isPresent()){
             ExamQuest examQuest = examQuestOptional.get();
+
+            if(examQuest.getExamCategory().getExam().getValue() == Integer.parseInt(request.getNumber())){
+                return ExamNextQuestResponse.examDTO2();
+            }
 
             Level level = examQuest.getLevel();
             int levelCheck = level.ordinal();
@@ -153,7 +155,6 @@ public class ExamService {
 
     @Transactional
     public String nextEnd(Long examId , String number,Long examPaperId) {
-
         Optional<ExamQuest> examQuestOptional = examQuestRepository.findById(examId);
         Optional<ExamPaper> examPaperOptional = examPaperRepository.findById(examPaperId);
         if (examQuestOptional.isEmpty()) {
@@ -166,23 +167,15 @@ public class ExamService {
         ExamQuest examQuest = examQuestOptional.get();
         Exam exam = examQuest.getExamCategory().getExam();
 
-        if (Integer.parseInt(number) > exam.getValue()) {
 
+        if (Integer.parseInt(number) <= exam.getValue()) return "NEXT";
+        else {
+            //맞춘 문제 확인해서 시험 등급측정
             List<MemberAnswer> memberAnswerList = memberAnswerRepository.findByMemberAnswerCategory_ExamPaperAndAnswerYN(examPaper, YN.Y);
             int sum = memberAnswerList.stream().mapToInt(memberAnswer -> memberAnswer.getExamQuest().getLevel().getValue()).sum();
             examPaper.setLevel(Level.PRE_A1.getLevel(sum));
             return "END";
-
         }
-
-        return "NEXT";
-
-
-            //맞춘 문제 확인해서 시험 등급측정
-
-
-
-
 
     }
 
