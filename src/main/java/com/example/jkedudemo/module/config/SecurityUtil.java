@@ -1,6 +1,5 @@
 package com.example.jkedudemo.module.config;
 
-import com.example.jkedudemo.module.handler.MyForbiddenException;
 import com.example.jkedudemo.module.handler.MyInternalServerException;
 import com.example.jkedudemo.module.handler.MyUnAuthorizedException;
 import org.springframework.security.core.Authentication;

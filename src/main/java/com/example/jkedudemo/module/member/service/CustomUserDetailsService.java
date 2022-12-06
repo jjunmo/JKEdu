@@ -1,14 +1,11 @@
 package com.example.jkedudemo.module.member.service;
 
 
+import com.example.jkedudemo.module.member.dto.CustomUser;
 import com.example.jkedudemo.module.member.entity.Member;
 import com.example.jkedudemo.module.member.repository.MemberRepository;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.SpringSecurityCoreVersion;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,7 +13,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
 import java.util.Collections;
 
 @Service

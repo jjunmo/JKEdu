@@ -1,4 +1,4 @@
-package com.example.jkedudemo.module.member.service;
+package com.example.jkedudemo.module.member.dto;
 
 import com.example.jkedudemo.module.member.entity.Member;
 import lombok.Getter;

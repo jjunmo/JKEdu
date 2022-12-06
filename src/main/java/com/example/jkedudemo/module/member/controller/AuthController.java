@@ -25,6 +25,7 @@ import java.util.Map;
 public class AuthController {
     private final AuthService authService;
     private final JwtService jwtService;
+//    private final RedisService redisService;
 
     /**
      * 회원가입
@@ -33,7 +34,6 @@ public class AuthController {
      */
     @PostMapping("/member/register")
     public HttpEntity<MemberStatusOkResponseDto> signup(@RequestBody MemberRequestDto requestDto) {
-
         return ResponseEntity.ok(authService.signup(requestDto));
     }
 

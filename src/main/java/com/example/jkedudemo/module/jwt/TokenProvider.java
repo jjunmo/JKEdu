@@ -1,10 +1,9 @@
 package com.example.jkedudemo.module.jwt;
 
-import com.example.jkedudemo.module.handler.MyForbiddenException;
 import com.example.jkedudemo.module.handler.MyInternalServerException;
 import com.example.jkedudemo.module.jwt.dto.TokenDto;
 import com.example.jkedudemo.module.jwt.entity.RefreshToken;
-import com.example.jkedudemo.module.member.service.CustomUser;
+import com.example.jkedudemo.module.member.dto.CustomUser;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -17,7 +16,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.http.HttpServletResponse;
 import java.security.Key;
 import java.util.*;
 import java.util.stream.Collectors;
