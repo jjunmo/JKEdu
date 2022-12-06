@@ -91,6 +91,7 @@ public class ExamService {
             throw new MyInternalServerException("잘못된 접근입니다.");
         }
         ExamPaper examPaper = examPaperOptional.get();
+        //TODO:마지막으로 시험친 문제 저장되지않음
 
         //시험에 나온문제 확인
         Optional<ExamQuest> examQuestOptional = examQuestRepository.findById(request.getExamId());
@@ -98,16 +99,16 @@ public class ExamService {
         if(examQuestOptional.isPresent()){
             ExamQuest examQuest = examQuestOptional.get();
 
-            if(examQuest.getExamCategory().getExam().getValue() == Integer.parseInt(request.getNumber())){
-                return ExamNextQuestResponse.examDTO2();
-            }
-
             Level level = examQuest.getLevel();
             int levelCheck = level.ordinal();
             Level changeLevel;
 
             MemberAnswerCategory memberAnswerCategory=new MemberAnswerCategory(null,member,examQuest.getExamCategory(),examPaper);
             memberAnswerCategoryRepository.save(memberAnswerCategory);
+
+            if(examQuest.getExamCategory().getExam().getValue() == Integer.parseInt(request.getNumber())){
+                return ExamNextQuestResponse.examDTO2();
+            }
 
             if(examQuest.getRightAnswer().equals(request.getMyAnswer())){
 
