@@ -3,8 +3,8 @@ package com.example.jkedudemo.module.common.enums;
 public enum Level {
     //문제 등급
     //멤버 등급
-    PRE_A1(2.5,200),
-    A1(7.5, 400),
+    PRE_A1(3,200),
+    A1(7, 400),
     A2(25, 600),
     B1(45, 800),
     B2(65, 1000),
@@ -18,11 +18,11 @@ public enum Level {
         this.cut = cut;
     }
 
-    public Double getValue() { return Double.parseDouble(String.valueOf(value)); }
+    public int getValue() { return Integer.parseInt(String.valueOf(value)); }
 
     public int getCut(){return cut;}
 
-    public Level getLevel(double a){
+    public Level getLevel(int a){
         if(a<=Level.PRE_A1.getCut()){
             return PRE_A1;
         } else if (a<=Level.A1.getCut()) {

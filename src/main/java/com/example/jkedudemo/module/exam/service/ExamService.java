@@ -170,7 +170,7 @@ public class ExamService {
             else {
 
                List<MemberAnswer> memberAnswerList=memberAnswerRepository.findByMemberAnswerCategory_ExamPaperAndAnswerYN(examPaper,YN.Y);
-                double sum = memberAnswerList.stream().mapToInt(memberAnswer->memberAnswer.getExamQuest().getLevel().getValue()).sum();
+                int sum = memberAnswerList.stream().mapToInt(memberAnswer->memberAnswer.getExamQuest().getLevel().getValue()).sum();
                 examPaper.setLevel(Level.PRE_A1.getLevel(sum));
                 return "END";
             }
