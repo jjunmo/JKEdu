@@ -18,7 +18,7 @@ public enum Level {
         this.cut = cut;
     }
 
-    public int getValue() { return Integer.parseInt(String.valueOf(value)); }
+    public Double getValue() { return Double.parseDouble(String.valueOf(value)); }
 
     public int getCut(){return cut;}
 
