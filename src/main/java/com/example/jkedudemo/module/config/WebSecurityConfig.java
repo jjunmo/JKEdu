@@ -91,7 +91,7 @@ public class WebSecurityConfig implements WebMvcConfigurer {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
         config.addAllowedOrigin("http://localhost:3000");
-        config.addAllowedOrigin("http://15.164.48.62"); // 프론트 IPv4 주소
+        config.addAllowedOrigin("http://3.39.237.125"); // 프론트 IPv4 주소
         config.addAllowedMethod("*");
         config.addAllowedHeader("*");
         config.setAllowCredentials(true);
