@@ -166,14 +166,15 @@ public class ExamService {
         Exam exam=examQuest.getExamCategory().getExam();
 
 
-            if(Integer.parseInt(number)<=exam.getValue()) return "NEXT";
-            else {
+            if(Integer.parseInt(number)>exam.getValue()) {
 
-               List<MemberAnswer> memberAnswerList=memberAnswerRepository.findByMemberAnswerCategory_ExamPaperAndAnswerYN(examPaper,YN.Y);
+                //맞춘 문제 확인해서 시험 등급측정
+                List<MemberAnswer> memberAnswerList=memberAnswerRepository.findByMemberAnswerCategory_ExamPaperAndAnswerYN(examPaper,YN.Y);
                 int sum = memberAnswerList.stream().mapToInt(memberAnswer->memberAnswer.getExamQuest().getLevel().getValue()).sum();
                 examPaper.setLevel(Level.PRE_A1.getLevel(sum));
                 return "END";
             }
+            else return "NEXT";
 
     }
 
