@@ -1,12 +1,12 @@
 ###S3 CSV 파일 읽어 DB에 저장
-POST http://3.35.153.95:8080/csv_read
+POST http://localhost:8080/csv_read
 
 <> 2022-12-02T170210.200.txt
 
 ### 첫 문제
 POST http://localhost:8080/exam
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwiYXV0aCI6IlVTRVIiLCJhdWQiOiJhc2ZkIiwiZXhwIjoxNjY5OTY5MjQ3fQ.4OTJv0iGM3JRVbwtFPzzUcWrQVMketR3YKJpriJuRfq7RK_FfaAZdzaVOj7jQtvg0SMPzUJ0xZ9Bz9aqv9LiYg
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlVTRVIiLCJhdWQiOiJhc2ZkIiwiZXhwIjoxNjcwMzEzNjEzfQ.U2GwfpxYmih6LBNSlXFr2D7--oPKprRgL_YNPENx4RPCvZXaDeGwYLs7K22Wq-kHK7L7HhRYWXY01j04jo2EVw
 
 {
   "exam" : "READING"
@@ -17,13 +17,13 @@ Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwiYXV0aCI6IlVTRVIiLCJhd
 ### 다음 문제
 POST http://localhost:8080/exam/next
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwiYXV0aCI6IlVTRVIiLCJhdWQiOiJhc2ZkIiwiZXhwIjoxNjY5OTY5MjQ3fQ.4OTJv0iGM3JRVbwtFPzzUcWrQVMketR3YKJpriJuRfq7RK_FfaAZdzaVOj7jQtvg0SMPzUJ0xZ9Bz9aqv9LiYg
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlVTRVIiLCJhdWQiOiJhc2ZkIiwiZXhwIjoxNjcwMzEzNjc5fQ.e_RgVPkwGBsk4XLGhuaxoygoxmZxJCebRLKaYbIbsaWso28VLHfL34pFPJHycP_g3kMXKw8VXtbI-3qymjFPvQ
 
 {
   "examId" : "28",
   "myAnswer" : "1",
-  "number" : "1",
-  "examPaper" : "14"
+  "number" : "6",
+  "examPaper" : "1"
 }
 
 <> 2022-12-02T170458.500.json

@@ -42,7 +42,7 @@ Accept: application/json
 <> 2022-12-02T164904.200.json
 
 ###인증번호 확인
-GET http://localhost:8080/member/cert/ex?phone=01091097122&smscode=0980&phoneauth=join
+GET http://localhost:8080/member/cert/ex?phone=01091097122&smscode=6309&phoneauth=join
 Accept: application/json
 
 <> 2022-12-02T164937.200.json

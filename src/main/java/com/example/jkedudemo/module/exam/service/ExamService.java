@@ -152,29 +152,42 @@ public class ExamService {
     }
 
     @Transactional
-    public String nextEnd(Long examId , String number,Long examPaperId){
+    public String nextEnd(Long examId , String number,Long examPaperId) {
+
         Optional<ExamQuest> examQuestOptional = examQuestRepository.findById(examId);
-        Optional<ExamPaper> examPaperOptional= examPaperRepository.findById(examPaperId);
-        if(examQuestOptional.isEmpty()){
+        Optional<ExamPaper> examPaperOptional = examPaperRepository.findById(examPaperId);
+        if (examQuestOptional.isEmpty()) {
             throw new MyInternalServerException("유형을 알수없는 문제입니다.");
         }
-        if(examPaperOptional.isEmpty()){
+        if (examPaperOptional.isEmpty()) {
             throw new MyInternalServerException("시험을 다시 시작하세요.");
         }
         ExamPaper examPaper = examPaperOptional.get();
         ExamQuest examQuest = examQuestOptional.get();
-        Exam exam=examQuest.getExamCategory().getExam();
+        Exam exam = examQuest.getExamCategory().getExam();
+
+        if (Integer.parseInt(number) > exam.getValue()) {
+
+            List<MemberAnswer> memberAnswerList = memberAnswerRepository.findByMemberAnswerCategory_ExamPaperAndAnswerYN(examPaper, YN.Y);
+            int sum = memberAnswerList.stream().mapToInt(memberAnswer -> memberAnswer.getExamQuest().getLevel().getValue()).sum();
+            examPaper.setLevel(Level.PRE_A1.getLevel(sum));
+            return "END";
+
+        }
+
+        return "NEXT";
 
 
-            if(Integer.parseInt(number)==exam.getValue()) {
-                //맞춘 문제 확인해서 시험 등급측정
-                List<MemberAnswer> memberAnswerList=memberAnswerRepository.findByMemberAnswerCategory_ExamPaperAndAnswerYN(examPaper,YN.Y);
-                int sum = memberAnswerList.stream().mapToInt(memberAnswer->memberAnswer.getExamQuest().getLevel().getValue()).sum();
-                examPaper.setLevel(Level.PRE_A1.getLevel(sum));
-                return "END";
-            }
-            else return "NEXT";
+            //맞춘 문제 확인해서 시험 등급측정
+
+
+
+
 
     }
 
-}
+    }
+
+
+
+
