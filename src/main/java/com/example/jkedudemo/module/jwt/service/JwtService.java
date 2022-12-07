@@ -31,6 +31,7 @@ public class JwtService {
     public Map<String, String> createRefreshJson(String createdAccessToken){
 
         Map<String, String> map = new HashMap<>();
+
         if(createdAccessToken == null){
             map.put("errortype", "Refresh 토큰 Expired");
             map.put("status", "402");
@@ -39,13 +40,11 @@ public class JwtService {
             return map;
         }
         //기존에 존재하는 accessToken 제거
-
         map.put("status", "200");
         map.put("message", "Refresh 토큰을 통한 Access Token 생성이 완료되었습니다.");
         map.put("accessToken", createdAccessToken);
 
         return map;
-
 
     }
 }

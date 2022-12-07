@@ -21,9 +21,9 @@ public final class MultipartUtil {
      * @return ex) png
      */
     public static String getFormat(String contentType) {
-        if (StringUtils.hasText(contentType)) {
-            return contentType.substring(contentType.lastIndexOf('/') + 1);
-        }
+
+        if (StringUtils.hasText(contentType)) return contentType.substring(contentType.lastIndexOf('/') + 1);
+
         return null;
     }
 

@@ -85,10 +85,7 @@ public class TokenProvider {
     public Authentication getAuthentication(String accessToken) {
         Claims claims = parseClaims(accessToken);
 
-        if (claims.get(AUTHORITIES_ROLE) == null) {
-            throw new MyInternalServerException("권한 정보가 없는 토큰입니다.");
-        }
-
+        if (claims.get(AUTHORITIES_ROLE) == null) throw new MyInternalServerException("권한 정보가 없는 토큰입니다.");
 
         Collection<? extends GrantedAuthority> authorities =
                 Arrays.stream(claims.get(AUTHORITIES_ROLE).toString().split(","))
@@ -128,16 +125,13 @@ public class TokenProvider {
             Claims claims =parseClaims(refreshToken);
 
             //refresh 토큰의 만료시간이 지나지 않았을 경우, 새로운 access 토큰을 생성합니다.
-            if (!claims.getExpiration().before(new Date())) {
+            if (!claims.getExpiration().before(new Date()))
                 return recreationAccessToken(claims.getSubject(), claims.get(AUTHORITIES_ROLE).toString(),claims.getAudience());
-            }
-        }catch (Exception e) {
 
+        }catch (Exception e) {
             //refresh 토큰이 만료되었을 경우, 로그인이 필요합니다.
             return null;
-
         }
-
         return null;
     }
 

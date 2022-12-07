@@ -64,9 +64,9 @@ public class S3Service {
                 if(storedFileName.contains("Quest")) {
                     Optional<ExamCategory> examCategory = examCategoryRepository.findById(Long.parseLong(data[1]));
                     ExamCategory examCategory1 = null;
-                    if (examCategory.isPresent()) {
-                        examCategory1 = examCategory.get();
-                    }
+
+                    if (examCategory.isPresent()) examCategory1 = examCategory.get();
+
                     data[0]=data[0].replace("\uFEFF", "");
 
                     ExamQuest examQuest = new ExamQuest(data[0],
@@ -81,21 +81,20 @@ public class S3Service {
                 if(storedFileName.contains("Multiple")) {
                     Optional<ExamQuest> examQuest = examQuestRepository.findById(Long.parseLong(data[1]));
                     ExamQuest examQuest1 = null;
-                    if (examQuest.isPresent()) {
-                        examQuest1 = examQuest.get();
-                    }
+
+                    if (examQuest.isPresent()) examQuest1 = examQuest.get();
+
                     ExamMultipleChoice examMultipleChoice= new ExamMultipleChoice(data[0],examQuest1,data[2],data[3]);
                     em.persist(examMultipleChoice);
                 }
 
             }
         } finally {
-            if(ois != null){
-                ois.close();
-            }
-            if(br != null){
-                br.close();
-            }
+
+            if(ois != null) ois.close();
+
+            if(br != null) br.close();
+
         }
     }
 }

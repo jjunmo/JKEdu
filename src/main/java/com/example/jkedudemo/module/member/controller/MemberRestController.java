@@ -124,12 +124,10 @@ public class MemberRestController {
     @GetMapping("/excheck")
     public HttpEntity<MemberStatusOkResponseDto> exEmail(String email) {
         String result = memberService.exEmailCheck(email);
-        if (result.equals("OK")) {
-            return ResponseEntity.ok(MemberStatusOkResponseDto.statusOk());
-        } else {
-            throw new MyInternalServerException("이미 존재하는 아이디입니다.");
-        }
 
+        if (result.equals("OK")) return ResponseEntity.ok(MemberStatusOkResponseDto.statusOk());
+
+        else throw new MyInternalServerException("이미 존재하는 아이디입니다.");
     }
 
     /**

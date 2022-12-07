@@ -49,9 +49,9 @@ public class ExamService {
         //로그인 정보
         Member member = isMemberCurrent();
 
-        if(member.getTestCount()<=0){
-            throw new MyInternalServerException("테스트 횟수가 없습니다.");
-        }else{
+        if(member.getTestCount()<=0) throw new MyInternalServerException("테스트 횟수가 없습니다.");
+
+        else{
             member.setTestCount(member.getTestCount()-1);
             memberRepository.save(member);
         }
@@ -87,9 +87,9 @@ public class ExamService {
         Level[] levels=Level.values();
 
         Optional<ExamPaper> examPaperOptional=examPaperRepository.findById(request.getExamPaper());
-        if(examPaperOptional.isEmpty()){
-            throw new MyInternalServerException("잘못된 접근입니다.");
-        }
+
+        if(examPaperOptional.isEmpty()) throw new MyInternalServerException("잘못된 접근입니다.");
+
         ExamPaper examPaper = examPaperOptional.get();
         //TODO:마지막으로 시험친 문제 저장되지않음
 
@@ -107,25 +107,24 @@ public class ExamService {
             memberAnswerCategoryRepository.save(memberAnswerCategory);
 
             if(examQuest.getExamCategory().getExam().getValue() == Integer.parseInt(request.getNumber())){
+                //맞춘 문제 확인해서 시험 등급측정
+                List<MemberAnswer> memberAnswerList = memberAnswerRepository.findByMemberAnswerCategory_ExamPaperAndAnswerYN(examPaper, YN.Y);
+                int sum = memberAnswerList.stream().mapToInt(memberAnswer -> memberAnswer.getExamQuest().getLevel().getValue()).sum();
+                examPaper.setLevel(Level.PRE_A1.getLevel(sum));
                 return ExamNextQuestResponse.examDTO2();
             }
 
             if(examQuest.getRightAnswer().equals(request.getMyAnswer())){
 
-                if(levelCheck < 5){
-                    changeLevel= levels[levelCheck + 1];
-                }else{
-                    changeLevel=levels[levelCheck];
-                }
+                if(levelCheck < 5) changeLevel=levels[levelCheck + 1];
+                else changeLevel=levels[levelCheck];
 
                 MemberAnswer memberAnswer=new MemberAnswer(null,memberAnswerCategory,examQuest, request.getMyAnswer(), YN.Y);
                 memberAnswerRepository.save(memberAnswer);
             }else{
-                if(levelCheck == 0){
-                    changeLevel=(levels[levelCheck]);
-                }else{
-                    changeLevel=(levels[levelCheck-1]);
-                }
+
+                if(levelCheck == 0) changeLevel=(levels[levelCheck]);
+                else changeLevel=(levels[levelCheck-1]);
 
                 MemberAnswer memberAnswer=new MemberAnswer(null,memberAnswerCategory,examQuest, request.getMyAnswer(), YN.N);
                 memberAnswerRepository.save(memberAnswer);
@@ -158,30 +157,19 @@ public class ExamService {
     public String nextEnd(Long examId , String number,Long examPaperId) {
         Optional<ExamQuest> examQuestOptional = examQuestRepository.findById(examId);
         Optional<ExamPaper> examPaperOptional = examPaperRepository.findById(examPaperId);
-        if (examQuestOptional.isEmpty()) {
-            throw new MyInternalServerException("유형을 알수없는 문제입니다.");
-        }
-        if (examPaperOptional.isEmpty()) {
-            throw new MyInternalServerException("시험을 다시 시작하세요.");
-        }
+
+        if (examQuestOptional.isEmpty()) throw new MyInternalServerException("유형을 알수없는 문제입니다.");
+
+        if (examPaperOptional.isEmpty()) throw new MyInternalServerException("시험을 다시 시작하세요.");
+
         ExamPaper examPaper = examPaperOptional.get();
         ExamQuest examQuest = examQuestOptional.get();
         Exam exam = examQuest.getExamCategory().getExam();
 
 
         if (Integer.parseInt(number) <= exam.getValue()) return "NEXT";
-        else {
-            //맞춘 문제 확인해서 시험 등급측정
-            List<MemberAnswer> memberAnswerList = memberAnswerRepository.findByMemberAnswerCategory_ExamPaperAndAnswerYN(examPaper, YN.Y);
-            int sum = memberAnswerList.stream().mapToInt(memberAnswer -> memberAnswer.getExamQuest().getLevel().getValue()).sum();
-            examPaper.setLevel(Level.PRE_A1.getLevel(sum));
-            return "END";
-        }
+        else return "END";
 
     }
-
-    }
-
-
-
+}
 
