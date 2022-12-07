@@ -23,17 +23,14 @@ public enum Level {
     public int getCut(){return cut;}
 
     public Level getLevel(int a){
-        if(a<=Level.PRE_A1.getCut()){
-            return PRE_A1;
-        } else if (a<=Level.A1.getCut()) {
-            return A1;
-        }else if (a<=Level.A2.getCut()) {
-            return A2;
-        }else if (a<=Level.B1.getCut()) {
-            return B1;
-        }else if (a<=Level.B2.getCut()) {
-            return B2;
-        }else return C;
+
+        if(a<=Level.PRE_A1.getCut()) return Level.PRE_A1;
+        else if (a<=Level.A1.getCut()) return Level.A1;
+        else if (a<=Level.A2.getCut()) return Level.A2;
+        else if (a<=Level.B1.getCut()) return Level.B1;
+        else if (a<=Level.B2.getCut()) return Level.B2;
+        else return Level.C;
+
     }
 
     // 2.5 /7.5/25/45/65/85
