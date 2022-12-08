@@ -40,8 +40,6 @@ public class MemberService {
 
     //토큰확인
 
-    //TODO : 회원 삭제 후 재 회원가입에 대한 Status 상태값 체크 필요.
-
     public Member isMemberCurrent() {
         return memberRepository.findById(SecurityUtil.getCurrentMemberId())
                 .orElseThrow(() -> new MyInternalServerException("로그인 유저 정보가 없습니다"));
@@ -156,8 +154,6 @@ public class MemberService {
     public MemberIdFindResopnseDto getMemberEmail(String phone , String smscode, Phoneauth phoneauth) {
 
         String result = certifiedPhoneCheck(phone, smscode,phoneauth);
-
-        //TODO : 예외처리 이후 테스트 / 정상적인 sms 인증 이후 다시 재인증시 인증되지않음 / POSTMAN 이용시 정상작동 확인
 
         if(result.equals("OK")){
             Optional<Member> memberOptional = memberRepository.findByPhoneAndStatusIn(phone,List.of(Status.GREEN,Status.YELLOW));

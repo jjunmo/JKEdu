@@ -43,11 +43,6 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final TokenProvider tokenProvider;
 
-    public Member isMemberCurrent() {
-        return memberRepository.findById(SecurityUtil.getCurrentMemberId())
-                .orElseThrow(() -> new MyInternalServerException("로그인 유저 정보가 없습니다"));
-    }
-
     @Transactional
     public MemberStatusOkResponseDto signup(MemberRequestDto requestDto) {
 
@@ -97,7 +92,6 @@ public class AuthService {
 
         if (!passwordEncoder.matches(requestDto.getPassword(), member.getPassword())) throw new MyInternalServerException("아이디 혹은 비밀번호가 일치하지 않습니다.");
 
-
         //TODO: 비밀번호 유효성 체크 , 토큰이 남아있음.
 
         //Status 체크
@@ -118,13 +112,6 @@ public class AuthService {
         refreshTokenRepository.save(refreshToken);
 
         return tokenDto;
-    }
-
-    public RefreshResponseDto refresh() {
-        Member member =isMemberCurrent();
-
-        return RefreshResponseDto.myInfo(member);
-
     }
 
 }

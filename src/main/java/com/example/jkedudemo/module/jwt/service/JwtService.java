@@ -1,8 +1,13 @@
 package com.example.jkedudemo.module.jwt.service;
 
+import com.example.jkedudemo.module.config.SecurityUtil;
+import com.example.jkedudemo.module.handler.MyInternalServerException;
 import com.example.jkedudemo.module.jwt.TokenProvider;
+import com.example.jkedudemo.module.jwt.dto.TokenDto;
 import com.example.jkedudemo.module.jwt.entity.RefreshToken;
 import com.example.jkedudemo.module.jwt.repository.RefreshTokenRepository;
+import com.example.jkedudemo.module.member.entity.Member;
+import com.example.jkedudemo.module.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +21,12 @@ public class JwtService {
 
     private final RefreshTokenRepository refreshTokenRepository;
     private final TokenProvider tokenProvider;
+    private final MemberRepository memberRepository;
 
+    public Member isMemberCurrent() {
+        return memberRepository.findById(SecurityUtil.getCurrentMemberId())
+                .orElseThrow(() -> new MyInternalServerException("로그인 유저 정보가 없습니다"));
+    }
 
     public Map<String, String> validateRefreshToken(String refreshToken) {
         Optional<RefreshToken> refreshTokenOptional =refreshTokenRepository.findByRefreshToken(refreshToken);
@@ -47,4 +57,16 @@ public class JwtService {
         return map;
 
     }
+
+    public TokenDto refresh(String userAgent) {
+        Member member = isMemberCurrent();
+        Optional<RefreshToken> refreshTokenOptional = refreshTokenRepository.findByKeyIdAndUserAgent(member, userAgent);
+        if (refreshTokenOptional.isPresent()) {
+            RefreshToken refresh = refreshTokenOptional.get();
+            String createdAccessToken = tokenProvider.validateRefreshToken(refresh);
+            return new TokenDto(createdAccessToken, refresh.getRefreshToken(), "200", "OK");
+        } else throw new MyInternalServerException("로그인을 다시 해주세요.");
+
+    }
+
 }

@@ -64,8 +64,8 @@ public class AuthController {
         return new ResponseEntity<>(refreshApiResponseMessage, HttpStatus.OK);
     }
 
-    @GetMapping("/myinfo")
-    public HttpEntity<RefreshResponseDto> refresh() {
-        return ResponseEntity.ok(authService.refresh());
+    @GetMapping("/refresh")
+    public HttpEntity<TokenDto> refresh(@RequestHeader("User-Agent") String userAgent) {
+        return ResponseEntity.ok(jwtService.refresh(userAgent));
     }
 }

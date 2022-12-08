@@ -149,14 +149,3 @@ public class MemberRestController {
         return ResponseEntity.ok(memberService.setAcademyMember(request));
     }
 }
-
-//    /**
-//     * 사용자 이름
-//     * @return name
-//     */
-//    @GetMapping("/name")
-//    public HttpEntity<MemberNameResopnseDto> getMemberName() {
-//        return ResponseEntity.ok(memberService.memberName());
-//    }
-//
-//    }

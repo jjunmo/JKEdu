@@ -23,11 +23,10 @@ public class ExamFirstQuestResponse {
 
 
 
-    public static ExamFirstQuestResponse examDTO(ExamQuestDTO examQuestDTO, ExamPaper examPaper){
+    public static ExamFirstQuestResponse examDTO(ExamQuestDTO examQuestDTO){
         return ExamFirstQuestResponse.builder()
                 .status("200")
                 .message("OK")
-                .examPaper(examPaper.getId())
                 .number("1")
                 .examQuestDTO(examQuestDTO)
                 .build();

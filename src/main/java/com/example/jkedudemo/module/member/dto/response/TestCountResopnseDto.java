@@ -13,12 +13,14 @@ import lombok.NoArgsConstructor;
 public class TestCountResopnseDto {
     private String status;
     private String message;
+    private String name;
     private int testCount;
 
     public static TestCountResopnseDto testCount(Member member){
         return TestCountResopnseDto.builder()
                 .status("200")
                 .message("OK")
+                .name(member.getName())
                 .testCount(member.getTestCount())
                 .build();
     }
