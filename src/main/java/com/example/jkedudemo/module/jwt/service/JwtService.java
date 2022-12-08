@@ -64,7 +64,7 @@ public class JwtService {
         if (refreshTokenOptional.isPresent()) {
             RefreshToken refresh = refreshTokenOptional.get();
             String createdAccessToken = tokenProvider.validateRefreshToken(refresh);
-            return new TokenDto(createdAccessToken, refresh.getRefreshToken(), "200", "OK");
+            return new TokenDto("200", "OK",createdAccessToken, refresh.getRefreshToken());
         } else throw new MyInternalServerException("로그인을 다시 해주세요.");
 
     }

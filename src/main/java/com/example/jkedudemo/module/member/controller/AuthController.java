@@ -68,4 +68,5 @@ public class AuthController {
     public HttpEntity<TokenDto> refresh(@RequestHeader("User-Agent") String userAgent) {
         return ResponseEntity.ok(jwtService.refresh(userAgent));
     }
+
 }
