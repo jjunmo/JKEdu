@@ -181,8 +181,12 @@ public class MemberService {
     @Transactional
     public AcademyMemberResponseDto setAcademyMember(AcademyMemberRequestDto requestDto) {
         Member member = isMemberCurrent();
+
         if(!member.getRole().equals(Role.ROLE_ACADEMY))
             throw new MyInternalServerException("접근 권한이 없습니다.");
+
+        if(requestDto.getPhone().isBlank()||requestDto.getPhone()==null)
+            throw new MyInternalServerException("전화번호를 입력하세요.");
 
         Optional<Member> memberOptional = memberRepository.findByPhoneAndRoleAndAcademyId(requestDto.getPhone(), Role.ROLE_ACADEMY_STUDENT, member.getAcademyId());
 

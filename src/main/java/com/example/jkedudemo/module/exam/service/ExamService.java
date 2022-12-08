@@ -46,6 +46,7 @@ public class ExamService {
 
     @Transactional
     public ExamFirstQuestResponse ExamFirstQuest(QuestRequest request){
+        //TODO:새로고침
         //로그인 정보
         Member member = isMemberCurrent();
 
@@ -91,7 +92,7 @@ public class ExamService {
         if(examPaperOptional.isEmpty()) throw new MyInternalServerException("잘못된 접근입니다.");
 
         ExamPaper examPaper = examPaperOptional.get();
-        //TODO:마지막으로 시험친 문제 저장되지않음
+
 
         //시험에 나온문제 확인
         Optional<ExamQuest> examQuestOptional = examQuestRepository.findById(request.getExamId());

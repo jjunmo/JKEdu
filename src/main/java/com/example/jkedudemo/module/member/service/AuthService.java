@@ -5,6 +5,7 @@ import com.example.jkedudemo.module.common.util.Cer;
 import com.example.jkedudemo.module.common.enums.member.Phoneauth;
 import com.example.jkedudemo.module.common.enums.member.Status;
 import com.example.jkedudemo.module.common.enums.YN;
+import com.example.jkedudemo.module.config.SecurityUtil;
 import com.example.jkedudemo.module.handler.MyInternalServerException;
 import com.example.jkedudemo.module.jwt.TokenProvider;
 import com.example.jkedudemo.module.jwt.dto.RefreshApiResponseMessage;
@@ -42,7 +43,10 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final TokenProvider tokenProvider;
 
-
+    public Member isMemberCurrent() {
+        return memberRepository.findById(SecurityUtil.getCurrentMemberId())
+                .orElseThrow(() -> new MyInternalServerException("로그인 유저 정보가 없습니다"));
+    }
 
     @Transactional
     public MemberStatusOkResponseDto signup(MemberRequestDto requestDto) {
@@ -89,39 +93,38 @@ public class AuthService {
 
         if (memberOptional.isEmpty()) throw new MyInternalServerException("아이디 혹은 비밀번호가 일치하지 않습니다.");
 
-        Member reqMember = memberOptional.get();
+        Member member = memberOptional.get();
 
-        if (!passwordEncoder.matches(requestDto.getPassword(), reqMember.getPassword())) throw new MyInternalServerException("아이디 혹은 비밀번호가 일치하지 않습니다.");
+        if (!passwordEncoder.matches(requestDto.getPassword(), member.getPassword())) throw new MyInternalServerException("아이디 혹은 비밀번호가 일치하지 않습니다.");
 
 
         //TODO: 비밀번호 유효성 체크 , 토큰이 남아있음.
 
         //Status 체크
 
-        if (reqMember.getStatus().equals(Status.YELLOW)) throw new MyInternalServerException("정지 대상입니다.");
+        if (member.getStatus().equals(Status.YELLOW)) throw new MyInternalServerException("정지 대상입니다.");
 
         UsernamePasswordAuthenticationToken authenticationToken = requestDto.toAuthentication();
         Authentication authentication = managerBuilder.getObject().authenticate(authenticationToken);
 
-        TokenDto tokenDto=tokenProvider.generateTokenDto(authentication,reqMember.getName());
+        TokenDto tokenDto=tokenProvider.generateTokenDto(authentication,member.getName());
 
         RefreshToken refreshToken = RefreshToken.builder()
-                .keyId(tokenDto.getKeyId())
+                .keyId(member)
                 .refreshToken(tokenDto.getRefreshToken())
                 .userAgent(userAgent)
                 .build();
 
-        String loginUserId = refreshToken.getKeyId();
-        Optional<RefreshToken> refreshTokenOptional=refreshTokenRepository.findByKeyIdAndUserAgent(loginUserId,userAgent);
-
-        if(refreshTokenOptional.isEmpty()) refreshTokenRepository.save(refreshToken);
-        else{
-            RefreshToken refreshToken1 = refreshTokenOptional.get();
-            refreshToken1.setRefreshToken(tokenDto.getRefreshToken());
-            refreshTokenRepository.save(refreshToken1);
-        }
+        refreshTokenRepository.save(refreshToken);
 
         return tokenDto;
+    }
+
+    public RefreshResponseDto refresh() {
+        Member member =isMemberCurrent();
+
+        return RefreshResponseDto.myInfo(member);
+
     }
 
 }

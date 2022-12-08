@@ -62,6 +62,10 @@ public class AuthController {
         log.info("RefreshController - Refresh Token이 유효.");
         RefreshApiResponseMessage refreshApiResponseMessage = new RefreshApiResponseMessage(map);
         return new ResponseEntity<>(refreshApiResponseMessage, HttpStatus.OK);
+    }
 
+    @GetMapping("/myinfo")
+    public HttpEntity<RefreshResponseDto> refresh() {
+        return ResponseEntity.ok(authService.refresh());
     }
 }

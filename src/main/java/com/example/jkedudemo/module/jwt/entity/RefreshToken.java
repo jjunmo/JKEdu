@@ -1,5 +1,6 @@
 package com.example.jkedudemo.module.jwt.entity;
 
+import com.example.jkedudemo.module.member.entity.Member;
 import lombok.*;
 
 import javax.persistence.*;
@@ -21,9 +22,9 @@ public class RefreshToken {
     @Column(name = "REFRESH_TOKEN", nullable = false)
     private String refreshToken;
 
-
-    @Column(name = "KEY_ID", nullable = false)
-    private String keyId;
+    @ManyToOne
+    @JoinColumn(name = "MEMBER_ID")
+    private Member keyId;
 
     @Column(name ="USER_AGENT", nullable = false)
     private String userAgent;
