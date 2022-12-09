@@ -92,6 +92,10 @@ public class ExamService {
             member = memberOptional.orElseGet(this::isMemberCurrent);
         }
 
+        Optional<ExamPaper> examPaperOptional = examPaperRepository.findById(request.getExamPaper());
+        ExamPaper examPaper = examPaperOptional.orElseGet(ExamPaper::new);
+
+
         //등급을 배열로
         Level[] levels=Level.values();
 
@@ -100,9 +104,6 @@ public class ExamService {
 
         if(examQuestOptional.isPresent()){
             ExamQuest examQuest = examQuestOptional.get();
-
-            Optional<ExamPaper> examPaperOptional=examPaperRepository.findById(request.getExamPaper());
-            ExamPaper examPaper=examPaperOptional.orElseGet(ExamPaper::new);
 
             MemberAnswerCategory memberAnswerCategory= memberAnswerCategoryRepository.save(new MemberAnswerCategory(null,member,examQuest.getExamCategory(),examPaper));
 
