@@ -45,6 +45,11 @@ public class ExamService {
                 .orElseThrow(() -> new MyInternalServerException("로그인 유저 정보가 없습니다"));
     }
 
+    public ExamPaper isExamPaper(Long id) {
+        return examPaperRepository.findById(id)
+                .orElseThrow(() -> new MyInternalServerException("시험을 다시 시작하세요"));
+    }
+
     @Transactional
     public ExamFirstQuestResponse ExamFirstQuest(QuestRequest request){
         //TODO:새로고침
@@ -62,9 +67,9 @@ public class ExamService {
         //객관식 문제의 경우 객관식 항목을 다 담기
         if(examQuestRandomElement.getQuest().equals(Quest.MULTIPLE)){
             List<ExamMultipleChoice> examMultipleChoice=examMultipleChoiceRepository.findByQuest_id(examQuestRandomElement.getId());
-            return ExamFirstQuestResponse.examDTO(examQuestRandomElement.entityToMultipleDto(examMultipleChoice));
+            return ExamFirstQuestResponse.examDTO(examQuestRandomElement.entityToMultipleDto(examMultipleChoice),request.getExamPaperId()) ;
         }
-        return ExamFirstQuestResponse.examDTO(examQuestRandomElement.entityToDto());
+        return ExamFirstQuestResponse.examDTO(examQuestRandomElement.entityToDto(),request.getExamPaperId());
     }
 
     @Transactional
@@ -75,26 +80,22 @@ public class ExamService {
         else {
             member.setTestCount(member.getTestCount() - 1);
             memberRepository.save(member);
-            return TestResponseDto.statusOk();
+            ExamPaper examPaper=examPaperRepository.save(new ExamPaper());
+            return TestResponseDto.statusOk(examPaper);
         }
 
     }
-
-
 
     @Transactional
     public ExamNextQuestResponse examNextQuestResponse(NextQuestRequest request){
         //일반유저인지 학원유저인지 확인
         Member member=isMemberCurrent();
+        ExamPaper examPaper = isExamPaper(request.getExamPaperId());
 
         if(member.getRole().equals(Role.ROLE_ACADEMY)) {
             Optional<Member> memberOptional = memberRepository.findById(request.getStudentId());
             member = memberOptional.orElseGet(this::isMemberCurrent);
         }
-
-        Optional<ExamPaper> examPaperOptional = examPaperRepository.findById(request.getExamPaper());
-        ExamPaper examPaper = examPaperOptional.orElseGet(ExamPaper::new);
-
 
         //등급을 배열로
         Level[] levels=Level.values();
@@ -102,14 +103,15 @@ public class ExamService {
         //시험에 나온문제 확인
         Optional<ExamQuest> examQuestOptional = examQuestRepository.findById(request.getExamId());
 
-        if(examQuestOptional.isPresent()){
-            ExamQuest examQuest = examQuestOptional.get();
+        if(examQuestOptional.isEmpty()) throw new MyInternalServerException("잘못된 접근입니다.");
 
-            MemberAnswerCategory memberAnswerCategory= memberAnswerCategoryRepository.save(new MemberAnswerCategory(null,member,examQuest.getExamCategory(),examPaper));
+        ExamQuest examQuest = examQuestOptional.get();
 
-            Level level = examQuest.getLevel();
-            int levelCheck = level.ordinal();
-            Level changeLevel;
+        MemberAnswerCategory memberAnswerCategory= memberAnswerCategoryRepository.save(new MemberAnswerCategory(null,member,examQuest.getExamCategory(),examPaper));
+
+        Level level = examQuest.getLevel();
+        int levelCheck = level.ordinal();
+        Level changeLevel;
 
             if(examQuest.getExamCategory().getExam().getValue() == Integer.parseInt(request.getNumber())){
                 //맞춘 문제 확인해서 시험 등급측정
@@ -153,10 +155,6 @@ public class ExamService {
             return ExamNextQuestResponse.examDTO(examQuestRandomElement.entityToDto(),examPaper, request.getNumber(), request.getStudentId());
 
         }
-        // 이전 문제가 조회되지 않음.
-        throw new MyInternalServerException("잘못된 접근입니다.");
-
-    }
 
     @Transactional
     public String nextEnd(Long examId , String number) {

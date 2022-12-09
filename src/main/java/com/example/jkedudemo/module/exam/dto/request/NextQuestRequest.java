@@ -15,7 +15,7 @@ public class NextQuestRequest {
 
     private Long examId;
 
-    private Long examPaper;
+    private Long examPaperId;
 
     private String myAnswer;
 

@@ -15,7 +15,7 @@ public class ExamFirstQuestResponse {
 
     private String message;
 
-    private Long examPaper;
+    private Long examPaperId;
 
     private String number;
 
@@ -23,10 +23,11 @@ public class ExamFirstQuestResponse {
 
 
 
-    public static ExamFirstQuestResponse examDTO(ExamQuestDTO examQuestDTO){
+    public static ExamFirstQuestResponse examDTO(ExamQuestDTO examQuestDTO,Long examPaperId){
         return ExamFirstQuestResponse.builder()
                 .status("200")
                 .message("OK")
+                .examPaperId(examPaperId)
                 .number("1")
                 .examQuestDTO(examQuestDTO)
                 .build();

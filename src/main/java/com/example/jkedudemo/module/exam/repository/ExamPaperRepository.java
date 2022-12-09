@@ -7,5 +7,5 @@ import org.springframework.lang.Nullable;
 import java.util.Optional;
 
 public interface ExamPaperRepository extends JpaRepository<ExamPaper,Long> {
-    Optional<ExamPaper> findById(@Nullable Long id);
+
 }
