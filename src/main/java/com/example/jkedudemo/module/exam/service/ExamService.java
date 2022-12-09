@@ -51,8 +51,6 @@ public class ExamService {
         //로그인 정보
         Member member = isMemberCurrent();
 
-        if(member.getTestCount()<=0) throw new MyInternalServerException("테스트 횟수가 없습니다.");
-
         //로그인된 유저의 레벨에 맞는 문제 List
         List<ExamQuest> examQuestList = examQuestRepository.findByExamCategory_ExamAndLevel(request.getExam(),Level.PRE_A1);
         //조회된 문제의 갯수
@@ -73,9 +71,12 @@ public class ExamService {
     public TestResponseDto test(){
         Member member=isMemberCurrent();
 
-        member.setTestCount(member.getTestCount()-1);
-        memberRepository.save(member);
-        return TestResponseDto.statusOk();
+        if(member.getTestCount()<=0) throw new MyInternalServerException("테스트 횟수가 없습니다.");
+        else {
+            member.setTestCount(member.getTestCount() - 1);
+            memberRepository.save(member);
+            return TestResponseDto.statusOk();
+        }
 
     }
 
@@ -91,17 +92,6 @@ public class ExamService {
             member = memberOptional.orElseGet(this::isMemberCurrent);
         }
 
-        ExamPaper examPaper = new ExamPaper();
-
-        if(request.getExamPaper()==null) {
-            examPaper=examPaperRepository.save(examPaper);
-        }else{
-            Optional<ExamPaper> examPaperOptional=examPaperRepository.findById(request.getExamPaper());
-            if(examPaperOptional.isPresent()){
-                examPaper=examPaperOptional.get();
-            }
-        }
-
         //등급을 배열로
         Level[] levels=Level.values();
 
@@ -111,11 +101,14 @@ public class ExamService {
         if(examQuestOptional.isPresent()){
             ExamQuest examQuest = examQuestOptional.get();
 
+            Optional<ExamPaper> examPaperOptional=examPaperRepository.findById(request.getExamPaper());
+            ExamPaper examPaper=examPaperOptional.orElseGet(ExamPaper::new);
+
+            MemberAnswerCategory memberAnswerCategory= memberAnswerCategoryRepository.save(new MemberAnswerCategory(null,member,examQuest.getExamCategory(),examPaper));
+
             Level level = examQuest.getLevel();
             int levelCheck = level.ordinal();
             Level changeLevel;
-
-            MemberAnswerCategory memberAnswerCategory= memberAnswerCategoryRepository.save(new MemberAnswerCategory(null,member,examQuest.getExamCategory(),examPaper));
 
             if(examQuest.getExamCategory().getExam().getValue() == Integer.parseInt(request.getNumber())){
                 //맞춘 문제 확인해서 시험 등급측정
