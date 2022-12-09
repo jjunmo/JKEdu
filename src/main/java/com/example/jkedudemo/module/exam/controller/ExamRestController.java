@@ -4,6 +4,7 @@ import com.example.jkedudemo.module.exam.dto.request.NextQuestRequest;
 import com.example.jkedudemo.module.exam.dto.response.ExamFirstQuestResponse;
 import com.example.jkedudemo.module.exam.dto.request.QuestRequest;
 import com.example.jkedudemo.module.exam.dto.response.ExamNextQuestResponse;
+import com.example.jkedudemo.module.exam.dto.response.TestResponseDto;
 import com.example.jkedudemo.module.exam.service.ExamService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,4 +33,10 @@ public class ExamRestController {
 
         else return ResponseEntity.ok(ExamNextQuestResponse.examDTO2());
     }
+
+    @PostMapping("/check")
+    public HttpEntity<TestResponseDto> test(){
+        return ResponseEntity.ok(examService.test());
+    }
+
 }

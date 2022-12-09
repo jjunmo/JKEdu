@@ -10,6 +10,7 @@ import com.example.jkedudemo.module.exam.dto.request.NextQuestRequest;
 import com.example.jkedudemo.module.exam.dto.response.ExamFirstQuestResponse;
 import com.example.jkedudemo.module.exam.dto.request.QuestRequest;
 import com.example.jkedudemo.module.exam.dto.response.ExamNextQuestResponse;
+import com.example.jkedudemo.module.exam.dto.response.TestResponseDto;
 import com.example.jkedudemo.module.exam.entity.*;
 import com.example.jkedudemo.module.exam.repository.*;
 import com.example.jkedudemo.module.handler.MyInternalServerException;
@@ -52,11 +53,6 @@ public class ExamService {
 
         if(member.getTestCount()<=0) throw new MyInternalServerException("테스트 횟수가 없습니다.");
 
-        else{
-            member.setTestCount(member.getTestCount()-1);
-            memberRepository.save(member);
-        }
-
         //로그인된 유저의 레벨에 맞는 문제 List
         List<ExamQuest> examQuestList = examQuestRepository.findByExamCategory_ExamAndLevel(request.getExam(),Level.PRE_A1);
         //조회된 문제의 갯수
@@ -72,6 +68,17 @@ public class ExamService {
         }
         return ExamFirstQuestResponse.examDTO(examQuestRandomElement.entityToDto());
     }
+
+    @Transactional
+    public TestResponseDto test(){
+        Member member=isMemberCurrent();
+
+        member.setTestCount(member.getTestCount()-1);
+        memberRepository.save(member);
+        return TestResponseDto.statusOk();
+
+    }
+
 
 
     @Transactional
