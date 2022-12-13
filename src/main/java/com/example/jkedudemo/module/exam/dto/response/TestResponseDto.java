@@ -14,13 +14,13 @@ import lombok.NoArgsConstructor;
 public class TestResponseDto {
     private String status;
     private String message;
-    private Long examPaperId;
+    private Long answerPaperId;
 
     public static TestResponseDto statusOk(ExamPaper examPaper){
         return TestResponseDto.builder()
                 .status("200")
                 .message("OK")
-                .examPaperId(examPaper.getId())
+                .answerPaperId(examPaper.getId())
                 .build();
     }
 }

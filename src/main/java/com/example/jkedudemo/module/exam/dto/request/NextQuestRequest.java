@@ -11,15 +11,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class NextQuestRequest {
 
-    private Long studentId;
-
     private Long examId;
-
-    private Long examPaperId;
 
     private String myAnswer;
 
-    private String number;
 
     public void setMyAnswer(String myAnswer) {
         this.myAnswer = myAnswer.toUpperCase();

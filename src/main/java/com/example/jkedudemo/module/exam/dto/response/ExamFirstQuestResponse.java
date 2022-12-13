@@ -15,20 +15,17 @@ public class ExamFirstQuestResponse {
 
     private String message;
 
-    private Long examPaperId;
-
-    private String number;
+    private int number=1;
 
     private ExamQuestDTO examQuestDTO;
 
 
 
-    public static ExamFirstQuestResponse examDTO(ExamQuestDTO examQuestDTO,Long examPaperId){
+    public static ExamFirstQuestResponse examDTO(ExamQuestDTO examQuestDTO, int number){
         return ExamFirstQuestResponse.builder()
                 .status("200")
                 .message("OK")
-                .examPaperId(examPaperId)
-                .number("1")
+                .number(number)
                 .examQuestDTO(examQuestDTO)
                 .build();
     }

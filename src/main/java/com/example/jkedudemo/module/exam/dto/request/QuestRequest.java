@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class QuestRequest {
     private Exam exam;
+
     private Long examPaperId;
 
     public void setExam(String exam) {

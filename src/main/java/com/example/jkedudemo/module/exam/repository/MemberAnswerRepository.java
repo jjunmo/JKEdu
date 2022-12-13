@@ -11,4 +11,8 @@ import java.util.List;
 
 public interface MemberAnswerRepository extends JpaRepository<MemberAnswer,Long> {
     List<MemberAnswer> findByMemberAnswerCategory_ExamPaperAndAnswerYN(ExamPaper memberAnswerCategory_ExamPaper,YN answerYN);
+
+    MemberAnswer findByAnswerYNAndMemberAnswerCategory_ExamPaper(YN answerYN,ExamPaper memberAnswerCategory_ExamPaper);
+
+    List<MemberAnswer> findByMemberAnswerCategory_ExamPaper(ExamPaper examPaper);
 }

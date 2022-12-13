@@ -17,21 +17,15 @@ public class ExamNextQuestResponse {
 
     private String message;
 
-    private Long examPaper;
-
-    private Long studentId;
-
-    private String number;
+    private int number;
 
     private ExamQuestDTO examQuestDTO;
 
-    public static ExamNextQuestResponse examDTO(ExamQuestDTO examQuestDTO, ExamPaper examPaper, String number, Long studentId){
+    public static ExamNextQuestResponse examDTO(ExamQuestDTO examQuestDTO,  int number){
         return ExamNextQuestResponse.builder()
                 .status("200")
                 .message("NEXT")
-                .examPaper(examPaper.getId())
-                .studentId(studentId)
-                .number(Integer.toString(Integer.parseInt(number)+1))
+                .number(number)
                 .examQuestDTO(examQuestDTO)
                 .build();
     }
