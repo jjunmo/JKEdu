@@ -1,6 +1,6 @@
 package com.example.jkedudemo.module.member.controller;
 
-import com.example.jkedudemo.module.common.enums.member.Phoneauth;
+import com.example.jkedudemo.module.common.enums.member.PhoneAuth;
 import com.example.jkedudemo.module.handler.MyInternalServerException;
 import com.example.jkedudemo.module.member.dto.request.*;
 import com.example.jkedudemo.module.member.dto.response.*;
@@ -28,7 +28,7 @@ public class MemberRestController {
      * @return SMS 발송
      */
     @GetMapping("/cert")
-    public HttpEntity<MemberStatusOkResponseDto> sendSMS(@RequestParam("phone") String phone, @RequestParam("phoneauth") Phoneauth phoneauth) {
+    public HttpEntity<MemberStatusOkResponseDto> sendSMS(@RequestParam("phone") String phone, @RequestParam("phoneauth") PhoneAuth phoneauth) {
         String result = memberService.certifiedPhone(phone, phoneauth);
         if (result.equals("OK")) {
             return ResponseEntity.ok(MemberStatusOkResponseDto.statusOk());
@@ -46,7 +46,7 @@ public class MemberRestController {
      * @return 인증여부
      */
     @GetMapping("/cert/ex")
-    public HttpEntity<MemberStatusOkResponseDto> sendSMSCheck(@RequestParam("phone") String phone, @RequestParam("smscode") String smscode, @RequestParam("phoneauth") Phoneauth phoneauth) {
+    public HttpEntity<MemberStatusOkResponseDto> sendSMSCheck(@RequestParam("phone") String phone, @RequestParam("smscode") String smscode, @RequestParam("phoneauth") PhoneAuth phoneauth) {
         String result = memberService.certifiedPhoneCheck(phone, smscode, phoneauth);
         if (result.equals("OK")) {
             return ResponseEntity.ok(MemberStatusOkResponseDto.statusOk());
@@ -98,7 +98,7 @@ public class MemberRestController {
      * @return
      */
     @GetMapping("/check")
-    public HttpEntity<MemberIdFindResopnseDto> getMemberEmail(String phone, String smscode, Phoneauth phoneauth) {
+    public HttpEntity<MemberIdFindResopnseDto> getMemberEmail(String phone, String smscode, PhoneAuth phoneauth) {
         return ResponseEntity.ok(memberService.getMemberEmail(phone, smscode, phoneauth));
     }
 
@@ -111,7 +111,7 @@ public class MemberRestController {
      * @return 임시비밀번호 문자로 발송
      */
     @PostMapping("/check")
-    public HttpEntity<MemberStatusOkResponseDto> getNewPassword(String email, String phone, String smscode, Phoneauth phoneauth) {
+    public HttpEntity<MemberStatusOkResponseDto> getNewPassword(String email, String phone, String smscode, PhoneAuth phoneauth) {
         return ResponseEntity.ok(memberService.getNewPassword(email, phone, smscode, phoneauth));
     }
 

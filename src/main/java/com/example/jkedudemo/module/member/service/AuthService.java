@@ -2,17 +2,14 @@ package com.example.jkedudemo.module.member.service;
 
 import com.example.jkedudemo.module.common.enums.member.Role;
 import com.example.jkedudemo.module.common.util.Cer;
-import com.example.jkedudemo.module.common.enums.member.Phoneauth;
+import com.example.jkedudemo.module.common.enums.member.PhoneAuth;
 import com.example.jkedudemo.module.common.enums.member.Status;
 import com.example.jkedudemo.module.common.enums.YN;
-import com.example.jkedudemo.module.config.SecurityUtil;
 import com.example.jkedudemo.module.handler.MyInternalServerException;
 import com.example.jkedudemo.module.jwt.TokenProvider;
-import com.example.jkedudemo.module.jwt.dto.RefreshApiResponseMessage;
 import com.example.jkedudemo.module.jwt.dto.TokenDto;
 import com.example.jkedudemo.module.jwt.entity.RefreshToken;
 import com.example.jkedudemo.module.jwt.repository.RefreshTokenRepository;
-import com.example.jkedudemo.module.jwt.service.JwtService;
 import com.example.jkedudemo.module.member.dto.request.MemberRequestDto;
 import com.example.jkedudemo.module.member.dto.response.*;
 import com.example.jkedudemo.module.member.entity.Member;
@@ -55,7 +52,7 @@ public class AuthService {
 
 
         //휴대폰 인증 여부
-        Optional<MemberPhoneAuth> memberPhoneAuthOptional = memberPhoneAuthRepository.findByPhoneAndCheckYnAndPhoneauth(requestDto.getPhone(),YN.Y, Phoneauth.JOIN);
+        Optional<MemberPhoneAuth> memberPhoneAuthOptional = memberPhoneAuthRepository.findByPhoneAndCheckYnAndPhoneauth(requestDto.getPhone(),YN.Y, PhoneAuth.JOIN);
 
         if(memberPhoneAuthOptional.isEmpty()) throw new MyInternalServerException("인증을 완료하세요");
 

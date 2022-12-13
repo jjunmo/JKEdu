@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -86,11 +87,12 @@ public class ExamService {
 
         } else {
 
-            List<MemberAnswer> memberAnswer = memberAnswerList.stream()
+            MemberAnswer memberAnswer = memberAnswerList.stream()
                     .filter(m -> m.getMyAnswer().isBlank() || m.getMyAnswer() == null)
-                    .collect(Collectors.toList());
+                    .collect(Collectors.toList())
+                    .get(0);
 
-            return ExamFirstQuestResponse.examDTO(memberAnswer.get(0).getExamQuest().entityToDto(), memberAnswerList.size());
+            return ExamFirstQuestResponse.examDTO(memberAnswer.getExamQuest().entityToDto(), memberAnswerList.size());
 
         }
 
@@ -124,7 +126,7 @@ public class ExamService {
         ExamPaper examPaper = isExamPaper(examPaperId);
 
         List<MemberAnswerCategory> memberAnswerCategoryList=memberAnswerCategoryRepository.findByExamPaper(examPaper);
-        if(memberAnswerCategoryList.isEmpty()) throw new MyInternalServerException("올바른 접근이 아닙니다.1");
+        if(memberAnswerCategoryList.isEmpty()) throw new MyInternalServerException("올바른 접근이 아닙니다.no examPaper");
 
         if(member.getRole().equals(Role.ROLE_ACADEMY)) {
             Optional<Member> memberOptional = memberRepository.findById(memberAnswerCategoryList.get(0).getMember().getId());
@@ -140,8 +142,15 @@ public class ExamService {
         if(examQuestOptional.isEmpty()) throw new MyInternalServerException("잘못된 접근입니다.");
 
         ExamQuest examQuest = examQuestOptional.get();
+        //TODO
+        MemberAnswerCategory memberAnswerCategory=memberAnswerCategoryList.stream()
+                .filter(m -> Objects.equals(m.getExamCategory().getId(), request.getExamId()))
+                .findFirst()
+                .orElseThrow(()->new MyInternalServerException("시험을 다시 치던가"));
 
-        MemberAnswerCategory memberAnswerCategory= memberAnswerCategoryRepository.save(new MemberAnswerCategory(null,member,examQuest.getExamCategory(),examPaper));
+
+
+        memberAnswerCategoryRepository.save(new MemberAnswerCategory(null,member,examQuest.getExamCategory(),examPaper));
 
         Level level = examQuest.getLevel();
         int levelCheck = level.ordinal();
@@ -151,14 +160,18 @@ public class ExamService {
 
                 if(levelCheck < 5) changeLevel=levels[levelCheck + 1];
                 else changeLevel=levels[levelCheck];
+                //TODO
+
 
                 MemberAnswer memberAnswer=new MemberAnswer(null,memberAnswerCategory,examQuest, request.getMyAnswer(), YN.Y);
                 memberAnswerRepository.save(memberAnswer);
+
+
             }else{
 
                 if(levelCheck == 0) changeLevel=(levels[levelCheck]);
                 else changeLevel=(levels[levelCheck-1]);
-
+                //TODO
                 MemberAnswer memberAnswer=new MemberAnswer(null,memberAnswerCategory,examQuest, request.getMyAnswer(), YN.N);
                 memberAnswerRepository.save(memberAnswer);
             }

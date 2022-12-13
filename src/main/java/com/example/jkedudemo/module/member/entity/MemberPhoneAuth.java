@@ -1,7 +1,7 @@
 package com.example.jkedudemo.module.member.entity;
 
 import com.example.jkedudemo.module.common.util.BaseTime;
-import com.example.jkedudemo.module.common.enums.member.Phoneauth;
+import com.example.jkedudemo.module.common.enums.member.PhoneAuth;
 import com.example.jkedudemo.module.common.enums.YN;
 import lombok.*;
 
@@ -28,7 +28,7 @@ public class MemberPhoneAuth extends BaseTime {
 
     //JOIN , ID ,PW
     @Enumerated(EnumType.STRING)
-    private Phoneauth phoneauth;
+    private PhoneAuth phoneauth;
 
     //인증 여부
     @Enumerated(EnumType.STRING)

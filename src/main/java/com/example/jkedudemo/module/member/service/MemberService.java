@@ -1,7 +1,7 @@
 package com.example.jkedudemo.module.member.service;
 
 import com.example.jkedudemo.module.handler.MyInternalServerException;
-import com.example.jkedudemo.module.common.enums.member.Phoneauth;
+import com.example.jkedudemo.module.common.enums.member.PhoneAuth;
 import com.example.jkedudemo.module.common.enums.member.Role;
 import com.example.jkedudemo.module.common.enums.member.Status;
 import com.example.jkedudemo.module.common.enums.YN;
@@ -25,7 +25,6 @@ import java.util.*;
 
 import static com.example.jkedudemo.module.common.util.Cer.getCerNum;
 import static com.example.jkedudemo.module.common.util.Cer.getStrStrCerNum;
-import static com.example.jkedudemo.module.common.util.MemberCurrent.*;
 
 @Service
 @Slf4j
@@ -46,11 +45,11 @@ public class MemberService {
     }
 
     @Transactional
-    public String certifiedPhone(String phone, Phoneauth phoneauth) {
+    public String certifiedPhone(String phone, PhoneAuth phoneauth) {
 
         StringBuilder cerNum = getCerNum(phone);
         //인증요청시 연락처 유효성 체크
-        if(phoneauth.equals(Phoneauth.JOIN)) {
+        if(phoneauth.equals(PhoneAuth.JOIN)) {
             Optional<Member> memberOptional = memberRepository.findByPhoneAndStatusIn(phone, List.of(Status.GREEN, Status.YELLOW));
 
             if (memberOptional.isPresent()) throw new MyInternalServerException("이미 사용중인 전화번호 입니다.");
@@ -94,7 +93,7 @@ public class MemberService {
     }
 
     @Transactional
-    public String certifiedPhoneCheck(String phone ,String smscode , Phoneauth phoneauth){
+    public String certifiedPhoneCheck(String phone ,String smscode , PhoneAuth phoneauth){
 
         Optional<MemberPhoneAuth> optional = memberPhoneAuthRepository.findByPhoneAndSmscodeAndPhoneauth(phone, smscode, phoneauth);
         if(optional.isEmpty()) throw new MyInternalServerException("인증번호가 일치하지 않습니다.");
@@ -151,7 +150,7 @@ public class MemberService {
 
 
     @Transactional
-    public MemberIdFindResopnseDto getMemberEmail(String phone , String smscode, Phoneauth phoneauth) {
+    public MemberIdFindResopnseDto getMemberEmail(String phone , String smscode, PhoneAuth phoneauth) {
 
         String result = certifiedPhoneCheck(phone, smscode,phoneauth);
 
@@ -160,7 +159,7 @@ public class MemberService {
 
             if(memberOptional.isEmpty()) throw new MyInternalServerException("해당 정보로 가입된 아이디가 없습니다.");
 
-            Optional<MemberPhoneAuth> memberPhoneAuthOptional = memberPhoneAuthRepository.findByPhoneAndPhoneauth(phone,Phoneauth.ID);
+            Optional<MemberPhoneAuth> memberPhoneAuthOptional = memberPhoneAuthRepository.findByPhoneAndPhoneauth(phone, PhoneAuth.ID);
 
             if(memberPhoneAuthOptional.isEmpty()) throw new MyInternalServerException("휴대폰 인증을 완료하세요.");
 
@@ -212,7 +211,7 @@ public class MemberService {
     }
 
     @Transactional
-    public MemberStatusOkResponseDto getNewPassword(String email,String phone ,String smscode ,Phoneauth phoneauth){
+    public MemberStatusOkResponseDto getNewPassword(String email, String phone , String smscode , PhoneAuth phoneauth){
 
         if(email.isEmpty()) throw new MyInternalServerException("이메일을 입력하세요.");
 
@@ -229,7 +228,7 @@ public class MemberService {
         if(!member.getEmail().equals(email)) throw new MyInternalServerException("해당 정보로 가입된 아이디가 없습니다.");
 
 
-        Optional<MemberPhoneAuth> memberPhoneAuthOptional = memberPhoneAuthRepository.findByPhoneAndCheckYnAndPhoneauth(phone,YN.Y, Phoneauth.PW);
+        Optional<MemberPhoneAuth> memberPhoneAuthOptional = memberPhoneAuthRepository.findByPhoneAndCheckYnAndPhoneauth(phone,YN.Y, PhoneAuth.PW);
 
         if(memberPhoneAuthOptional.isEmpty()) throw new MyInternalServerException("인증을 완료하세요");
 
