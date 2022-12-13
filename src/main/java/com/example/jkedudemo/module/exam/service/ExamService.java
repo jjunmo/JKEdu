@@ -72,7 +72,7 @@ public class ExamService {
 
         if(memberAnswerList.isEmpty()) log.info("첫 시험입니당");
 
-        boolean memberAnswerGet = memberAnswerList.stream().anyMatch(m->m.getMyAnswer().isBlank()||m.getMyAnswer()==null);
+        boolean memberAnswerGet = memberAnswerList.stream().anyMatch(m->m.getMyAnswer().equals(""));
 
         if (!memberAnswerGet) {
             memberAnswerCategoryList.get(0).setExamCategory(examQuestRandomElement.getExamCategory());
@@ -88,7 +88,7 @@ public class ExamService {
         } else {
 
             MemberAnswer memberAnswer = memberAnswerList.stream()
-                    .filter(m -> m.getMyAnswer().isBlank() || m.getMyAnswer() == null)
+                    .filter(m -> m.getMyAnswer().equals(""))
                     .collect(Collectors.toList())
                     .get(0);
 
