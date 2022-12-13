@@ -60,11 +60,6 @@ public class ExamService {
     public ExamFirstQuestResponse ExamFirstQuest(Long examPaperId){
         ExamPaper examPaper = isExamPaper(examPaperId);
 
-        List<ExamQuest> examQuestList = examQuestRepository.findByExamCategory_ExamAndLevel(examPaper.getExamCategory(),Level.PRE_A1);
-        //조회된 문제의 갯수
-        int examQuestListSize = examQuestList.size();
-        // 조회된 문제중 하나의 문제를 가져옴
-        ExamQuest examQuestRandomElement = examQuestList.get(rand.nextInt(examQuestListSize));
         //DTO 담기
         List<MemberAnswer> memberAnswerList=memberAnswerRepository.findByMemberAnswerCategory_ExamPaper(examPaper);
         List<MemberAnswerCategory> memberAnswerCategoryList=memberAnswerCategoryRepository.findByExamPaper(examPaper);
@@ -74,6 +69,12 @@ public class ExamService {
         boolean memberAnswerGet = memberAnswerList.stream().anyMatch(m->m.getMyAnswer().equals(""));
 
         if (!memberAnswerGet) {
+            List<ExamQuest> examQuestList = examQuestRepository.findByExamCategory_ExamAndLevel(examPaper.getExamCategory(),Level.PRE_A1);
+            //조회된 문제의 갯수
+            int examQuestListSize = examQuestList.size();
+            // 조회된 문제중 하나의 문제를 가져옴
+            ExamQuest examQuestRandomElement = examQuestList.get(rand.nextInt(examQuestListSize));
+
             memberAnswerCategoryList.get(0).setExamCategory(examQuestRandomElement.getExamCategory());
 
             memberAnswerRepository.save(new MemberAnswer(null,memberAnswerCategoryList.get(0),examQuestRandomElement,"",null));
@@ -232,9 +233,13 @@ public class ExamService {
         List<MemberAnswer> memberAnswerList=memberAnswerRepository.findByMemberAnswerCategory_ExamPaper(examPaper);
 
         log.info("풀지않은 문제를 확인");
-        MemberAnswer memberAnswer= (MemberAnswer) memberAnswerList.stream().filter(m -> m.getMyAnswer().isBlank()||m.getMyAnswer()==null);
 
-        return ExamRefreshResponseDto.examDTO(memberAnswer.getExamQuest().entityToDto(), (long) memberAnswerList.size());
+        MemberAnswer memberAnswer = memberAnswerList.stream()
+                .filter(m -> m.getMyAnswer().equals(""))
+                .collect(Collectors.toList())
+                .get(0);
+
+        return ExamRefreshResponseDto.examDTO(memberAnswer.getExamQuest().entityToDto(), memberAnswerList.size());
 
     }
 }

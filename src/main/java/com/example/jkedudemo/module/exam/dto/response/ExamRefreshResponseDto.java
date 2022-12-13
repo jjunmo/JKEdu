@@ -13,15 +13,15 @@ public class ExamRefreshResponseDto {
 
     private String message;
 
-    private String number;
+    private int number;
 
     private ExamQuestDTO examQuestDTO;
 
-    public static ExamRefreshResponseDto examDTO(ExamQuestDTO examQuestDTO,Long number){
+    public static ExamRefreshResponseDto examDTO(ExamQuestDTO examQuestDTO,int number){
         return ExamRefreshResponseDto.builder()
                 .status("200")
                 .message("OK")
-                .number(String.valueOf(number))
+                .number(number)
                 .examQuestDTO(examQuestDTO)
                 .build();
     }
