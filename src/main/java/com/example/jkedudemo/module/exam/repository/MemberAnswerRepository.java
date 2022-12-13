@@ -15,4 +15,6 @@ public interface MemberAnswerRepository extends JpaRepository<MemberAnswer,Long>
     MemberAnswer findByAnswerYNAndMemberAnswerCategory_ExamPaper(YN answerYN,ExamPaper memberAnswerCategory_ExamPaper);
 
     List<MemberAnswer> findByMemberAnswerCategory_ExamPaper(ExamPaper examPaper);
+
+    MemberAnswer findByExamQuest_Id(Long id);
 }

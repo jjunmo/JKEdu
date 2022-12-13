@@ -21,11 +21,11 @@ public class ExamNextQuestResponse {
 
     private ExamQuestDTO examQuestDTO;
 
-    public static ExamNextQuestResponse examDTO(ExamQuestDTO examQuestDTO,  int number){
+    public static ExamNextQuestResponse examDTO(ExamQuestDTO examQuestDTO, int number){
         return ExamNextQuestResponse.builder()
                 .status("200")
                 .message("NEXT")
-                .number(number)
+                .number(number+1)
                 .examQuestDTO(examQuestDTO)
                 .build();
     }

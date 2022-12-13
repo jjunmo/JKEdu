@@ -15,7 +15,7 @@ public class ExamFirstQuestResponse {
 
     private String message;
 
-    private int number=1;
+    private int number;
 
     private ExamQuestDTO examQuestDTO;
 

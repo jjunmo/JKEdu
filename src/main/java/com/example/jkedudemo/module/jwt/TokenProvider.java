@@ -57,7 +57,7 @@ public class TokenProvider {
                 .claim(AUTHORITIES_ROLE,authorities.substring(idx+1))
                 //member.getName -> JWT 토큰 { aud : member.getName }
                 .setAudience(name)
-                .setExpiration(new Date(now + 1000*60))
+                .setExpiration(tokenExpiresIn)
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
 
@@ -67,7 +67,7 @@ public class TokenProvider {
                 .claim(AUTHORITIES_ROLE,authorities.substring(idx+1))
                 //member.getName -> JWT 토큰 { aud : member.getName }
                 .setAudience(name)
-                .setExpiration(new Date(now + 1000*60))
+                .setExpiration(refreshTokenExpiresIn)
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
 

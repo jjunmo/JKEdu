@@ -12,13 +12,13 @@ public class FindPasswordRequestDto {
 
     private String phone;
 
-    private String smscode;
-    private PhoneAuth phoneauth;
-    public void setPhoneauth(String phoneauth) {
-        this.phoneauth = PhoneAuth.valueOf(phoneauth.toUpperCase());
+    private String smsCode;
+    private PhoneAuth phoneAuth;
+    public void setPhoneAuth(String phoneAuth) {
+        this.phoneAuth = PhoneAuth.valueOf(phoneAuth.toUpperCase());
     }
-    public PhoneAuth getPhoneauth() {
-        return phoneauth;
+    public PhoneAuth getPhoneAuth() {
+        return phoneAuth;
     }
 
 }

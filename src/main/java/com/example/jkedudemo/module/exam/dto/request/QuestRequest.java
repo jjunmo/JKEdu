@@ -13,6 +13,7 @@ public class QuestRequest {
 
     private Long examPaperId;
 
+
     public void setExam(String exam) {
         this.exam = Exam.valueOf(exam.toUpperCase());
     }

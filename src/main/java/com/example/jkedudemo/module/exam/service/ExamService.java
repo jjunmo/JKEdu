@@ -139,47 +139,47 @@ public class ExamService {
         //시험에 나온문제 확인
         Optional<ExamQuest> examQuestOptional = examQuestRepository.findById(request.getExamId());
 
+        MemberAnswer memberAnswer=memberAnswerRepository.findByExamQuest_Id(request.getExamId());
+        memberAnswer.setMyAnswer(request.getMyAnswer());
+
         if(examQuestOptional.isEmpty()) throw new MyInternalServerException("잘못된 접근입니다.");
 
         ExamQuest examQuest = examQuestOptional.get();
         //TODO
-        MemberAnswerCategory memberAnswerCategory=memberAnswerCategoryList.stream()
-                .filter(m -> Objects.equals(m.getExamCategory().getId(), request.getExamId()))
-                .findFirst()
-                .orElseThrow(()->new MyInternalServerException("시험을 다시 치던가"));
+//        MemberAnswerCategory memberAnswerCategory=memberAnswerCategoryList.stream()
+//                .filter(m -> m.getExamCategory().getId()==request.getExamId())
+//                .findFirst()
+//                .orElseThrow(()->new MyInternalServerException("시험을 다시 치던가"));
 
-
-
-        memberAnswerCategoryRepository.save(new MemberAnswerCategory(null,member,examQuest.getExamCategory(),examPaper));
+//      memberAnswerCategoryRepository.save(new MemberAnswerCategory(null,member,examQuest.getExamCategory(),examPaper));
 
         Level level = examQuest.getLevel();
         int levelCheck = level.ordinal();
         Level changeLevel;
 
-            if(examQuest.getRightAnswer().equals(request.getMyAnswer())){
+            if(examQuest.getRightAnswer().equals(memberAnswer.getMyAnswer())){
 
                 if(levelCheck < 5) changeLevel=levels[levelCheck + 1];
                 else changeLevel=levels[levelCheck];
                 //TODO
 
-
-                MemberAnswer memberAnswer=new MemberAnswer(null,memberAnswerCategory,examQuest, request.getMyAnswer(), YN.Y);
+                memberAnswer.setAnswerYN(YN.Y);
                 memberAnswerRepository.save(memberAnswer);
-
 
             }else{
 
                 if(levelCheck == 0) changeLevel=(levels[levelCheck]);
                 else changeLevel=(levels[levelCheck-1]);
                 //TODO
-                MemberAnswer memberAnswer=new MemberAnswer(null,memberAnswerCategory,examQuest, request.getMyAnswer(), YN.N);
+
+                memberAnswer.setAnswerYN(YN.N);
                 memberAnswerRepository.save(memberAnswer);
             }
 
             if(examQuest.getExamCategory().getExam().getValue() == memberAnswerCategoryList.size()){
                 //맞춘 문제 확인해서 시험 등급측정
                 List<MemberAnswer> memberAnswerList = memberAnswerRepository.findByMemberAnswerCategory_ExamPaperAndAnswerYN(examPaper, YN.Y);
-                int sum = memberAnswerList.stream().mapToInt(memberAnswer -> memberAnswer.getExamQuest().getLevel().getValue()).sum();
+                int sum = memberAnswerList.stream().mapToInt(m -> m.getExamQuest().getLevel().getValue()).sum();
                 examPaper.setLevel(Level.PRE_A1.getLevel(sum));
                 return ExamNextQuestResponse.examDTO2();
             }
@@ -191,9 +191,10 @@ public class ExamService {
 
             // 조회된 문제중 하나의 문제를 가져옴
             ExamQuest examQuestRandomElement = examQuestList.get(rand.nextInt(examQuestListSize));
+
             //DTO 담기
-            MemberAnswerCategory nextMemberAnswerCategory= memberAnswerCategoryRepository.save(new MemberAnswerCategory(null,member,examQuest.getExamCategory(),examPaper));
-            memberAnswerRepository.save(new MemberAnswer(null,nextMemberAnswerCategory,examQuestRandomElement,null, YN.N));
+            MemberAnswerCategory nextMemberAnswerCategory= memberAnswerCategoryRepository.save(new MemberAnswerCategory(null,member,examQuestRandomElement.getExamCategory(),examPaper));
+            memberAnswerRepository.save(new MemberAnswer(null,nextMemberAnswerCategory,examQuestRandomElement,"", YN.N));
 
             //객관식 문제의 경우 객관식 항목을 다 담기
             if(examQuestRandomElement.getQuest().equals(Quest.MULTIPLE)){
