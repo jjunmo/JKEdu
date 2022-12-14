@@ -94,7 +94,7 @@ public class ExamService {
 
             if(memberAnswer.getExamQuest().getQuest().equals(Quest.MULTIPLE)){
                 List<ExamMultipleChoice> examMultipleChoice=examMultipleChoiceRepository.findByQuest_id(memberAnswer.getExamQuest().getId());
-                return ExamFirstQuestResponse.examDTO(memberAnswer.getExamQuest().entityToMultipleDto(examMultipleChoice),1) ;
+                return ExamFirstQuestResponse.examDTO(memberAnswer.getExamQuest().entityToMultipleDto(examMultipleChoice),memberAnswerList.size()) ;
             }
 
             return ExamFirstQuestResponse.examDTO(memberAnswer.getExamQuest().entityToDto(), memberAnswerList.size());
