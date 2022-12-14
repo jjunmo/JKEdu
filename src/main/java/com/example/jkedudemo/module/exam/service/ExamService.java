@@ -102,20 +102,22 @@ public class ExamService {
     public TestResponseDto test(String exam,Long studentId){
         Member member=isMemberCurrent();
 
-        Optional<MemberAnswer> memberAnswerOptional=memberAnswerRepository.findByMyAnswerAndExamQuest_ExamCategory_ExamAndMemberAnswerCategory_Member("",Exam.valueOf(exam),member);
-        if(memberAnswerOptional.isPresent()){
-            return TestResponseDto.statusOk(memberAnswerOptional.get().getMemberAnswerCategory().getExamPaper());
+        if(member.getRole().equals(Role.ROLE_ACADEMY)) {
+            Optional<Member> memberOptional = memberRepository.findById(studentId);
+            member = memberOptional.orElseGet(this::isMemberCurrent);
+
+            Optional<MemberAnswer> memberAnswerOptional=memberAnswerRepository.findByMyAnswerAndExamQuest_ExamCategory_ExamAndMemberAnswerCategory_Member("",Exam.valueOf(exam),member);
+            if(memberAnswerOptional.isPresent()){
+                return TestResponseDto.statusOk(memberAnswerOptional.get().getMemberAnswerCategory().getExamPaper());
+            }
         }
+
+
 
         if(member.getTestCount()<=0) throw new MyInternalServerException("테스트 횟수가 없습니다.");
         else {
             member.setTestCount(member.getTestCount() - 1);
             memberRepository.save(member);
-        }
-
-        if(member.getRole().equals(Role.ROLE_ACADEMY)) {
-            Optional<Member> memberOptional = memberRepository.findById(studentId);
-            member = memberOptional.orElseGet(this::isMemberCurrent);
         }
 
         ExamPaper examPaper=examPaperRepository.save(new ExamPaper(null,null, Exam.valueOf(exam)));
