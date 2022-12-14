@@ -160,7 +160,7 @@ public class ExamService {
         //시험에 나온문제 확인
         Optional<ExamQuest> examQuestOptional = examQuestRepository.findById(request.getExamId());
 
-        MemberAnswer memberAnswer=memberAnswerRepository.findByExamQuest_Id(request.getExamId());
+        MemberAnswer memberAnswer=memberAnswerRepository.findByExamQuest_IdAndMemberAnswerCategory_ExamPaper(request.getExamId(),examPaper);
         memberAnswer.setMyAnswer(request.getMyAnswer());
 
         if(examQuestOptional.isEmpty()) throw new MyInternalServerException("잘못된 접근입니다.");
