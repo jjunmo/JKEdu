@@ -92,6 +92,11 @@ public class ExamService {
                     .collect(Collectors.toList())
                     .get(0);
 
+            if(memberAnswer.getExamQuest().getQuest().equals(Quest.MULTIPLE)){
+                List<ExamMultipleChoice> examMultipleChoice=examMultipleChoiceRepository.findByQuest_id(memberAnswer.getExamQuest().getId());
+                return ExamFirstQuestResponse.examDTO(memberAnswer.getExamQuest().entityToMultipleDto(examMultipleChoice),1) ;
+            }
+
             return ExamFirstQuestResponse.examDTO(memberAnswer.getExamQuest().entityToDto(), memberAnswerList.size());
 
         }
@@ -107,17 +112,26 @@ public class ExamService {
             member = memberOptional.orElseGet(this::isMemberCurrent);
 
             Optional<MemberAnswer> memberAnswerOptional=memberAnswerRepository.findByMyAnswerAndExamQuest_ExamCategory_ExamAndMemberAnswerCategory_Member("",Exam.valueOf(exam),member);
-            if(memberAnswerOptional.isPresent()){
+            if(memberAnswerOptional.isPresent()) {
                 return TestResponseDto.statusOk(memberAnswerOptional.get().getMemberAnswerCategory().getExamPaper());
             }
         }
 
+        Member memberAcademy = memberRepository.findByRoleAndAcademyId(Role.ROLE_ACADEMY,member.getAcademyId());
 
+        if(member.getRole().equals(Role.ROLE_ACADEMY_STUDENT)){
+            if (memberAcademy.getTestCount() <= 0) throw new MyInternalServerException("해당 학원에 테스트 횟수가 없습니다.");
+            else {
+                memberAcademy.setTestCount(memberAcademy.getTestCount() - 1);
+                memberRepository.save(memberAcademy);
+            }
 
-        if(member.getTestCount()<=0) throw new MyInternalServerException("테스트 횟수가 없습니다.");
-        else {
-            member.setTestCount(member.getTestCount() - 1);
-            memberRepository.save(member);
+        }else {
+            if (member.getTestCount() <= 0) throw new MyInternalServerException("테스트 횟수가 없습니다.");
+            else {
+                member.setTestCount(member.getTestCount() - 1);
+                memberRepository.save(member);
+            }
         }
 
         ExamPaper examPaper=examPaperRepository.save(new ExamPaper(null,null, Exam.valueOf(exam)));

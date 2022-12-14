@@ -20,6 +20,8 @@ public interface MemberRepository extends JpaRepository<Member,Long> {
     boolean existsByPhoneAndStatus(String phone , Status status);
     Optional<Member> findByPhoneAndStatusIn(String phone, Collection<Status> status);
 
+    Member findByRoleAndAcademyId(Role role,String academyId);
+
     //학원 학생 리스트 조회
     Optional<Member> findByPhoneAndRoleAndAcademyId(String phone , Role role , String academyId);
 
