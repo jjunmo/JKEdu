@@ -1,9 +1,7 @@
 package com.example.jkedudemo.module.exam.controller;
 
-import com.example.jkedudemo.module.common.enums.exam.Exam;
 import com.example.jkedudemo.module.exam.dto.request.NextQuestRequest;
 import com.example.jkedudemo.module.exam.dto.response.ExamFirstQuestResponse;
-import com.example.jkedudemo.module.exam.dto.request.QuestRequest;
 import com.example.jkedudemo.module.exam.dto.response.ExamNextQuestResponse;
 import com.example.jkedudemo.module.exam.dto.response.ExamRefreshResponseDto;
 import com.example.jkedudemo.module.exam.dto.response.TestResponseDto;
