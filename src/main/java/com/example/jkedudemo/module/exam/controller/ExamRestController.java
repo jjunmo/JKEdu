@@ -22,11 +22,22 @@ public class ExamRestController {
 
     private final ExamService examService;
 
+    /**
+     * 시험 시작 첫 문제
+     * @param examPaperId PK
+     * @return
+     */
     @PostMapping
     public HttpEntity<ExamFirstQuestResponse> getQuest(@RequestParam("answer-paper") Long examPaperId){
         return ResponseEntity.ok(examService.ExamFirstQuest(examPaperId));
     }
 
+    /**
+     * 테스트 횟수 체크 , 이전 시험
+     * @param exam 시험 응시 영역
+     * @param studentId ROLE_ACADEMY 경우 응시 전 넘어옴
+     * @return
+     */
     @PostMapping("/check")
     public HttpEntity<TestResponseDto> test(@RequestParam("category") String exam,@RequestParam(value="student",required = false) Long studentId){
 

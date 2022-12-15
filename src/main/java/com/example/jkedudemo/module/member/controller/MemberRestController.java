@@ -95,7 +95,7 @@ public class MemberRestController {
      * @param phone     연락처
      * @param smscode   인증번호
      * @param phoneauth 인증확인
-     * @return
+     * @return email
      */
     @GetMapping("/check")
     public HttpEntity<MemberIdFindResopnseDto> getMemberEmail(String phone, String smscode, PhoneAuth phoneauth) {

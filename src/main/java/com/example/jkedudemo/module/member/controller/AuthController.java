@@ -47,6 +47,11 @@ public class AuthController {
         return ResponseEntity.ok(authService.login(requestDto,userAgent));
     }
 
+    /**
+     * accessToken 재발급
+     * @param bodyJson refreshToken
+     * @return
+     */
     @PostMapping("/refresh")
     public HttpEntity<RefreshApiResponseMessage> validateRefreshToken(@RequestBody HashMap<String, String> bodyJson) {
 
@@ -64,6 +69,11 @@ public class AuthController {
         return new ResponseEntity<>(refreshApiResponseMessage, HttpStatus.OK);
     }
 
+    /**
+     * 새로고침
+     * @param userAgent 브라우저 환경
+     * @return accessToken,refreshToken
+     */
     @GetMapping("/refresh")
     public HttpEntity<TokenDto> refresh(@RequestHeader("User-Agent") String userAgent) {
         return ResponseEntity.ok(jwtService.refresh(userAgent));
