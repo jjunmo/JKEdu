@@ -63,25 +63,32 @@ public class WebSecurityConfig implements WebMvcConfigurer {
 
                 .and()
                 .httpBasic().disable()
-                .csrf().disable()
+                .csrf()
+                .disable()
+
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 
                 .and()
                 .headers()
-                .addHeaderWriter(new XFrameOptionsHeaderWriter(
-                        XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN))
+                .addHeaderWriter(new XFrameOptionsHeaderWriter(XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN))
 
                 .and()
                 .exceptionHandling()
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 .accessDeniedHandler(jwtAccessDeniedHandler)
-
-
+                //TODO: URL 권한 설정 미구현
                 .and()
                 .authorizeRequests()
-                .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-                .antMatchers("/auth/**","/member/**","/upload/**","/csv_read/**").permitAll()
-                .anyRequest().authenticated()
+                .requestMatchers(CorsUtils::isPreFlightRequest)
+                .permitAll()
+
+                .antMatchers("/auth/**","/member/**","/upload/**","/csv_read/**")
+                .permitAll()
+
+                .anyRequest()
+                .authenticated()
+
+
 
                 .and()
                 .apply(new JwtSecurityConfig(tokenProvider));

@@ -46,7 +46,7 @@ public class TokenProvider {
         long now = (new Date()).getTime();
 
         Date tokenExpiresIn = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
-        Date refreshTokenExpiresIn = new Date(now + ACCESS_TOKEN_EXPIRE_TIME*5);
+        Date refreshTokenExpiresIn = new Date(now + ACCESS_TOKEN_EXPIRE_TIME * 48);
 
         System.out.println(tokenExpiresIn);
         int idx = authorities.indexOf("_");
@@ -57,7 +57,7 @@ public class TokenProvider {
                 .claim(AUTHORITIES_ROLE,authorities.substring(idx+1))
                 //member.getName -> JWT 토큰 { aud : member.getName }
                 .setAudience(name)
-                .setExpiration(new Date(now + 1000*60 ))
+                .setExpiration(tokenExpiresIn)
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
 
@@ -67,7 +67,7 @@ public class TokenProvider {
                 .claim(AUTHORITIES_ROLE,authorities.substring(idx+1))
                 //member.getName -> JWT 토큰 { aud : member.getName }
                 .setAudience(name)
-                .setExpiration((new Date(now + 1000*70 )))
+                .setExpiration(refreshTokenExpiresIn)
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
 
@@ -147,7 +147,7 @@ public class TokenProvider {
                 .setSubject(id)
                 .claim(AUTHORITIES_ROLE,auth)// 정보 저장
                 .setAudience(name) // 토큰 발행 시간 정보
-                .setExpiration(new Date(now + 1000*60)) // set Expire Time
+                .setExpiration(tokenExpiresIn) // set Expire Time
                 .signWith(key, SignatureAlgorithm.HS512)  // 사용할 암호화 알고리즘과
                 // signature 에 들어갈 secret값 세팅
                 .compact();
