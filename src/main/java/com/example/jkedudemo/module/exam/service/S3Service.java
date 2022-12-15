@@ -71,9 +71,9 @@ public class S3Service {
 
                     ExamQuest examQuest = new ExamQuest(data[0],
                             examCategory1, data[2],
-                            data[3].replace("*",",").replace(";","'"),
-                            data[4].replace("*",",").replace(";","'"),
-                            data[5].replace("*",",").replace(";","'"),
+                            data[3].replace("^","\"").replace("*",",").replace(";","'"),
+                            data[4].replace("^","\"").replace("*",",").replace(";","'"),
+                            data[5].replace("^","\"").replace("*",",").replace(";","'"),
                             data[6], data[7], data[8], data[9]);
                     em.persist(examQuest);
                 }
