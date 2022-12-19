@@ -79,14 +79,13 @@ public class WebSecurityConfig implements WebMvcConfigurer {
                 //TODO: URL 권한 설정 미구현
                 .and()
                 .authorizeRequests()
-                .requestMatchers(CorsUtils::isPreFlightRequest)
-                .permitAll()
-
-                .antMatchers("/auth/**","/member/**","/upload/**","/csv_read/**")
-                .permitAll()
-
-                .anyRequest()
-                .authenticated()
+                .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
+                .antMatchers("/","/csv_read").permitAll()
+                .antMatchers("/auth/**").anonymous()
+                .antMatchers("/member/excheck/**","/member/cert/**","/member/check/**").permitAll()
+                .antMatchers("/member/**").hasAnyRole("USER","ACADEMY")
+                //.antMatchers("/auth/**","/member/**","/upload/**","/csv_read/**")
+                .anyRequest().authenticated()
 
 
 
