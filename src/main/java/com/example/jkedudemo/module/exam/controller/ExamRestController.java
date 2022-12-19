@@ -23,7 +23,7 @@ public class ExamRestController {
     /**
      * 시험 시작 첫 문제
      * @param examPaperId PK
-     * @return
+     * @return 시험중인 문제 , 랜덤으로 첫문제
      */
     @PostMapping
     public HttpEntity<ExamFirstQuestResponse> getQuest(@RequestParam("answer-paper") Long examPaperId){
@@ -34,7 +34,7 @@ public class ExamRestController {
      * 테스트 횟수 체크 , 이전 시험
      * @param exam 시험 응시 영역
      * @param studentId ROLE_ACADEMY 경우 응시 전 넘어옴
-     * @return
+     * @return  examPaper,memberAnswerCategory save
      */
     @PostMapping("/check")
     public HttpEntity<TestResponseDto> test(@RequestParam("category") String exam,@RequestParam(value="student",required = false) Long studentId){
@@ -55,6 +55,11 @@ public class ExamRestController {
         if(nextEnd.equals("NEXT")) return ResponseEntity.ok(examService.examNextQuestResponse(request,examPaperId));
 
         else return ResponseEntity.ok(ExamNextQuestResponse.examDTO2());
+    }
+
+    @PostMapping("/run")
+    public HttpEntity<ExamNextQuestResponse> setQuest(@RequestParam(value ="answer-paper") Long examPaperId){
+        return ResponseEntity.ok(examService.setQuest(examPaperId));
     }
 
 }

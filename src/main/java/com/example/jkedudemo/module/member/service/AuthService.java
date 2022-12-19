@@ -72,6 +72,7 @@ public class AuthService {
         }
 
         member.setStatus(Status.GREEN);
+        //임의로 999 설정
         member.setTestCount(999);
         return MemberStatusOkResponseDto.statusOk();
 

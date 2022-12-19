@@ -45,11 +45,11 @@ public class MemberService {
     }
 
     @Transactional
-    public String certifiedPhone(String phone, PhoneAuth phoneauth) {
+    public String certifiedPhone(String phone, PhoneAuth phoneAuth) {
 
         StringBuilder cerNum = getCerNum(phone);
         //인증요청시 연락처 유효성 체크
-        if(phoneauth.equals(PhoneAuth.JOIN)) {
+        if(phoneAuth.equals(PhoneAuth.JOIN)) {
             Optional<Member> memberOptional = memberRepository.findByPhoneAndStatusIn(phone, List.of(Status.GREEN, Status.YELLOW));
 
             if (memberOptional.isPresent()) throw new MyInternalServerException("이미 사용중인 전화번호 입니다.");
@@ -74,8 +74,8 @@ public class MemberService {
             System.out.println(obj.toString());
 
             //해당 휴대전화로 인증요청이 없을경우 있을경우도 동일한 코드로 확인됨.
-            Optional<MemberPhoneAuth> optional = memberPhoneAuthRepository.findByPhoneAndPhoneauth(phone, phoneauth);
-            if (optional.isEmpty()) memberPhoneAuthRepository.save( new MemberPhoneAuth(null, null, phone, phoneauth, YN.N, cerNum.toString()));
+            Optional<MemberPhoneAuth> optional = memberPhoneAuthRepository.findByPhoneAndPhoneauth(phone, phoneAuth);
+            if (optional.isEmpty()) memberPhoneAuthRepository.save( new MemberPhoneAuth(null, null, phone, phoneAuth, YN.N, cerNum.toString()));
                 // save
              else {
                 MemberPhoneAuth memberPhoneAuth = optional.get();
@@ -93,9 +93,9 @@ public class MemberService {
     }
 
     @Transactional
-    public String certifiedPhoneCheck(String phone ,String smscode , PhoneAuth phoneauth){
+    public String certifiedPhoneCheck(String phone ,String smsCode , PhoneAuth phoneAuth){
 
-        Optional<MemberPhoneAuth> optional = memberPhoneAuthRepository.findByPhoneAndSmscodeAndPhoneauth(phone, smscode, phoneauth);
+        Optional<MemberPhoneAuth> optional = memberPhoneAuthRepository.findByPhoneAndSmscodeAndPhoneauth(phone, smsCode, phoneAuth);
         if(optional.isEmpty()) throw new MyInternalServerException("인증번호가 일치하지 않습니다.");
         else{
 
@@ -150,9 +150,9 @@ public class MemberService {
 
 
     @Transactional
-    public MemberIdFindResopnseDto getMemberEmail(String phone , String smscode, PhoneAuth phoneauth) {
+    public MemberIdFindResopnseDto getMemberEmail(String phone , String smsCode, PhoneAuth phoneAuth) {
 
-        String result = certifiedPhoneCheck(phone, smscode,phoneauth);
+        String result = certifiedPhoneCheck(phone, smsCode,phoneAuth);
 
         if(result.equals("OK")){
             Optional<Member> memberOptional = memberRepository.findByPhoneAndStatusIn(phone,List.of(Status.GREEN,Status.YELLOW));
@@ -211,12 +211,12 @@ public class MemberService {
     }
 
     @Transactional
-    public MemberStatusOkResponseDto getNewPassword(String email, String phone , String smscode , PhoneAuth phoneauth){
+    public MemberStatusOkResponseDto getNewPassword(String email, String phone , String smsCode , PhoneAuth phoneAuth){
 
         if(email.isEmpty()) throw new MyInternalServerException("이메일을 입력하세요.");
 
         //인증번호 확인
-        String result = certifiedPhoneCheck(phone,smscode,phoneauth);
+        String result = certifiedPhoneCheck(phone,smsCode,phoneAuth);
 
         Optional<Member> memberOptional = memberRepository.findByPhoneAndStatusIn(phone,List.of(Status.GREEN,Status.YELLOW));
 

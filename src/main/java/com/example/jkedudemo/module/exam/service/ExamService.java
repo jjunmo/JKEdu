@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -64,11 +65,12 @@ public class ExamService {
         List<MemberAnswer> memberAnswerList=memberAnswerRepository.findByMemberAnswerCategory_ExamPaper(examPaper);
         List<MemberAnswerCategory> memberAnswerCategoryList=memberAnswerCategoryRepository.findByExamPaper(examPaper);
 
-        if(memberAnswerList.isEmpty()) log.info("첫 시험입니당");
-
         boolean memberAnswerGet = memberAnswerList.stream().anyMatch(m->m.getMyAnswer().equals(""));
 
         if (!memberAnswerGet) {
+
+            log.info("첫 시험입니당");
+
             List<ExamQuest> examQuestList = examQuestRepository.findByExamCategory_ExamAndLevel(examPaper.getExamCategory(),Level.PRE_A1);
             //조회된 문제의 갯수
             int examQuestListSize = examQuestList.size();
@@ -79,7 +81,7 @@ public class ExamService {
 
             memberAnswerRepository.save(new MemberAnswer(null,memberAnswerCategoryList.get(0),examQuestRandomElement,"",null));
             //객관식 문제의 경우 객관식 항목을 다 담기
-            if(examQuestRandomElement.getQuest().equals(Quest.MULTIPLE)){
+            if(Objects.equals(examQuestRandomElement.getQuest(), Quest.MULTIPLE)){
                 List<ExamMultipleChoice> examMultipleChoice=examMultipleChoiceRepository.findByQuest_id(examQuestRandomElement.getId());
                 return ExamFirstQuestResponse.examDTO(examQuestRandomElement.entityToMultipleDto(examMultipleChoice),1) ;
             }
@@ -92,7 +94,7 @@ public class ExamService {
                     .collect(Collectors.toList())
                     .get(0);
 
-            if(memberAnswer.getExamQuest().getQuest().equals(Quest.MULTIPLE)){
+            if(Objects.equals(memberAnswer.getExamQuest().getQuest(), Quest.MULTIPLE)){
                 List<ExamMultipleChoice> examMultipleChoice=examMultipleChoiceRepository.findByQuest_id(memberAnswer.getExamQuest().getId());
                 return ExamFirstQuestResponse.examDTO(memberAnswer.getExamQuest().entityToMultipleDto(examMultipleChoice),memberAnswerList.size()) ;
             }
@@ -107,26 +109,26 @@ public class ExamService {
     public TestResponseDto test(String exam,Long studentId){
         Member member=isMemberCurrent();
 
-        if(member.getRole().equals(Role.ROLE_ACADEMY)) {
+        if(Objects.equals(member.getRole(), Role.ROLE_ACADEMY)) {
             Optional<Member> memberOptional = memberRepository.findById(studentId);
             member = memberOptional.orElseGet(this::isMemberCurrent);
 
             Optional<MemberAnswer> memberAnswerOptional=memberAnswerRepository.findByMyAnswerAndExamQuest_ExamCategory_ExamAndMemberAnswerCategory_Member("",Exam.valueOf(exam),member);
-            if(memberAnswerOptional.isPresent()) {
-                return TestResponseDto.statusOk(memberAnswerOptional.get().getMemberAnswerCategory().getExamPaper());
-            }
+
+            if(memberAnswerOptional.isPresent()) return TestResponseDto.statusOk(memberAnswerOptional.get().getMemberAnswerCategory().getExamPaper());
         }
 
         Member memberAcademy = memberRepository.findByRoleAndAcademyId(Role.ROLE_ACADEMY,member.getAcademyId());
 
-        if(member.getRole().equals(Role.ROLE_ACADEMY_STUDENT)){
+        if(Objects.equals(member.getRole(), Role.ROLE_ACADEMY_STUDENT))
+
             if (memberAcademy.getTestCount() <= 0) throw new MyInternalServerException("해당 학원에 테스트 횟수가 없습니다.");
             else {
                 memberAcademy.setTestCount(memberAcademy.getTestCount() - 1);
                 memberRepository.save(memberAcademy);
             }
+        else {
 
-        }else {
             if (member.getTestCount() <= 0) throw new MyInternalServerException("테스트 횟수가 없습니다.");
             else {
                 member.setTestCount(member.getTestCount() - 1);
@@ -149,7 +151,7 @@ public class ExamService {
         List<MemberAnswerCategory> memberAnswerCategoryList=memberAnswerCategoryRepository.findByExamPaper(examPaper);
         if(memberAnswerCategoryList.isEmpty()) throw new MyInternalServerException("올바른 접근이 아닙니다.no examPaper");
 
-        if(member.getRole().equals(Role.ROLE_ACADEMY)) {
+        if(Objects.equals(member.getRole(), Role.ROLE_ACADEMY)) {
             Optional<Member> memberOptional = memberRepository.findById(memberAnswerCategoryList.get(0).getMember().getId());
             member = memberOptional.orElseGet(this::isMemberCurrent);
         }
@@ -171,7 +173,7 @@ public class ExamService {
         int levelCheck = level.ordinal();
         Level changeLevel;
 
-            if(examQuest.getRightAnswer().equals(memberAnswer.getMyAnswer())){
+            if(Objects.equals(examQuest.getRightAnswer(), memberAnswer.getMyAnswer())){
 
                 if(levelCheck < 5) changeLevel=levels[levelCheck + 1];
                 else changeLevel=levels[levelCheck];
@@ -188,7 +190,7 @@ public class ExamService {
                 memberAnswerRepository.save(memberAnswer);
             }
 
-            if(examQuest.getExamCategory().getExam().getValue() == memberAnswerCategoryList.size()){
+            if(examPaper.getExamCategory().getValue() == memberAnswerCategoryList.size()){
                 //맞춘 문제 확인해서 시험 등급측정
                 List<MemberAnswer> memberAnswerList = memberAnswerRepository.findByMemberAnswerCategory_ExamPaperAndAnswerYN(examPaper, YN.Y);
                 int sum = memberAnswerList.stream().mapToInt(m -> m.getExamQuest().getLevel().getValue()).sum();
@@ -196,25 +198,28 @@ public class ExamService {
                 return ExamNextQuestResponse.examDTO2();
             }
 
+
+
             List<ExamQuest> examQuestList = examQuestRepository.findByExamCategory_ExamAndLevel(examQuest.getExamCategory().getExam(),changeLevel);
 
-            List<ExamQuest> resultList1 = examQuestList.stream()
-                    .filter(o -> memberAnswerCategoryList
+            List<ExamQuest> resultList = examQuestList.stream()
+                    .filter(eq -> memberAnswerCategoryList
                     .stream()
-                            .noneMatch(n -> o.getExamCategory().getId().equals(n.getExamCategory().getId())))
+                            .noneMatch(mac -> Objects.equals(eq.getExamCategory().getId(), mac.getExamCategory().getId())))
                     .collect(Collectors.toList());
 
-            int examQuestListSize = resultList1.size();
+
+            int examQuestListSize = resultList.size();
 
             // 조회된 문제중 하나의 문제를 가져옴
-            ExamQuest examQuestRandomElement = resultList1.get(rand.nextInt(examQuestListSize));
+            ExamQuest examQuestRandomElement = resultList.get(rand.nextInt(examQuestListSize));
 
             //DTO 담기
             MemberAnswerCategory nextMemberAnswerCategory= memberAnswerCategoryRepository.save(new MemberAnswerCategory(null,member,examQuestRandomElement.getExamCategory(),examPaper));
             memberAnswerRepository.save(new MemberAnswer(null,nextMemberAnswerCategory,examQuestRandomElement,"", YN.N));
 
             //객관식 문제의 경우 객관식 항목을 다 담기
-            if(examQuestRandomElement.getQuest().equals(Quest.MULTIPLE)){
+            if(Objects.equals(examQuestRandomElement.getQuest(), Quest.MULTIPLE)){
                 List<ExamMultipleChoice> examMultipleChoice=examMultipleChoiceRepository.findByQuest_id(examQuestRandomElement.getId());
                 return ExamNextQuestResponse.examDTO(examQuestRandomElement.entityToMultipleDto(examMultipleChoice),memberAnswerCategoryList.size());
             }
@@ -250,13 +255,41 @@ public class ExamService {
 
         log.info("풀지않은 문제를 확인");
 
-        MemberAnswer memberAnswer = memberAnswerList.stream()
-                .filter(m -> m.getMyAnswer().equals(""))
-                .collect(Collectors.toList())
-                .get(0);
+            MemberAnswer memberAnswer = memberAnswerList.stream()
+                    .filter(m -> m.getMyAnswer().equals(""))
+                    .collect(Collectors.toList())
+                    .get(0);
 
         return ExamRefreshResponseDto.examDTO(memberAnswer.getExamQuest().entityToDto(), memberAnswerList.size());
 
     }
-}
+
+    @Transactional
+    public ExamNextQuestResponse setQuest(Long examPaperId){
+            ExamPaper examPaper=isExamPaper(examPaperId);
+
+            List<MemberAnswer> memberAnswerList=memberAnswerRepository.findByMemberAnswerCategory_ExamPaper(examPaper);
+
+            MemberAnswer memberAnswer = memberAnswerList.stream()
+                .filter(m -> Objects.equals(m.getMyAnswer(), ""))
+                .collect(Collectors.toList())
+                .get(0);
+
+            memberAnswer.setMyAnswer("0");
+
+            memberAnswerRepository.save(memberAnswer);
+
+            //맞춘 문제 확인해서 시험 등급측정
+            List<MemberAnswer> memberAnswerResultList = memberAnswerRepository.findByMemberAnswerCategory_ExamPaperAndAnswerYN(examPaper, YN.Y);
+            int sum = memberAnswerResultList.stream().mapToInt(m -> m.getExamQuest().getLevel().getValue()).sum();
+
+            examPaper.setLevel(Level.PRE_A1.getLevel(sum));
+
+            examPaperRepository.save(examPaper);
+
+            return ExamNextQuestResponse.examDTO2();
+
+        }
+
+    }
 
