@@ -248,21 +248,21 @@ public class ExamService {
 
     }
 
-    public ExamRefreshResponseDto examRefresh(Long examPaperId) {
-        ExamPaper examPaper=isExamPaper(examPaperId);
-
-        List<MemberAnswer> memberAnswerList=memberAnswerRepository.findByMemberAnswerCategory_ExamPaper(examPaper);
-
-        log.info("풀지않은 문제를 확인");
-
-            MemberAnswer memberAnswer = memberAnswerList.stream()
-                    .filter(m -> m.getMyAnswer().equals(""))
-                    .collect(Collectors.toList())
-                    .get(0);
-
-        return ExamRefreshResponseDto.examDTO(memberAnswer.getExamQuest().entityToDto(), memberAnswerList.size());
-
-    }
+//    public ExamRefreshResponseDto examRefresh(Long examPaperId) {
+//        ExamPaper examPaper=isExamPaper(examPaperId);
+//
+//        List<MemberAnswer> memberAnswerList=memberAnswerRepository.findByMemberAnswerCategory_ExamPaper(examPaper);
+//
+//        log.info("풀지않은 문제를 확인");
+//
+//            MemberAnswer memberAnswer = memberAnswerList.stream()
+//                    .filter(m -> m.getMyAnswer().equals(""))
+//                    .collect(Collectors.toList())
+//                    .get(0);
+//
+//        return ExamRefreshResponseDto.examDTO(memberAnswer.getExamQuest().entityToDto(), memberAnswerList.size());
+//
+//    }
 
     @Transactional
     public ExamNextQuestResponse setQuest(Long examPaperId){

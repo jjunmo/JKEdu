@@ -43,10 +43,10 @@ public class ExamRestController {
     }
 
 
-    @GetMapping("/next")
-    public HttpEntity<ExamRefreshResponseDto> examRefresh(@RequestParam("answer-paper") Long examPaperId){
-        return ResponseEntity.ok(examService.examRefresh(examPaperId));
-    }
+//    @GetMapping("/next")
+//    public HttpEntity<ExamRefreshResponseDto> examRefresh(@RequestParam("answer-paper") Long examPaperId){
+//        return ResponseEntity.ok(examService.examRefresh(examPaperId));
+//    }
 
     @PostMapping("/next")
     public HttpEntity<ExamNextQuestResponse> getNextQuest(@RequestParam(value ="answer-paper") Long examPaperId, @RequestBody NextQuestRequest request){
