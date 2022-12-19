@@ -80,15 +80,10 @@ public class WebSecurityConfig implements WebMvcConfigurer {
                 .and()
                 .authorizeRequests()
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-
-                .antMatchers("/auth/**").anonymous()
-                .antMatchers("/member/excheck/**","/member/cert/**","/member/check/**").permitAll()
-                .antMatchers("/member/**","/exam/**").hasAnyRole("USER","ACADEMY","ADMIN")
                 //.antMatchers("/auth/**","/member/**","/upload/**","/csv_read/**")
-                .antMatchers("/**","/csv_read").permitAll()
+                .antMatchers("/member/*").permitAll()
+                .antMatchers("/**").permitAll()
                 .anyRequest().authenticated()
-
-
 
                 .and()
                 .apply(new JwtSecurityConfig(tokenProvider));
