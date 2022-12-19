@@ -83,7 +83,7 @@ public class WebSecurityConfig implements WebMvcConfigurer {
 
                 .antMatchers("/auth/**").anonymous()
                 .antMatchers("/member/excheck/**","/member/cert/**","/member/check/**").permitAll()
-                .antMatchers("/member/**","/exam/**").hasAnyAuthority("ROLE_USER","ROLE_ACADEMY")
+                .antMatchers("/member/**","/exam/**").hasAnyRole("USER","ACADEMY","ADMIN")
                 //.antMatchers("/auth/**","/member/**","/upload/**","/csv_read/**")
                 .antMatchers("/**","/csv_read").permitAll()
                 .anyRequest().authenticated()
