@@ -114,20 +114,21 @@ public class ExamService {
             member = memberOptional.orElseGet(this::isMemberCurrent);
 
             Optional<MemberAnswer> memberAnswerOptional=memberAnswerRepository.findByMyAnswerAndExamQuest_ExamCategory_ExamAndMemberAnswerCategory_Member("",Exam.valueOf(exam),member);
-
             if(memberAnswerOptional.isPresent()) return TestResponseDto.statusOk(memberAnswerOptional.get().getMemberAnswerCategory().getExamPaper());
-        }
 
-        Member memberAcademy = memberRepository.findByRoleAndAcademyId(Role.ROLE_ACADEMY,member.getAcademyId());
+            Member memberAcademy = memberRepository.findByRoleAndAcademyId(Role.ROLE_ACADEMY,member.getAcademyId());
+            if(Objects.equals(member.getRole(), Role.ROLE_ACADEMY_STUDENT))
 
-        if(Objects.equals(member.getRole(), Role.ROLE_ACADEMY_STUDENT))
+                if (memberAcademy.getTestCount() <= 0) throw new MyInternalServerException("해당 학원에 테스트 횟수가 없습니다.");
+                else {
+                    memberAcademy.setTestCount(memberAcademy.getTestCount() - 1);
+                    memberRepository.save(memberAcademy);
+                }
 
-            if (memberAcademy.getTestCount() <= 0) throw new MyInternalServerException("해당 학원에 테스트 횟수가 없습니다.");
-            else {
-                memberAcademy.setTestCount(memberAcademy.getTestCount() - 1);
-                memberRepository.save(memberAcademy);
-            }
-        else {
+        } else {
+
+            Optional<MemberAnswer> memberAnswerOptional=memberAnswerRepository.findByMyAnswerAndExamQuest_ExamCategory_ExamAndMemberAnswerCategory_Member("",Exam.valueOf(exam),member);
+            if(memberAnswerOptional.isPresent()) return TestResponseDto.statusOk(memberAnswerOptional.get().getMemberAnswerCategory().getExamPaper());
 
             if (member.getTestCount() <= 0) throw new MyInternalServerException("테스트 횟수가 없습니다.");
             else {
@@ -248,21 +249,21 @@ public class ExamService {
 
     }
 
-//    public ExamRefreshResponseDto examRefresh(Long examPaperId) {
-//        ExamPaper examPaper=isExamPaper(examPaperId);
-//
-//        List<MemberAnswer> memberAnswerList=memberAnswerRepository.findByMemberAnswerCategory_ExamPaper(examPaper);
-//
-//        log.info("풀지않은 문제를 확인");
-//
-//            MemberAnswer memberAnswer = memberAnswerList.stream()
-//                    .filter(m -> m.getMyAnswer().equals(""))
-//                    .collect(Collectors.toList())
-//                    .get(0);
-//
-//        return ExamRefreshResponseDto.examDTO(memberAnswer.getExamQuest().entityToDto(), memberAnswerList.size());
-//
-//    }
+    public ExamRefreshResponseDto examRefresh(Long examPaperId) {
+        ExamPaper examPaper=isExamPaper(examPaperId);
+
+        List<MemberAnswer> memberAnswerList=memberAnswerRepository.findByMemberAnswerCategory_ExamPaper(examPaper);
+
+        log.info("풀지않은 문제를 확인");
+
+            MemberAnswer memberAnswer = memberAnswerList.stream()
+                    .filter(m -> m.getMyAnswer().equals(""))
+                    .collect(Collectors.toList())
+                    .get(0);
+
+        return ExamRefreshResponseDto.examDTO(memberAnswer.getExamQuest().entityToDto(), memberAnswerList.size());
+
+    }
 
     @Transactional
     public ExamNextQuestResponse setQuest(Long examPaperId){
