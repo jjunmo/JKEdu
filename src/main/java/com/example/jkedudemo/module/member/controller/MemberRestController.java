@@ -8,9 +8,14 @@ import com.example.jkedudemo.module.member.dto.response.*;
 import com.example.jkedudemo.module.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -147,5 +152,11 @@ public class MemberRestController {
     @PostMapping("/academy/exam")
     public HttpEntity<AcademyMemberResponseDto> academyMember(@RequestBody AcademyMemberRequestDto request) {
         return ResponseEntity.ok(memberService.setAcademyMember(request));
+    }
+
+    @GetMapping("/management")
+    public HttpEntity<ManagementResponseDto> academyMemberList(@RequestParam(defaultValue = "0",required = false) int pageNo,@PageableDefault(size = 10) Pageable pageable){
+
+        return ResponseEntity.ok(memberService.find(pageable));
     }
 }

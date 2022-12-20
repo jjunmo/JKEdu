@@ -17,6 +17,8 @@ import lombok.extern.slf4j.Slf4j;
 import net.nurigo.java_sdk.api.Message;
 import net.nurigo.java_sdk.exceptions.CoolsmsException;
 import org.json.simple.JSONObject;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -273,5 +275,14 @@ public class MemberService {
     public TestCountResopnseDto getTestCount(){
         Member member = isMemberCurrent();
         return TestCountResopnseDto.testCount(member);
+    }
+
+    public ManagementResponseDto find(Pageable pageable){
+        Member member = isMemberCurrent();
+        Page<AcademyMemberListResponseDto> academyMemberListResponseDtoList=
+                memberRepository.findByAcademyIdAndRoleOrderByIdAsc(member.getAcademyId(),Role.ROLE_ACADEMY_STUDENT,pageable)
+                .map(AcademyMemberListResponseDto::find);
+        return ManagementResponseDto.getPage(academyMemberListResponseDtoList.getTotalPages(),academyMemberListResponseDtoList.getContent());
+
     }
 }

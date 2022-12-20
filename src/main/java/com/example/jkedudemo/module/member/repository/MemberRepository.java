@@ -2,8 +2,9 @@ package com.example.jkedudemo.module.member.repository;
 
 import com.example.jkedudemo.module.common.enums.member.Role;
 import com.example.jkedudemo.module.common.enums.member.Status;
-import com.example.jkedudemo.module.member.dto.request.AcademyMemberRequestDto;
 import com.example.jkedudemo.module.member.entity.Member;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Collection;
@@ -24,5 +25,7 @@ public interface MemberRepository extends JpaRepository<Member,Long> {
 
     //학원 학생 리스트 조회
     Optional<Member> findByPhoneAndRoleAndAcademyId(String phone , Role role , String academyId);
+
+    Page<Member> findByAcademyIdAndRoleOrderByIdAsc(String academyId,Role role, Pageable pageable);
 
 }
