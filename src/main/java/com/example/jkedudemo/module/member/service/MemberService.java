@@ -185,13 +185,14 @@ public class MemberService {
         if(requestDto.getPhone().isBlank()||requestDto.getPhone()==null)
             throw new MyInternalServerException("전화번호를 입력하세요.");
 
-        Optional<Member> memberOptional = memberRepository.findByPhoneAndRoleAndAcademyId(requestDto.getPhone(), Role.ROLE_ACADEMY_STUDENT, member.getAcademyId());
+        Optional<Member> memberOptional = memberRepository.findByPhoneAndRoleAndAcademyIdAndStatus(requestDto.getPhone(), Role.ROLE_ACADEMY_STUDENT, member.getAcademyId(),Status.GREEN);
 
         if(memberOptional.isPresent()){
             Member member1=memberOptional.get();
             return new AcademyMemberResponseDto("200","already",member1.getId());
         }
-        Member member1 = new Member(requestDto.getPhone(),requestDto.getName(),requestDto.getBirth(),Role.ROLE_ACADEMY_STUDENT, member.getAcademyId());
+
+        Member member1 = new Member(requestDto.getPhone(),requestDto.getName(),requestDto.getBirth(),Role.ROLE_ACADEMY_STUDENT, member.getAcademyId(),Status.GREEN);
 
         if(requestDto.getName().isBlank()||requestDto.getName()==null) return new AcademyMemberResponseDto("200", "ready");
         else{
@@ -277,12 +278,34 @@ public class MemberService {
         return TestCountResopnseDto.testCount(member);
     }
 
-    public ManagementResponseDto find(Pageable pageable){
+    public AcademyManagementResponseDto findAll(Pageable pageable){
         Member member = isMemberCurrent();
         Page<AcademyMemberListResponseDto> academyMemberListResponseDtoList=
-                memberRepository.findByAcademyIdAndRoleOrderByIdAsc(member.getAcademyId(),Role.ROLE_ACADEMY_STUDENT,pageable)
+                memberRepository.findByAcademyIdAndRoleAndStatusOrderByIdAsc(member.getAcademyId(),Role.ROLE_ACADEMY_STUDENT,Status.GREEN,pageable)
                 .map(AcademyMemberListResponseDto::find);
-        return ManagementResponseDto.getPage(academyMemberListResponseDtoList.getTotalPages(),academyMemberListResponseDtoList.getContent());
+        return AcademyManagementResponseDto.getPage(academyMemberListResponseDtoList.getTotalPages(),academyMemberListResponseDtoList.getContent());
 
+    }
+
+    public AcademyManagementResponseDto find(String naming , Pageable pageable){
+        Member member=isMemberCurrent();
+        Page<AcademyMemberListResponseDto> academyMemberListResponseDtoList=
+                memberRepository.findByAcademyIdAndRoleAndStatusAndNameContainingOrderByIdAsc(member.getAcademyId(),Role.ROLE_ACADEMY_STUDENT,Status.GREEN,naming,pageable)
+                        .map(AcademyMemberListResponseDto::find);
+        return AcademyManagementResponseDto.getPage(academyMemberListResponseDtoList.getTotalPages(),academyMemberListResponseDtoList.getContent());
+    }
+
+    public MemberStatusOkResponseDto deleteAcademyMember(Long studentId){
+        Member member=isMemberCurrent();
+
+        Optional<Member> memberOptional=memberRepository.findById(studentId);
+
+        if(memberOptional.isEmpty()) throw new MyInternalServerException("존재하지 않는 학생 입니다.");
+
+        Member academyStudentMember=memberOptional.get();
+        academyStudentMember.setStatus(Status.RED);
+        memberRepository.save(academyStudentMember);
+
+        return MemberStatusOkResponseDto.statusOk();
     }
 }

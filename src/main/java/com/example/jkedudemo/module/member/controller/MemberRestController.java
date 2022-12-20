@@ -8,14 +8,11 @@ import com.example.jkedudemo.module.member.dto.response.*;
 import com.example.jkedudemo.module.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -155,8 +152,20 @@ public class MemberRestController {
     }
 
     @GetMapping("/management")
-    public HttpEntity<ManagementResponseDto> academyMemberList(@RequestParam(defaultValue = "0",required = false) int pageNo,@PageableDefault(size = 10) Pageable pageable){
+    public HttpEntity<AcademyManagementResponseDto> academyMemberList(@RequestParam(defaultValue = "0",required = false) int page, @PageableDefault(size = 10) Pageable pageable){
 
-        return ResponseEntity.ok(memberService.find(pageable));
+        return ResponseEntity.ok(memberService.findAll(pageable));
     }
+
+    @GetMapping("/management/search")
+    public HttpEntity<AcademyManagementResponseDto> academyMemberList(@RequestParam(value = "name") String naming, @PageableDefault(size = 10) Pageable pageable){
+
+        return ResponseEntity.ok(memberService.find(naming,pageable));
+    }
+
+    @PostMapping("/management")
+    public HttpEntity<MemberStatusOkResponseDto> setAcademyMemberDelete(@RequestParam(value="student") Long studentId) {
+        return ResponseEntity.ok(memberService.deleteAcademyMember(studentId));
+    }
+
 }

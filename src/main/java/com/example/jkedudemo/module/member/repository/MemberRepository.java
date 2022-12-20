@@ -24,8 +24,10 @@ public interface MemberRepository extends JpaRepository<Member,Long> {
     Member findByRoleAndAcademyId(Role role,String academyId);
 
     //학원 학생 리스트 조회
-    Optional<Member> findByPhoneAndRoleAndAcademyId(String phone , Role role , String academyId);
+    Optional<Member> findByPhoneAndRoleAndAcademyIdAndStatus(String phone , Role role , String academyId ,Status status);
 
-    Page<Member> findByAcademyIdAndRoleOrderByIdAsc(String academyId,Role role, Pageable pageable);
+    Page<Member> findByAcademyIdAndRoleAndStatusOrderByIdAsc(String academyId,Role role,Status status, Pageable pageable);
+
+    Page<Member> findByAcademyIdAndRoleAndStatusAndNameContainingOrderByIdAsc(String academyId,Role role,Status status,String naming, Pageable pageable);
 
 }

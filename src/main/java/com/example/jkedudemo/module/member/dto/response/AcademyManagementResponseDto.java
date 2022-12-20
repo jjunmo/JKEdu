@@ -11,17 +11,17 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ManagementResponseDto {
+public class AcademyManagementResponseDto {
     private String status;
     private String message;
-    private int allPage;
+    private int pages;
     private List<AcademyMemberListResponseDto> academyMemberListResponseDtoList;
 
-    public static ManagementResponseDto getPage(int allPage, List<AcademyMemberListResponseDto> academyMemberListResponseDtoList){
-        return ManagementResponseDto.builder()
+    public static AcademyManagementResponseDto getPage(int pages, List<AcademyMemberListResponseDto> academyMemberListResponseDtoList){
+        return AcademyManagementResponseDto.builder()
                 .status("200")
                 .message("OK")
-                .allPage(allPage)
+                .pages(pages)
                 .academyMemberListResponseDtoList(academyMemberListResponseDtoList)
                 .build();
     }

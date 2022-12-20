@@ -52,12 +52,13 @@ public class Member extends BaseTime {
 //    private int levelScore=0;
 
     //학원 학생
-    public Member(String phone, String name, Date birth, Role role, String academyId) {
+    public Member(String phone, String name, Date birth, Role role, String academyId,Status status) {
         this.phone=phone;
         this.name=name;
         this.birth=birth;
         this.role=role;
         this.academyId=academyId;
+        this.status=status;
     }
 
     //TODO: 약관동의 체크
