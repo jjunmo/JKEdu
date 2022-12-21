@@ -15,7 +15,7 @@ import javax.persistence.*;
 @Builder
 @Entity
 @Table(name = "MEMBER_EXAM_PAPER")
-public class ExamPaper extends BaseTime {
+public class ExamPaper {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,5 +26,9 @@ public class ExamPaper extends BaseTime {
 
     @Enumerated(EnumType.STRING)
     private Exam examCategory;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "MEMBER_EXAM_RESULT")
+    private ExamResult examResult;
 
 }

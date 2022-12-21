@@ -1,10 +1,7 @@
 package com.example.jkedudemo.module.exam.controller;
 
 import com.example.jkedudemo.module.exam.dto.request.NextQuestRequest;
-import com.example.jkedudemo.module.exam.dto.response.ExamFirstQuestResponse;
-import com.example.jkedudemo.module.exam.dto.response.ExamNextQuestResponse;
-import com.example.jkedudemo.module.exam.dto.response.ExamRefreshResponseDto;
-import com.example.jkedudemo.module.exam.dto.response.TestResponseDto;
+import com.example.jkedudemo.module.exam.dto.response.*;
 import com.example.jkedudemo.module.exam.service.ExamService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,10 +33,10 @@ public class ExamRestController {
      * @param studentId ROLE_ACADEMY 경우 응시 전 넘어옴
      * @return  examPaper,memberAnswerCategory save
      */
-    @PostMapping("/check")
-    public HttpEntity<TestResponseDto> test(@RequestParam("category") String exam,@RequestParam(value="student",required = false) Long studentId){
+    @PostMapping("/check/{examId}")
+    public HttpEntity<TestResponseDto> test(@PathVariable Long examId,@RequestParam("category") String exam,@RequestParam(value="student",required = false) Long studentId){
 
-        return ResponseEntity.ok(examService.test(exam,studentId));
+        return ResponseEntity.ok(examService.test(examId,exam,studentId));
     }
 
 
@@ -60,6 +57,11 @@ public class ExamRestController {
     @PostMapping("/run")
     public HttpEntity<ExamNextQuestResponse> setQuest(@RequestParam(value ="answer-paper") Long examPaperId){
         return ResponseEntity.ok(examService.setQuest(examPaperId));
+    }
+
+    @PostMapping("/new")
+    public HttpEntity<ExamStartResponseDto> examStart(){
+        return ResponseEntity.ok(examService.examStart());
     }
 
 }

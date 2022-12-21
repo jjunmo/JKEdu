@@ -7,10 +7,7 @@ import com.example.jkedudemo.module.common.enums.exam.Quest;
 import com.example.jkedudemo.module.common.enums.member.Role;
 import com.example.jkedudemo.module.config.SecurityUtil;
 import com.example.jkedudemo.module.exam.dto.request.NextQuestRequest;
-import com.example.jkedudemo.module.exam.dto.response.ExamFirstQuestResponse;
-import com.example.jkedudemo.module.exam.dto.response.ExamNextQuestResponse;
-import com.example.jkedudemo.module.exam.dto.response.ExamRefreshResponseDto;
-import com.example.jkedudemo.module.exam.dto.response.TestResponseDto;
+import com.example.jkedudemo.module.exam.dto.response.*;
 import com.example.jkedudemo.module.exam.entity.*;
 import com.example.jkedudemo.module.exam.repository.*;
 import com.example.jkedudemo.module.handler.MyInternalServerException;
@@ -39,6 +36,7 @@ public class ExamService {
     private final MemberAnswerRepository memberAnswerRepository;
     private final MemberAnswerCategoryRepository memberAnswerCategoryRepository;
     private final ExamPaperRepository examPaperRepository;
+    private final ExamResultRepository examResultRepository;
 
     Random rand = new Random();
 
@@ -106,8 +104,11 @@ public class ExamService {
     }
 
     @Transactional
-    public TestResponseDto test(String exam,Long studentId){
+    public TestResponseDto test(Long examId,String exam,Long studentId){
         Member member=isMemberCurrent();
+        Optional<ExamResult> examResultOptional=examResultRepository.findById(examId);
+
+        if(examResultOptional.isEmpty()) throw new MyInternalServerException("잘못된 접근입니다. 시험을 처음부터 다시 시작하세요. examResult null");
 
         if(Objects.equals(member.getRole(), Role.ROLE_ACADEMY)) {
             Optional<Member> memberOptional = memberRepository.findById(studentId);
@@ -137,7 +138,7 @@ public class ExamService {
             }
         }
 
-        ExamPaper examPaper=examPaperRepository.save(new ExamPaper(null,null, Exam.valueOf(exam)));
+        ExamPaper examPaper=examPaperRepository.save(new ExamPaper(null,null, Exam.valueOf(exam),examResultOptional.get()));
         memberAnswerCategoryRepository.save(new MemberAnswerCategory(null,member,null,examPaper));
 
         return TestResponseDto.statusOk(examPaper);
@@ -153,7 +154,7 @@ public class ExamService {
         if(memberAnswerCategoryList.isEmpty()) throw new MyInternalServerException("올바른 접근이 아닙니다.no examPaper");
 
         if(Objects.equals(member.getRole(), Role.ROLE_ACADEMY)) {
-            Optional<Member> memberOptional = memberRepository.findById(memberAnswerCategoryList.get(0).getMember().getId());
+            Optional<Member> memberOptional = memberRepository.findById(examPaper.getExamResult().getMember().getId());
             member = memberOptional.orElseGet(this::isMemberCurrent);
         }
 
@@ -289,8 +290,28 @@ public class ExamService {
             examPaperRepository.save(examPaper);
 
             return ExamNextQuestResponse.examDTO2();
+        }
+
+        @Transactional
+        public ExamStartResponseDto examStart(){
+            Member member=isMemberCurrent();
+            List<ExamResult> examResultList=examResultRepository.findByMember(member);
+
+            log.info("examResultList empty 확인");
+            if(examResultList.isEmpty()) return ExamStartResponseDto.start(examResultRepository.save(new ExamResult(null,member)));
+
+            log.info("examResultList stream");
+            Optional<ExamResult> examResultOptional=examResultList
+                    .stream()
+                    .filter(er->!examPaperRepository.existsByExamResult(er))
+                    .findFirst();
+
+            if(examResultOptional.isEmpty()){
+                log.info("examResult는 있지만 examPaper가 없는 경우가 없다");
+                return ExamStartResponseDto.start(examResultRepository.save(new ExamResult(null,member)));}
+
+            else return ExamStartResponseDto.start(examResultOptional.get());
 
         }
 
     }
-

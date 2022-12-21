@@ -61,6 +61,8 @@ public class Member extends BaseTime {
         this.status=status;
     }
 
+
+
     //TODO: 약관동의 체크
 
 }
