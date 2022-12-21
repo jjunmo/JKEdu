@@ -19,6 +19,7 @@ import net.nurigo.java_sdk.exceptions.CoolsmsException;
 import org.json.simple.JSONObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -280,19 +281,19 @@ public class MemberService {
 
     public AcademyManagementResponseDto findAll(Pageable pageable){
         Member member = isMemberCurrent();
-        Page<AcademyMemberListResponseDto> academyMemberListResponseDtoList=
+        Slice<AcademyMemberListResponseDto> academyMemberListResponseDtoList=
                 memberRepository.findByAcademyIdAndRoleAndStatusOrderByIdAsc(member.getAcademyId(),Role.ROLE_ACADEMY_STUDENT,Status.GREEN,pageable)
                 .map(AcademyMemberListResponseDto::find);
-        return AcademyManagementResponseDto.getPage(academyMemberListResponseDtoList.getTotalPages(),academyMemberListResponseDtoList.getContent());
+        return AcademyManagementResponseDto.getPage(academyMemberListResponseDtoList.hasNext(),academyMemberListResponseDtoList.getContent());
 
     }
 
     public AcademyManagementResponseDto find(String naming , Pageable pageable){
         Member member=isMemberCurrent();
-        Page<AcademyMemberListResponseDto> academyMemberListResponseDtoList=
+        Slice<AcademyMemberListResponseDto> academyMemberListResponseDtoList=
                 memberRepository.findByAcademyIdAndRoleAndStatusAndNameContainingOrderByIdAsc(member.getAcademyId(),Role.ROLE_ACADEMY_STUDENT,Status.GREEN,naming,pageable)
                         .map(AcademyMemberListResponseDto::find);
-        return AcademyManagementResponseDto.getPage(academyMemberListResponseDtoList.getTotalPages(),academyMemberListResponseDtoList.getContent());
+        return AcademyManagementResponseDto.getPage(academyMemberListResponseDtoList.hasNext(),academyMemberListResponseDtoList.getContent());
     }
 
     public MemberStatusOkResponseDto deleteAcademyMember(Long studentId){
