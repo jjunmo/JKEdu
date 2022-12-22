@@ -152,7 +152,7 @@ public class MemberRestController {
     }
 
     @GetMapping("/management")
-    public HttpEntity<AcademyManagementResponseDto> academyMemberList(@RequestParam(defaultValue = "0",required = false) int page, @PageableDefault(size = 10) Pageable pageable){
+    public HttpEntity<AcademyManagementResponseDto> academyMemberList( @PageableDefault(size = 10) Pageable pageable){
 
         return ResponseEntity.ok(memberService.findAll(pageable));
     }

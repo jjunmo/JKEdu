@@ -1,5 +1,6 @@
 package com.example.jkedudemo.module.member.dto.response;
 
+import com.example.jkedudemo.module.exam.entity.ExamResult;
 import com.example.jkedudemo.module.member.entity.Member;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,18 +15,12 @@ public class AcademyMemberResponseDto {
     private String status;
     private String condition;
     private Long studentId;
+    private Long examId;
 
     public AcademyMemberResponseDto(String status, String condition) {
         this.status=status;
         this.condition=condition;
     }
 
-    public static AcademyMemberResponseDto academyExamId(Member member){
-        return AcademyMemberResponseDto.builder()
-                .status("200")
-                .condition("")
-                .studentId(member.getId())
-                .build();
-    }
 
 }

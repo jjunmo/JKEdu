@@ -1,5 +1,9 @@
 package com.example.jkedudemo.module.member.service;
 
+import com.example.jkedudemo.module.exam.dto.response.ExamStartResponseDto;
+import com.example.jkedudemo.module.exam.entity.ExamResult;
+import com.example.jkedudemo.module.exam.repository.ExamPaperRepository;
+import com.example.jkedudemo.module.exam.repository.ExamResultRepository;
 import com.example.jkedudemo.module.handler.MyInternalServerException;
 import com.example.jkedudemo.module.common.enums.member.PhoneAuth;
 import com.example.jkedudemo.module.common.enums.member.Role;
@@ -37,6 +41,8 @@ public class MemberService {
 
     private final PasswordEncoder passwordEncoder;
     private final MemberRepository memberRepository;
+    private final ExamResultRepository examResultRepository;
+    private final ExamPaperRepository examPaperRepository;
 
     private final MemberPhoneAuthRepository memberPhoneAuthRepository;
 
@@ -190,7 +196,25 @@ public class MemberService {
 
         if(memberOptional.isPresent()){
             Member member1=memberOptional.get();
-            return new AcademyMemberResponseDto("200","already",member1.getId());
+            List<ExamResult> examResultList=examResultRepository.findByMember(member1);
+
+            log.info("examResultList empty 확인");
+            if(examResultList.isEmpty()) {
+                return new AcademyMemberResponseDto("200","already",member1.getId(),examResultRepository.save(new ExamResult(null,member1)).getId());
+            }
+
+            log.info("examResultList stream");
+            Optional<ExamResult> examResultOptional=examResultList
+                    .stream()
+                    .filter(er->!examPaperRepository.existsByExamResult(er))
+                    .findFirst();
+
+            if(examResultOptional.isEmpty()) {
+                log.info("examResult는 있지만 examPaper가 없는 경우가 없다");
+                return new AcademyMemberResponseDto("200", "already", member1.getId(), examResultRepository.save(new ExamResult(null, member1)).getId());
+            }
+            else return new AcademyMemberResponseDto("200","already",member1.getId(),examResultOptional.get().getId());
+
         }
 
         Member member1 = new Member(requestDto.getPhone(),requestDto.getName(),requestDto.getBirth(),Role.ROLE_ACADEMY_STUDENT, member.getAcademyId(),Status.GREEN);
@@ -199,7 +223,26 @@ public class MemberService {
         else{
             // name 유효성 체크
             memberRepository.save(member1);
-            return new AcademyMemberResponseDto("200", "go", member1.getId());
+
+            List<ExamResult> examResultList=examResultRepository.findByMember(member1);
+
+            log.info("examResultList empty 확인");
+            if(examResultList.isEmpty()) {
+                return new AcademyMemberResponseDto("200","go",member1.getId(),examResultRepository.save(new ExamResult(null,member1)).getId());
+            }
+
+            log.info("examResultList stream");
+            Optional<ExamResult> examResultOptional=examResultList
+                    .stream()
+                    .filter(er->!examPaperRepository.existsByExamResult(er))
+                    .findFirst();
+
+            if(examResultOptional.isEmpty()) {
+                log.info("examResult는 있지만 examPaper가 없는 경우가 없다");
+                return new AcademyMemberResponseDto("200", "go", member1.getId(), examResultRepository.save(new ExamResult(null, member1)).getId());
+            }
+            else return new AcademyMemberResponseDto("200","go",member1.getId(),examResultOptional.get().getId());
+
         }
 
     }
@@ -220,7 +263,7 @@ public class MemberService {
         if(email.isEmpty()) throw new MyInternalServerException("이메일을 입력하세요.");
 
         //인증번호 확인
-        String result = certifiedPhoneCheck(phone,smscode,phoneauth);
+        certifiedPhoneCheck(phone,smscode,phoneauth);
 
         Optional<Member> memberOptional = memberRepository.findByPhoneAndStatusIn(phone,List.of(Status.GREEN,Status.YELLOW));
 
@@ -297,7 +340,7 @@ public class MemberService {
     }
 
     public MemberStatusOkResponseDto deleteAcademyMember(Long studentId){
-        Member member=isMemberCurrent();
+       isMemberCurrent();
 
         Optional<Member> memberOptional=memberRepository.findById(studentId);
 
