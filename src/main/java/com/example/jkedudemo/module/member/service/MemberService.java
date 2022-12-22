@@ -339,6 +339,7 @@ public class MemberService {
         return AcademyManagementResponseDto.getPage(academyMemberListResponseDtoList.hasNext(),academyMemberListResponseDtoList.getContent());
     }
 
+    @Transactional
     public MemberStatusOkResponseDto deleteAcademyMember(Long studentId){
        isMemberCurrent();
 

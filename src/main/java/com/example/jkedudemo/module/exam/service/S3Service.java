@@ -65,6 +65,7 @@ public class S3Service {
                 String[] data = line.split(",", 0);
 
                 if(storedFileName.contains("Category")) {
+                    data[0]=data[0].replace("\uFEFF", "");
                     ExamCategory examCategory = new ExamCategory(data[0], data[1]);
                     em.persist(examCategory);
                 }
@@ -79,9 +80,21 @@ public class S3Service {
 
                     ExamQuest examQuest = new ExamQuest(data[0],
                             examCategory1, data[2],
-                            data[3].replace("^","\"").replace("*",",").replace(";","'"),
-                            data[4].replace("^","\"").replace("*",",").replace(";","'"),
-                            data[5].replace("^","\"").replace("*",",").replace(";","'"),
+                            data[3]
+                                    .replace("^","\"")
+                                    .replace("*",",")
+                                    .replace(";","'")
+                                    .replace("$","\n"),
+                            data[4]
+                                    .replace("^","\"")
+                                    .replace("*",",")
+                                    .replace(";","'")
+                                    .replace("$","\n"),
+                            data[5]
+                                    .replace("^","\"")
+                                    .replace("*",",")
+                                    .replace(";","'")
+                                    .replace("$","\n"),
                             data[6], data[7], data[8], data[9]);
                     em.persist(examQuest);
                 }
@@ -92,7 +105,14 @@ public class S3Service {
 
                     if (examQuest.isPresent()) examQuest1 = examQuest.get();
 
-                    ExamMultipleChoice examMultipleChoice= new ExamMultipleChoice(data[0],examQuest1,data[2],data[3]);
+                    data[0]=data[0].replace("\uFEFF", "");
+
+                    ExamMultipleChoice examMultipleChoice= new ExamMultipleChoice(data[0],examQuest1,data[2],
+                            data[3]
+                                    .replace("^","\"")
+                                    .replace("*",",")
+                                    .replace(";","'")
+                                    .replace("$","\n"));
                     em.persist(examMultipleChoice);
                 }
 
