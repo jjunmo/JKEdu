@@ -164,7 +164,7 @@ public class MemberRestController {
     }
 
     @PostMapping("/management")
-    public HttpEntity<MemberStatusOkResponseDto> setAcademyMemberDelete(@RequestParam(value="student") Long studentId) {
+    public HttpEntity<MemberStatusOkResponseDto> setAcademyMemberDelete(@RequestParam(value="student-id") Long studentId) {
         return ResponseEntity.ok(memberService.deleteAcademyMember(studentId));
     }
 

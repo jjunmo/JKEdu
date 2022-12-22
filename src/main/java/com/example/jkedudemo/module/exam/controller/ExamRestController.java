@@ -23,7 +23,7 @@ public class ExamRestController {
      * @return 시험중인 문제 , 랜덤으로 첫문제
      */
     @PostMapping
-    public HttpEntity<ExamFirstQuestResponse> getQuest(@RequestParam("answer-paper") Long examPaperId){
+    public HttpEntity<ExamFirstQuestResponse> getQuest(@RequestParam("answer-paper-id") Long examPaperId){
         return ResponseEntity.ok(examService.ExamFirstQuest(examPaperId));
     }
 
@@ -33,20 +33,20 @@ public class ExamRestController {
      * @param studentId ROLE_ACADEMY 경우 응시 전 넘어옴
      * @return  examPaper,memberAnswerCategory save
      */
-    @PostMapping("/check/{examId}")
-    public HttpEntity<TestResponseDto> test(@PathVariable Long examId,@RequestParam("category") String exam,@RequestParam(value="student",required = false) Long studentId){
+    @PostMapping("/check")
+    public HttpEntity<TestResponseDto> test(@RequestParam(value = "exam-id") Long examId,@RequestParam("category") String exam,@RequestParam(value="student-id",required = false) Long studentId){
 
         return ResponseEntity.ok(examService.test(examId,exam,studentId));
     }
 
 
     @GetMapping("/next")
-    public HttpEntity<ExamRefreshResponseDto> examRefresh(@RequestParam("answer-paper") Long examPaperId){
+    public HttpEntity<ExamRefreshResponseDto> examRefresh(@RequestParam("answer-paper-id") Long examPaperId){
         return ResponseEntity.ok(examService.examRefresh(examPaperId));
     }
 
     @PostMapping("/next")
-    public HttpEntity<ExamNextQuestResponse> getNextQuest(@RequestParam(value ="answer-paper") Long examPaperId, @RequestBody NextQuestRequest request){
+    public HttpEntity<ExamNextQuestResponse> getNextQuest(@RequestParam(value = "answer-paper-id") Long examPaperId, @RequestBody NextQuestRequest request){
         String nextEnd = examService.nextEnd(examPaperId);
 
         if(nextEnd.equals("NEXT")) return ResponseEntity.ok(examService.examNextQuestResponse(request,examPaperId));
@@ -55,7 +55,7 @@ public class ExamRestController {
     }
 
     @PostMapping("/run")
-    public HttpEntity<ExamNextQuestResponse> setQuest(@RequestParam(value ="answer-paper") Long examPaperId){
+    public HttpEntity<ExamNextQuestResponse> setQuest(@RequestParam(value = "answer-paper-id") Long examPaperId){
         return ResponseEntity.ok(examService.setQuest(examPaperId));
     }
 
