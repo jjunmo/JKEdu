@@ -63,9 +63,7 @@ public class WebSecurityConfig implements WebMvcConfigurer {
 
                 .and()
                 .httpBasic().disable()
-                .csrf()
-                .disable()
-
+                .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 
                 .and()
@@ -76,13 +74,13 @@ public class WebSecurityConfig implements WebMvcConfigurer {
                 .exceptionHandling()
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 .accessDeniedHandler(jwtAccessDeniedHandler)
+
                 //TODO: URL 권한 설정 미구현
                 .and()
                 .authorizeRequests()
-                .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-                //.antMatchers("/auth/**","/member/**","/upload/**","/csv_read/**")
-                .antMatchers("/member/*").permitAll()
-                .antMatchers("/**").permitAll()
+                .requestMatchers(CorsUtils::isPreFlightRequest)
+                .permitAll()
+                .antMatchers("/login/**","/singup/**","/findid","/findpw").permitAll()
                 .anyRequest().authenticated()
 
                 .and()
