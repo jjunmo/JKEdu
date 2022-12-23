@@ -59,3 +59,7 @@ logging:
         type:
           descriptor:
             sql: debug
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    use-root-path: true

@@ -43,6 +43,7 @@ dependencies {
     implementation group: 'com.amazonaws', name: 'aws-java-sdk-s3', version: '1.12.172'
     //implementation 'org.springframework.boot:spring-boot-starter-batch'
     //runtimeOnly 'mysql:mysql-connector-java'
+    implementation 'org.springdoc:springdoc-openapi-ui:1.6.9'
 }
 
 
