@@ -32,7 +32,7 @@ public class AuthController {
      * @param requestDto memberRequestDto
      * @return OK,FAIL
      */
-    @PostMapping("/register")
+    @PostMapping("/member/register")
     public HttpEntity<MemberStatusOkResponseDto> signup(@RequestBody MemberRequestDto requestDto) {
         return ResponseEntity.ok(authService.signup(requestDto));
     }
@@ -42,7 +42,7 @@ public class AuthController {
      * @param requestDto email ,password
      * @return JWT Token ,token expire , Bearer
      */
-    @PostMapping("/login")
+    @PostMapping("/member/login")
     public HttpEntity<TokenDto> login(@RequestBody MemberRequestDto requestDto,@RequestHeader("User-Agent") String userAgent) {
         return ResponseEntity.ok(authService.login(requestDto,userAgent));
     }
