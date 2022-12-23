@@ -80,7 +80,7 @@ public class WebSecurityConfig implements WebMvcConfigurer {
                 .authorizeRequests()
                 .requestMatchers(CorsUtils::isPreFlightRequest)
                 .permitAll()
-                .antMatchers("/login/**","/singup/**","/findid","/findpw").permitAll()
+                .antMatchers("/").permitAll()
                 .anyRequest().authenticated()
 
                 .and()
