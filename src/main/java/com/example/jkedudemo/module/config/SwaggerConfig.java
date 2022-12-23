@@ -13,7 +13,7 @@ public class SwaggerConfig {
     @Bean
     public GroupedOpenApi jwtApi() {
         return GroupedOpenApi.builder()
-                .group("jwt-api")
+                .group("Jkedu-demo-api")
                 .pathsToMatch("/**")
                 .build();
     }
@@ -22,8 +22,8 @@ public class SwaggerConfig {
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
                 .components(new Components())
-                .info(new Info().title("Spring Boot API Example")
-                        .description("Spring Boot API 예시 프로젝트입니다.")
+                .info(new Info().title("Jkedu-demo Spring boot API Example")
+                        .description("Jkedu-demo.")
                         .version("v0.0.1"));
     }
 }
