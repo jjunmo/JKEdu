@@ -323,7 +323,7 @@ public class ExamService {
 
         ExamResult examResult=examResultOptional.get();
 
-        List<ExamPaper> examPaperList=examPaperRepository.findByExamResult(examResult);
+        List<ExamPaper> examPaperList=examPaperRepository.findByExamResultAndLevelIn(examResult,List.of(Level.PRE_A1,Level.A1,Level.A2,Level.B1,Level.B2,Level.C));
 
         List<Exam> examList=examPaperList.stream()
                 .map(ExamPaper::getExamCategory)
