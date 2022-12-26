@@ -12,4 +12,6 @@ public interface ExamPaperRepository extends JpaRepository<ExamPaper,Long> {
 
     boolean existsByExamResult(ExamResult examResult);
 
+    List<ExamPaper> findByExamResult(ExamResult examResult);
+
 }

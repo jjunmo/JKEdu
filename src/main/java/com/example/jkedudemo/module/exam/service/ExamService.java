@@ -63,7 +63,9 @@ public class ExamService {
         List<MemberAnswer> memberAnswerList=memberAnswerRepository.findByMemberAnswerCategory_ExamPaper(examPaper);
         List<MemberAnswerCategory> memberAnswerCategoryList=memberAnswerCategoryRepository.findByExamPaper(examPaper);
 
-        boolean memberAnswerGet = memberAnswerList.stream().anyMatch(m->m.getMyAnswer().equals(""));
+        boolean memberAnswerGet =
+                memberAnswerList.stream()
+                                .anyMatch(m->m.getMyAnswer().equals(""));
 
         if (!memberAnswerGet) {
 
@@ -267,51 +269,68 @@ public class ExamService {
     }
 
     @Transactional
-    public ExamNextQuestResponse setQuest(Long examPaperId){
-            ExamPaper examPaper=isExamPaper(examPaperId);
+    public ExamNextQuestResponse setQuest(Long examPaperId) {
+        ExamPaper examPaper = isExamPaper(examPaperId);
 
-            List<MemberAnswer> memberAnswerList=memberAnswerRepository.findByMemberAnswerCategory_ExamPaper(examPaper);
+        List<MemberAnswer> memberAnswerList = memberAnswerRepository.findByMemberAnswerCategory_ExamPaper(examPaper);
 
-            MemberAnswer memberAnswer = memberAnswerList.stream()
+        MemberAnswer memberAnswer = memberAnswerList.stream()
                 .filter(m -> Objects.equals(m.getMyAnswer(), ""))
                 .collect(Collectors.toList())
                 .get(0);
 
-            memberAnswer.setMyAnswer("0");
+        memberAnswer.setMyAnswer("0");
 
-            memberAnswerRepository.save(memberAnswer);
+        memberAnswerRepository.save(memberAnswer);
 
-            //맞춘 문제 확인해서 시험 등급측정
-            List<MemberAnswer> memberAnswerResultList = memberAnswerRepository.findByMemberAnswerCategory_ExamPaperAndAnswerYN(examPaper, YN.Y);
-            int sum = memberAnswerResultList.stream().mapToInt(m -> m.getExamQuest().getLevel().getValue()).sum();
+        //맞춘 문제 확인해서 시험 등급측정
+        List<MemberAnswer> memberAnswerResultList = memberAnswerRepository.findByMemberAnswerCategory_ExamPaperAndAnswerYN(examPaper, YN.Y);
+        int sum = memberAnswerResultList.stream().mapToInt(m -> m.getExamQuest().getLevel().getValue()).sum();
 
-            examPaper.setLevel(Level.PRE_A1.getLevel(sum));
+        examPaper.setLevel(Level.PRE_A1.getLevel(sum));
 
-            examPaperRepository.save(examPaper);
+        examPaperRepository.save(examPaper);
 
-            return ExamNextQuestResponse.examDTO2();
-        }
+        return ExamNextQuestResponse.examDTO2();
 
-        @Transactional
-        public ExamStartResponseDto examStart(){
-            Member member=isMemberCurrent();
-            List<ExamResult> examResultList=examResultRepository.findByMember(member);
+    }
+    @Transactional
+    public ExamStartResponseDto examStart(){
+        Member member=isMemberCurrent();
+        List<ExamResult> examResultList=examResultRepository.findByMember(member);
 
-            log.info("examResultList empty 확인");
-            if(examResultList.isEmpty()) return ExamStartResponseDto.start(examResultRepository.save(new ExamResult(null,member)));
+        log.info("examResultList empty 확인");
+        if(examResultList.isEmpty()) return ExamStartResponseDto.start(examResultRepository.save(new ExamResult(null,member)));
 
-            log.info("examResultList stream");
-            Optional<ExamResult> examResultOptional=examResultList
-                    .stream()
-                    .filter(er->!examPaperRepository.existsByExamResult(er))
-                    .findFirst();
+        log.info("examResultList stream");
+        Optional<ExamResult> examResultOptional=examResultList
+                .stream()
+                .filter(er->!examPaperRepository.existsByExamResult(er))
+                .findFirst();
 
-            if(examResultOptional.isEmpty()){
-                log.info("examResult는 있지만 examPaper가 없는 경우가 없다");
-                return ExamStartResponseDto.start(examResultRepository.save(new ExamResult(null,member)));}
+        if(examResultOptional.isEmpty()){
+            log.info("examResult는 있지만 examPaper가 없는 경우가 없다");
+            return ExamStartResponseDto.start(examResultRepository.save(new ExamResult(null,member)));}
 
             else return ExamStartResponseDto.start(examResultOptional.get());
 
-        }
-
     }
+
+    public ExamResultCheckResponseDto resultCheck(Long examId){
+        Optional<ExamResult> examResultOptional=examResultRepository.findById(examId);
+
+        if(examResultOptional.isEmpty()) throw new MyInternalServerException("시험을 다시 시작하세요");
+
+        ExamResult examResult=examResultOptional.get();
+
+        List<ExamPaper> examPaperList=examPaperRepository.findByExamResult(examResult);
+
+        List<Exam> examList=examPaperList.stream()
+                .map(ExamPaper::getExamCategory)
+                .distinct()
+                .collect(Collectors.toList());
+
+        return ExamResultCheckResponseDto.start(examList);
+    }
+
+}

@@ -69,6 +69,15 @@ public class ExamRestController {
     @Operation(summary = "시험 응시", description = "시험 응시 examId 응답")
     public HttpEntity<ExamStartResponseDto> examStart(){
         return ResponseEntity.ok(examService.examStart());
+
     }
+
+    @GetMapping("/check")
+    @Operation(summary = "시험중 응시영역 확인", description = "응시된 영역")
+    public HttpEntity<ExamResultCheckResponseDto> resultCheck(@RequestParam(value = "exam-id") Long examId){
+
+        return ResponseEntity.ok(examService.resultCheck(examId));
+    }
+
 
 }
