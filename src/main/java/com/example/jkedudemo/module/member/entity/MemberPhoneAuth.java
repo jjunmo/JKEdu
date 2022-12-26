@@ -4,6 +4,7 @@ import com.example.jkedudemo.module.common.util.BaseTime;
 import com.example.jkedudemo.module.common.enums.member.PhoneAuth;
 import com.example.jkedudemo.module.common.enums.YN;
 import lombok.*;
+import org.hibernate.annotations.Comment;
 
 import javax.persistence.*;
 
@@ -22,19 +23,24 @@ public class MemberPhoneAuth extends BaseTime {
 
     @ManyToOne
     @JoinColumn(name = "MEMBER")
+    @Comment("사용자")
     private Member member;
-
+    @Comment("인증요청 번호")
     private String phone;
 
     //JOIN , ID ,PW
     @Enumerated(EnumType.STRING)
+    @Comment("인증요청 유형")
     private PhoneAuth phoneauth;
 
     //인증 여부
     @Enumerated(EnumType.STRING)
+    @Column(name = "Y_N")
+    @Comment("인증 여부")
     private YN checkYn;
 
     //인증 코드
+    @Comment("인증 코드")
     private String smscode;
 
 }

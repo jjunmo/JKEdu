@@ -3,6 +3,7 @@ package com.example.jkedudemo.module.exam.entity;
 import com.example.jkedudemo.module.common.util.BaseTime;
 import com.example.jkedudemo.module.member.entity.Member;
 import lombok.*;
+import org.hibernate.annotations.Comment;
 
 import javax.persistence.*;
 
@@ -21,6 +22,7 @@ public class ExamResult extends BaseTime {
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "MEMBER")
+    @Comment("응시자")
     private Member member;
 
 }

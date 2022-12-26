@@ -8,6 +8,7 @@ import com.example.jkedudemo.module.exam.dto.ExamQuestDTO;
 import com.example.jkedudemo.module.exam.dto.response.ExamFirstQuestResponse;
 import com.example.jkedudemo.module.exam.repository.ExamCategoryRepository;
 import lombok.*;
+import org.hibernate.annotations.Comment;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -28,30 +29,39 @@ public class ExamQuest {
     //시험 유형
     @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     @JoinColumn(name = "EXAM_CATEGORY")
+    @Comment("문제 영역")
     private ExamCategory examCategory;
     //주관식 , 객관식 DESCRIPTIVE, MULTIPLE
     @Enumerated(EnumType.STRING)
     @Column(name = "QUEST")
+    @Comment("문제 유형")
     private Quest quest;
     // 질문
     @Lob
     @Column(name = "QUESTION",columnDefinition = "LONGTEXT")
+    @Comment("문제")
     private String question;
     //부가 질문
     @Column(name = "SUBQUESTION",columnDefinition = "LONGTEXT")
+    @Comment("부제")
     private String subQuestion;
     //해당문제의 정답
     @Column(name = "RIGHTANSWER",columnDefinition = "LONGTEXT")
+    @Comment("정답")
     private String rightAnswer;
     //img URL
+    @Comment("이미지")
     private String imgUrl;
     //video URL
+    @Comment("비디오")
     private String videoUrl;
     //음성파일 URL
+    @Comment("음성")
     private String speakUrl;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "LEVEL")
+    @Comment("문제 난이도")
     private Level level;
 
     public ExamQuest(String id, ExamCategory examCategory, String quest,  String question, String subQuestion,String rightAnswer,String imgUrl, String videoUrl, String speakUrl, String level) {

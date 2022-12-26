@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Comment;
 
 import javax.persistence.*;
 import java.util.Optional;
@@ -23,6 +24,7 @@ public class ExamCategory {
 
     //시험 유형
     @Enumerated(EnumType.STRING)
+    @Comment("시험 유형")
     private Exam exam;
 
     public ExamCategory(String id, String exam) {
