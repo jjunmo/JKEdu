@@ -61,5 +61,6 @@ logging:
             sql: debug
 springdoc:
   swagger-ui:
-    path: /swagger-ui
+    path: /springdocs-demo
     use-root-path: true
+  version: 'v1'

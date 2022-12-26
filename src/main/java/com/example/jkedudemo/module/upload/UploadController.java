@@ -1,5 +1,6 @@
 package com.example.jkedudemo.module.upload;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,7 @@ public class UploadController {
     private final FileUploadService fileUploadService;
 
     @PostMapping("/upload")
+    @Operation(summary = "업로드 기능", description = "버킷에 해당 파일 업로드")
     public HttpEntity<FileDetail> post(
             @RequestPart("file") MultipartFile multipartFile) {
         return ResponseEntity.ok(fileUploadService.save(multipartFile));

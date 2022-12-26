@@ -7,6 +7,7 @@ import com.example.jkedudemo.module.jwt.service.JwtService;
 import com.example.jkedudemo.module.member.dto.request.MemberRequestDto;
 import com.example.jkedudemo.module.member.dto.response.*;
 import com.example.jkedudemo.module.member.service.AuthService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +34,7 @@ public class AuthController {
      * @return OK,FAIL
      */
     @PostMapping("/member/register")
+    @Operation(summary = "회원가입", description = "회원가입 진행")
     public HttpEntity<MemberStatusOkResponseDto> signup(@RequestBody MemberRequestDto requestDto) {
         return ResponseEntity.ok(authService.signup(requestDto));
     }
@@ -43,6 +45,7 @@ public class AuthController {
      * @return JWT Token ,token expire , Bearer
      */
     @PostMapping("/member/login")
+    @Operation(summary = "회원 로그인", description = "로그인 및 토큰 발급")
     public HttpEntity<TokenDto> login(@RequestBody MemberRequestDto requestDto,@RequestHeader("User-Agent") String userAgent) {
         return ResponseEntity.ok(authService.login(requestDto,userAgent));
     }
@@ -53,6 +56,7 @@ public class AuthController {
      * @return
      */
     @PostMapping("/refresh")
+    @Operation(summary = "토큰 재발급", description = "Refresh Token DB에서 확인 후 재발급")
     public HttpEntity<RefreshApiResponseMessage> validateRefreshToken(@RequestBody HashMap<String, String> bodyJson) {
 
         log.info("refresh controller 실행");
@@ -75,6 +79,7 @@ public class AuthController {
      * @return accessToken,refreshToken
      */
     @GetMapping("/refresh")
+    @Operation(summary = "새로고침", description = "브라우저 환경 확인하여 Refresh 사용 X")
     public HttpEntity<TokenDto> refresh(@RequestHeader("User-Agent") String userAgent) {
         return ResponseEntity.ok(jwtService.refresh(userAgent));
     }
