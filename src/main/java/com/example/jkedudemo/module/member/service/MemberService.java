@@ -334,7 +334,7 @@ public class MemberService {
     public AcademyManagementResponseDto find(String naming , Pageable pageable){
         Member member=isMemberCurrent();
         Slice<AcademyMemberListResponseDto> academyMemberListResponseDtoList=
-                memberRepository.findByAcademyIdAndRoleAndStatusAndNameContainingOrderByIdAsc(member.getAcademyId(),Role.ROLE_ACADEMY_STUDENT,Status.GREEN,naming,pageable)
+                memberRepository.findByAcademyIdAndRoleAndStatusAndNameContainingIgnoreCaseOrderByIdAsc(member.getAcademyId(),Role.ROLE_ACADEMY_STUDENT,Status.GREEN,naming,pageable)
                         .map(AcademyMemberListResponseDto::find);
         return AcademyManagementResponseDto.getPage(academyMemberListResponseDtoList.hasNext(),academyMemberListResponseDtoList.getContent());
     }

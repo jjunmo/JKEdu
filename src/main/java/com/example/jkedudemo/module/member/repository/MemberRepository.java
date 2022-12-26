@@ -29,6 +29,6 @@ public interface MemberRepository extends JpaRepository<Member,Long> {
 
     Slice<Member> findByAcademyIdAndRoleAndStatusOrderByIdAsc(String academyId, Role role, Status status, Pageable pageable);
 
-    Slice<Member> findByAcademyIdAndRoleAndStatusAndNameContainingOrderByIdAsc(String academyId,Role role,Status status,String naming, Pageable pageable);
+    Slice<Member> findByAcademyIdAndRoleAndStatusAndNameContainingIgnoreCaseOrderByIdAsc(String academyId,Role role,Status status,String naming, Pageable pageable);
 
 }
