@@ -79,5 +79,10 @@ public class ExamRestController {
         return ResponseEntity.ok(examService.resultCheck(examId));
     }
 
+    @GetMapping("/result")
+    @Operation(summary = "시험결과", description = "시험결과")
+    public HttpEntity<ExamResultResponseDto> getResult(@RequestParam(value = "exam-id") Long examId){
+        return ResponseEntity.ok(examService.result(examId));
+    }
 
 }

@@ -15,4 +15,6 @@ public interface ExamPaperRepository extends JpaRepository<ExamPaper,Long> {
 
     List<ExamPaper> findByExamResultAndLevelIn(ExamResult examResult, Collection<Level> level);
 
+    List<ExamPaper> findByExamResult(ExamResult examResult);
+
 }

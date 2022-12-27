@@ -7,6 +7,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @MappedSuperclass
@@ -14,16 +15,17 @@ import java.time.LocalDateTime;
 public class BaseTime {
 
     @CreatedDate
-    private LocalDateTime create_date;
+    private LocalDate create_date;
 
     @LastModifiedDate
-    private LocalDateTime update_date;
+    private LocalDate update_date;
 
-    public LocalDateTime getCreateDate() {
+    public LocalDate getCreateDate() {
         return create_date;
     }
 
-    public LocalDateTime getUpdateDate() {
+
+    public LocalDate getUpdateDate() {
         return update_date;
     }
 }

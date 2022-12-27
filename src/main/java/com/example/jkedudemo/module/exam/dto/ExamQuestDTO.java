@@ -20,7 +20,7 @@ public class ExamQuestDTO {
     private Level level;
 
     // 객관식일때만 있음
-    List<ExamMultipleChoiceDTO> MultipleChoice = new ArrayList<>();
+    List<ExamMultipleChoiceDTO> MultipleChoice;
 
 
 
