@@ -330,7 +330,13 @@ public class ExamService {
                 .distinct()
                 .collect(Collectors.toList());
 
+        //TODO: 현재 응시 불가한 영역들.
+        examList.add(Exam.LISTENING);
+        examList.add(Exam.WRITING);
+        examList.add(Exam.SPEAKING);
+
         return ExamResultCheckResponseDto.start(examList);
     }
+
 
 }
