@@ -36,7 +36,7 @@ public class ExamRestController {
      * @return  examPaper,memberAnswerCategory save
      */
     @PostMapping("/check")
-    @Operation(summary = "시험 영영 선택 후 test 횟수 체크", description = "test 횟수 체크 및 answer-paper 생성")
+    @Operation(summary = "시험 영역 선택 후 test 횟수 체크", description = "test 횟수 체크 및 answer-paper 생성")
     public HttpEntity<TestResponseDto> test(@RequestParam(value = "exam-id") Long examId,@RequestParam("category") String exam,@RequestParam(value="student-id",required = false) Long studentId){
 
         return ResponseEntity.ok(examService.test(examId,exam,studentId));

@@ -171,15 +171,20 @@ public class MemberRestController {
 
     @GetMapping("/management/search")
     @Operation(summary = "학생관리에서 학생 이름 검색", description = "이름 검색")
-    public HttpEntity<AcademyManagementResponseDto> academyMemberList(@RequestParam(value = "name") String naming, @PageableDefault(size = 10) Pageable pageable){
+    public HttpEntity<AcademyManagementResponseDto> academyMemberList(@RequestParam(value = "name") String naming, @PageableDefault Pageable pageable){
 
         return ResponseEntity.ok(memberService.find(naming,pageable));
     }
 
     @PostMapping("/management")
-    @Operation(summary = "학원 학생 기록삭제", description = "학생 삭제")
+    @Operation(summary = "학원 학생 삭제", description = "학생 삭제")
     public HttpEntity<MemberStatusOkResponseDto> setAcademyMemberDelete(@RequestParam(value="student-id") Long studentId) {
         return ResponseEntity.ok(memberService.deleteAcademyMember(studentId));
+    }
+
+    @GetMapping("/management/result")
+    public HttpEntity<MemberResultResponseDto> resultSelect(@PageableDefault Pageable pageable, @RequestParam(value="id") Long id){
+        return ResponseEntity.ok(memberService.resultSelect(pageable, id));
     }
 
 }

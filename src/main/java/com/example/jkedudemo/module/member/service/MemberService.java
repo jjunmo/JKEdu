@@ -353,4 +353,19 @@ public class MemberService {
 
         return MemberStatusOkResponseDto.statusOk();
     }
+
+    public MemberResultResponseDto resultSelect(Pageable pageable,Long id){
+        Member member = isMemberCurrent();
+
+        if (Objects.equals(member.getRole(), Role.ROLE_ACADEMY)) {
+            Optional<Member> memberOptional = memberRepository.findById(id);
+            member = memberOptional.orElseGet(this::isMemberCurrent);
+        }
+
+        Slice<ResultListDto> resultListDtoSlice=examResultRepository.findByMemberOrderByIdAsc(member,pageable)
+                .map(ResultListDto::getResultList);
+
+        return MemberResultResponseDto.toDto(resultListDtoSlice.hasNext(),resultListDtoSlice.getContent());
+
+    }
 }
