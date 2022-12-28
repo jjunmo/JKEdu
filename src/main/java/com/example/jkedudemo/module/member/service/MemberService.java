@@ -354,7 +354,7 @@ public class MemberService {
         return MemberStatusOkResponseDto.statusOk();
     }
 
-    public MemberResultResponseDto resultSelect(Pageable pageable,Long id){
+    public MemberResultResponseDto resultSelect(Long id,Pageable pageable){
         Member member = isMemberCurrent();
 
         if (Objects.equals(member.getRole(), Role.ROLE_ACADEMY)) {

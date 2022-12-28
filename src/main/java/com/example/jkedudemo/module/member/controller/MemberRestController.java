@@ -183,8 +183,8 @@ public class MemberRestController {
     }
 
     @GetMapping("/management/result")
-    public HttpEntity<MemberResultResponseDto> resultSelect(@PageableDefault Pageable pageable, @RequestParam(value="id") Long id){
-        return ResponseEntity.ok(memberService.resultSelect(pageable, id));
+    public HttpEntity<MemberResultResponseDto> resultSelect( @RequestParam(value="id") Long id,@PageableDefault Pageable pageable){
+        return ResponseEntity.ok(memberService.resultSelect(id,pageable));
     }
 
 }
