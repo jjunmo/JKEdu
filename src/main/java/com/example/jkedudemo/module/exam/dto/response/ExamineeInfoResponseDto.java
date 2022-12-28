@@ -5,7 +5,6 @@ import com.example.jkedudemo.module.member.entity.Member;
 import lombok.*;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 @Data
 @Getter
