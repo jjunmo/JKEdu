@@ -5,11 +5,10 @@ import com.example.jkedudemo.module.jwt.dto.RefreshApiResponseMessage;
 import com.example.jkedudemo.module.jwt.dto.TokenDto;
 import com.example.jkedudemo.module.jwt.service.JwtService;
 import com.example.jkedudemo.module.member.dto.request.MemberRequestDto;
-import com.example.jkedudemo.module.member.dto.response.*;
+import com.example.jkedudemo.module.member.dto.response.MemberStatusOkResponseDto;
 import com.example.jkedudemo.module.member.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
-
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;

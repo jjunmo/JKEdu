@@ -3,15 +3,12 @@ package com.example.jkedudemo.module.member.dto;
 import com.example.jkedudemo.module.member.entity.Member;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.SpringSecurityCoreVersion;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Set;
+
 
 
 @Getter

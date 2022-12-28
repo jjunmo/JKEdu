@@ -1,20 +1,15 @@
 package com.example.jkedudemo.module.exam.entity;
 
 import com.example.jkedudemo.module.common.enums.Level;
-import com.example.jkedudemo.module.common.util.BaseTime;
 import com.example.jkedudemo.module.common.enums.exam.Quest;
 import com.example.jkedudemo.module.exam.dto.ExamMultipleChoiceDTO;
 import com.example.jkedudemo.module.exam.dto.ExamQuestDTO;
-import com.example.jkedudemo.module.exam.dto.response.ExamFirstQuestResponse;
-import com.example.jkedudemo.module.exam.repository.ExamCategoryRepository;
 import lombok.*;
 import org.hibernate.annotations.Comment;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collector;
 
 @Entity
 @Setter

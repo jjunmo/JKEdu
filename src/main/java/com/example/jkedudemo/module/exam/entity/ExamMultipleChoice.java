@@ -1,13 +1,9 @@
 package com.example.jkedudemo.module.exam.entity;
 
-import com.example.jkedudemo.module.common.util.BaseTime;
-import com.example.jkedudemo.module.exam.dto.ExamMultipleChoiceDTO;
 import lombok.*;
 import org.hibernate.annotations.Comment;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 
 @Setter

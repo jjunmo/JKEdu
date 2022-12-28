@@ -6,7 +6,6 @@ import com.example.jkedudemo.module.common.enums.exam.Exam;
 import com.example.jkedudemo.module.common.enums.exam.Quest;
 import com.example.jkedudemo.module.common.enums.member.Role;
 import com.example.jkedudemo.module.config.SecurityUtil;
-import com.example.jkedudemo.module.exam.dto.ExamMultipleChoiceDTO;
 import com.example.jkedudemo.module.exam.dto.request.NextQuestRequest;
 import com.example.jkedudemo.module.exam.dto.response.*;
 import com.example.jkedudemo.module.exam.entity.*;

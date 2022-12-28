@@ -1,8 +1,6 @@
 package com.example.jkedudemo.module.exam.dto.response;
 
-import com.example.jkedudemo.module.exam.entity.ExamPaper;
 import com.example.jkedudemo.module.exam.entity.ExamResult;
-import com.example.jkedudemo.module.member.entity.Member;
 import lombok.*;
 
 @Data

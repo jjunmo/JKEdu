@@ -1,7 +1,10 @@
 package com.example.jkedudemo.module.member.dto.response;
 
 import com.example.jkedudemo.module.exam.entity.ExamResult;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 

@@ -3,7 +3,6 @@ package com.example.jkedudemo.module.member.repository;
 import com.example.jkedudemo.module.common.enums.member.Role;
 import com.example.jkedudemo.module.common.enums.member.Status;
 import com.example.jkedudemo.module.member.entity.Member;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -1,7 +1,6 @@
 package com.example.jkedudemo.module.exam.dto.response;
 
 import com.example.jkedudemo.module.exam.dto.ExamQuestDTO;
-import com.example.jkedudemo.module.exam.entity.ExamPaper;
 import lombok.*;
 
 @Data

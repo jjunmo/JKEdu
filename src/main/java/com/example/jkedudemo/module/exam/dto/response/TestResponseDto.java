@@ -1,7 +1,6 @@
 package com.example.jkedudemo.module.exam.dto.response;
 
 import com.example.jkedudemo.module.exam.entity.ExamPaper;
-import com.example.jkedudemo.module.member.dto.response.MemberStatusOkResponseDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

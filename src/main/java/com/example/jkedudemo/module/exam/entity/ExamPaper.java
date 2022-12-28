@@ -2,8 +2,6 @@ package com.example.jkedudemo.module.exam.entity;
 
 import com.example.jkedudemo.module.common.enums.Level;
 import com.example.jkedudemo.module.common.enums.exam.Exam;
-import com.example.jkedudemo.module.common.enums.member.Role;
-import com.example.jkedudemo.module.common.util.BaseTime;
 import lombok.*;
 import org.hibernate.annotations.Comment;
 

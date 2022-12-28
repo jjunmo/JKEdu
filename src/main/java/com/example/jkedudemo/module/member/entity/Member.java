@@ -1,13 +1,11 @@
 package com.example.jkedudemo.module.member.entity;
 
-import com.example.jkedudemo.module.common.enums.Level;
-import com.example.jkedudemo.module.common.util.BaseTime;
 import com.example.jkedudemo.module.common.enums.member.Role;
 import com.example.jkedudemo.module.common.enums.member.Status;
+import com.example.jkedudemo.module.common.util.BaseTime;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
-import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
 import java.util.Date;

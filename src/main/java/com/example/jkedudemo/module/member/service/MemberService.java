@@ -1,15 +1,14 @@
 package com.example.jkedudemo.module.member.service;
 
-import com.example.jkedudemo.module.exam.dto.response.ExamStartResponseDto;
+import com.example.jkedudemo.module.common.enums.YN;
+import com.example.jkedudemo.module.common.enums.member.PhoneAuth;
+import com.example.jkedudemo.module.common.enums.member.Role;
+import com.example.jkedudemo.module.common.enums.member.Status;
+import com.example.jkedudemo.module.config.SecurityUtil;
 import com.example.jkedudemo.module.exam.entity.ExamResult;
 import com.example.jkedudemo.module.exam.repository.ExamPaperRepository;
 import com.example.jkedudemo.module.exam.repository.ExamResultRepository;
 import com.example.jkedudemo.module.handler.MyInternalServerException;
-import com.example.jkedudemo.module.common.enums.member.PhoneAuth;
-import com.example.jkedudemo.module.common.enums.member.Role;
-import com.example.jkedudemo.module.common.enums.member.Status;
-import com.example.jkedudemo.module.common.enums.YN;
-import com.example.jkedudemo.module.config.SecurityUtil;
 import com.example.jkedudemo.module.member.dto.request.AcademyMemberRequestDto;
 import com.example.jkedudemo.module.member.dto.response.*;
 import com.example.jkedudemo.module.member.entity.Member;
@@ -21,14 +20,16 @@ import lombok.extern.slf4j.Slf4j;
 import net.nurigo.java_sdk.api.Message;
 import net.nurigo.java_sdk.exceptions.CoolsmsException;
 import org.json.simple.JSONObject;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 import static com.example.jkedudemo.module.common.util.Cer.getCerNum;
 import static com.example.jkedudemo.module.common.util.Cer.getStrStrCerNum;
@@ -151,12 +152,6 @@ public class MemberService {
         memberRepository.save(member);
         return MemberStatusOkResponseDto.statusOk();
     }
-
-//    public MemberNameResopnseDto memberName(){
-//        Member member = isMemberCurrent();
-//        return MemberNameResopnseDto.name(member);
-//    }
-
 
     @Transactional
     public MemberIdFindResopnseDto getMemberEmail(String phone , String smscode, PhoneAuth phoneauth) {
@@ -365,7 +360,7 @@ public class MemberService {
         Slice<ResultListDto> resultListDtoSlice=examResultRepository.findByMemberOrderByIdAsc(member,pageable)
                 .map(ResultListDto::getResultList);
 
-        return MemberResultResponseDto.toDto(resultListDtoSlice.hasNext(),resultListDtoSlice.getContent());
+        return MemberResultResponseDto.toDto(member,resultListDtoSlice.hasNext(),resultListDtoSlice.getContent());
 
     }
 }

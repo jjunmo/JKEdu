@@ -9,7 +9,6 @@ import com.example.jkedudemo.module.common.enums.member.Status;
 import com.example.jkedudemo.module.exam.entity.ExamCategory;
 import com.example.jkedudemo.module.exam.entity.ExamMultipleChoice;
 import com.example.jkedudemo.module.exam.entity.ExamQuest;
-
 import com.example.jkedudemo.module.exam.repository.ExamCategoryRepository;
 import com.example.jkedudemo.module.exam.repository.ExamQuestRepository;
 import com.example.jkedudemo.module.member.entity.Member;
@@ -25,8 +24,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.util.Date;
 import java.util.Optional;
 
 

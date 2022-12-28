@@ -1,7 +1,6 @@
 package com.example.jkedudemo.module.exam.dto.response;
 
 import com.example.jkedudemo.module.common.enums.exam.Exam;
-import com.example.jkedudemo.module.exam.entity.ExamResult;
 import lombok.*;
 
 import java.util.List;

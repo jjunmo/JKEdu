@@ -1,12 +1,7 @@
 package com.example.jkedudemo.module.exam.dto.response;
 
-import com.example.jkedudemo.module.common.enums.exam.Exam;
-import com.example.jkedudemo.module.exam.dto.ExamMultipleChoiceDTO;
-import com.example.jkedudemo.module.exam.dto.ExamQuestDTO;
-import com.example.jkedudemo.module.exam.entity.ExamMultipleChoice;
 import lombok.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Data

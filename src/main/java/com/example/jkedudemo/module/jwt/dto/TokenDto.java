@@ -1,7 +1,5 @@
 package com.example.jkedudemo.module.jwt.dto;
 
-import com.example.jkedudemo.module.member.dto.response.AcademyMemberResponseDto;
-import com.example.jkedudemo.module.member.entity.Member;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

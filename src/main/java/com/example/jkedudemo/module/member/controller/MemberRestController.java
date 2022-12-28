@@ -2,9 +2,10 @@ package com.example.jkedudemo.module.member.controller;
 
 import com.example.jkedudemo.module.common.enums.member.PhoneAuth;
 import com.example.jkedudemo.module.handler.MyInternalServerException;
-import com.example.jkedudemo.module.member.dto.request.*;
+import com.example.jkedudemo.module.member.dto.request.AcademyMemberRequestDto;
+import com.example.jkedudemo.module.member.dto.request.ChangePasswordRequestDto;
+import com.example.jkedudemo.module.member.dto.request.DeleteMemberRequestDto;
 import com.example.jkedudemo.module.member.dto.response.*;
-
 import com.example.jkedudemo.module.member.service.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;

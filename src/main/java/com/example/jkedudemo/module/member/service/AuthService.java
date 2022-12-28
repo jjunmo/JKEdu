@@ -1,17 +1,17 @@
 package com.example.jkedudemo.module.member.service;
 
-import com.example.jkedudemo.module.common.enums.member.Role;
-import com.example.jkedudemo.module.common.util.Cer;
-import com.example.jkedudemo.module.common.enums.member.PhoneAuth;
-import com.example.jkedudemo.module.common.enums.member.Status;
 import com.example.jkedudemo.module.common.enums.YN;
+import com.example.jkedudemo.module.common.enums.member.PhoneAuth;
+import com.example.jkedudemo.module.common.enums.member.Role;
+import com.example.jkedudemo.module.common.enums.member.Status;
+import com.example.jkedudemo.module.common.util.Cer;
 import com.example.jkedudemo.module.handler.MyInternalServerException;
 import com.example.jkedudemo.module.jwt.TokenProvider;
 import com.example.jkedudemo.module.jwt.dto.TokenDto;
 import com.example.jkedudemo.module.jwt.entity.RefreshToken;
 import com.example.jkedudemo.module.jwt.repository.RefreshTokenRepository;
 import com.example.jkedudemo.module.member.dto.request.MemberRequestDto;
-import com.example.jkedudemo.module.member.dto.response.*;
+import com.example.jkedudemo.module.member.dto.response.MemberStatusOkResponseDto;
 import com.example.jkedudemo.module.member.entity.Member;
 import com.example.jkedudemo.module.member.entity.MemberPhoneAuth;
 import com.example.jkedudemo.module.member.repository.MemberPhoneAuthRepository;
