@@ -365,7 +365,7 @@ public class ExamService {
                     List<MemberAnswer> memberAnswerCorrectList = memberAnswerRepository.findByMemberAnswerCategory_ExamPaperAndAnswerYN(ep, YN.Y);
                     examResultLevelDto.setCategory(ep.getExamCategory());
                     examResultLevelDto.setCorrectCount(memberAnswerCorrectList.size());
-                    examResultLevelDto.setProblemCount(ep.getLevel().getValue());
+                    examResultLevelDto.setProblemCount(ep.getExamCategory().getValue());
                     examResultLevelDto.setLevel(ep.getLevel());
                     examResultLevelDtoList.add(examResultLevelDto);
                 }
