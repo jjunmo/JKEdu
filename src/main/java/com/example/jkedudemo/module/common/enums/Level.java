@@ -8,7 +8,7 @@ public enum Level {
     A2(25, 600),
     B1(45, 800),
     B2(65, 1000),
-    C(85, 1200);
+    C1(85, 1200);
 
     private final int value;
     private final int cut;
@@ -29,7 +29,7 @@ public enum Level {
         else if (a<=Level.A2.getCut()) return Level.A2;
         else if (a<=Level.B1.getCut()) return Level.B1;
         else if (a<=Level.B2.getCut()) return Level.B2;
-        else return Level.C;
+        else return Level.C1;
 
     }
 
