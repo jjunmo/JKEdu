@@ -87,11 +87,7 @@ public class S3Service {
                                     .replace("*",",")
                                     .replace(";","'")
                                     .replace("$","\n"),
-                            data[5]
-                                    .replace("^","\"")
-                                    .replace("*",",")
-                                    .replace(";","'")
-                                    .replace("$","\n"),
+                            data[5],
                             data[6], data[7], data[8], data[9]);
                     em.persist(examQuest);
                 }
