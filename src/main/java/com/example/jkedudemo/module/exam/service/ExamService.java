@@ -369,8 +369,12 @@ public class ExamService {
                     examResultLevelDto.setCorrectCount(memberAnswerCorrectList.size());
                     examResultLevelDto.setProblemCount(ep.getExamCategory().getValue());
 
-                    if(ep.getLevel() == null) throw new MyInternalServerException(ep.getExamCategory()+"시험을 종료하세요.");
-                    else examResultLevelDto.setLevel(ep.getLevel());
+                    if(ep.getLevel() == null) {
+                        throw new MyInternalServerException(ep.getExamCategory().toString()+" 시험을 종료하세요.");
+                    }
+                    else{
+                        examResultLevelDto.setLevel(ep.getLevel());
+                    }
 
                     examResultLevelDtoList.add(examResultLevelDto);
                 }
