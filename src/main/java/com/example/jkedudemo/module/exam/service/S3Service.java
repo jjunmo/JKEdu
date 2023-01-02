@@ -109,11 +109,11 @@ public class S3Service {
                     em.persist(examMultipleChoice);
                 }
 
-                if(storedFileName.contains("data")) {
-                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-                    Member member= new Member("010-1234-1234",data[0],format.parse(data[1]), Role.ROLE_ACADEMY_STUDENT,data[2], Status.GREEN);
-                    em.persist(member);
-                }
+//                if(storedFileName.contains("data")) {
+//                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+//                    Member member= new Member("010-1234-1234",data[0],format.parse(data[1]), Role.ROLE_ACADEMY_STUDENT,data[2], Status.GREEN);
+//                    em.persist(member);
+//                }
 
             }
         } finally {

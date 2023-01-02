@@ -16,13 +16,13 @@ spring:
         show_sql: 'true'
 #  datasource:
 #    driver-class-name: com.mysql.cj.jdbc.Driver
-#    url: jdbc:mysql://localhost:3306/jkedu?serverTimezone=Asia/Seoul
-#    username: jkedu
-#    password: a123456
-#root:
-#  key: AnyKeyYouWantTo
-#server:
-#  port: '8080'
+#    url: jdbc:mysql://jkeduexam.cn3flekcns70.ap-northeast-2.rds.amazonaws.com:3306/jkedu?serverTimezone=Asia/Seoul
+#    username: admin
+#    password: a123456789
+root:
+  key: AnyKeyYouWantTo
+server:
+  port: '8080'
   h2:
     console:
       enabled: true
@@ -39,10 +39,10 @@ jwt:
 cloud:
   aws:
     s3:
-      bucket: jkedu.exam
+      bucket: jkedu.question
     credentials:
-      access-key: AKIA36UON3LI2IPGFY4W
-      secret-key: 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
+      access-key: AKIA4OTF2RFBNW42IR5C
+      secret-key: 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
     region:
       static: ap-northeast-2
       auto: false

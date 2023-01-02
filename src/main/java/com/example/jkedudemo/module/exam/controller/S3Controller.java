@@ -26,7 +26,6 @@ public class S3Controller {
         s3Service.readObject(folder+"examCategory"+csv);
         s3Service.readObject(folder+"examQuest"+csv);
         s3Service.readObject(folder+"examMultiple"+csv);
-        s3Service.readObject(folder+"data"+csv);
         return new ResponseEntity<>("success", HttpStatus.OK);
     }
 }
