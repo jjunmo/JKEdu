@@ -370,7 +370,7 @@ public class ExamService {
                     examResultLevelDto.setProblemCount(ep.getExamCategory().getValue());
 
                     if(ep.getLevel() == null) {
-                        throw new MyInternalServerException(ep.getExamCategory().toString()+" 시험을 종료하세요.");
+                        throw new MyInternalServerException(ep.getExamCategory().toString()+" 시험을 종료하고 결과를 확인해주세요.");
                     }
                     else{
                         examResultLevelDto.setLevel(ep.getLevel());
