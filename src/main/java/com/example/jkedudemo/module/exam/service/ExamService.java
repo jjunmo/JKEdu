@@ -17,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -356,6 +357,8 @@ public class ExamService {
 
         List<ExamPaper> examPaperList = examPaperRepository.findByExamResult(examResult);
 
+        if(ObjectUtils.isEmpty(examPaperList)) throw new MyInternalServerException("응시한 시험이 없습니다.");
+
         List<ExamResultLevelDto> examResultLevelDtoList = new ArrayList<>();
 
         examPaperList.forEach(
@@ -365,7 +368,10 @@ public class ExamService {
                     examResultLevelDto.setCategory(ep.getExamCategory());
                     examResultLevelDto.setCorrectCount(memberAnswerCorrectList.size());
                     examResultLevelDto.setProblemCount(ep.getExamCategory().getValue());
-                    examResultLevelDto.setLevel(ep.getLevel());
+
+                    if(ep.getLevel() == null) throw new MyInternalServerException(ep.getExamCategory()+"시험을 종료하세요.");
+                    else examResultLevelDto.setLevel(ep.getLevel());
+
                     examResultLevelDtoList.add(examResultLevelDto);
                 }
         );
