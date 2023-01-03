@@ -6,7 +6,6 @@ import com.example.jkedudemo.module.common.enums.member.Role;
 import com.example.jkedudemo.module.common.enums.member.Status;
 import com.example.jkedudemo.module.common.util.Cer;
 import com.example.jkedudemo.module.handler.MyForbiddenException;
-import com.example.jkedudemo.module.handler.MyInternalServerException;
 import com.example.jkedudemo.module.handler.MyNotFoundException;
 import com.example.jkedudemo.module.jwt.TokenProvider;
 import com.example.jkedudemo.module.jwt.dto.TokenDto;

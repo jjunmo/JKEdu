@@ -1,6 +1,5 @@
 package com.example.jkedudemo.module.jwt;
 
-import com.example.jkedudemo.module.handler.MyInternalServerException;
 import com.example.jkedudemo.module.handler.MyUnAuthorizedException;
 import com.example.jkedudemo.module.jwt.dto.TokenDto;
 import com.example.jkedudemo.module.jwt.entity.RefreshToken;

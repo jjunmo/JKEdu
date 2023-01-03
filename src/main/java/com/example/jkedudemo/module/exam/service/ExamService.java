@@ -11,7 +11,6 @@ import com.example.jkedudemo.module.exam.dto.response.*;
 import com.example.jkedudemo.module.exam.entity.*;
 import com.example.jkedudemo.module.exam.repository.*;
 import com.example.jkedudemo.module.handler.MyForbiddenException;
-import com.example.jkedudemo.module.handler.MyInternalServerException;
 import com.example.jkedudemo.module.handler.MyNotFoundException;
 import com.example.jkedudemo.module.member.entity.Member;
 import com.example.jkedudemo.module.member.repository.MemberRepository;
