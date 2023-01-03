@@ -1,6 +1,7 @@
 package com.example.jkedudemo.module.member.controller;
 
 import com.example.jkedudemo.module.common.enums.member.PhoneAuth;
+import com.example.jkedudemo.module.handler.MyForbiddenException;
 import com.example.jkedudemo.module.handler.MyInternalServerException;
 import com.example.jkedudemo.module.member.dto.request.AcademyMemberRequestDto;
 import com.example.jkedudemo.module.member.dto.request.ChangePasswordRequestDto;
@@ -57,7 +58,7 @@ public class MemberRestController {
         if (result.equals("OK")) {
             return ResponseEntity.ok(MemberStatusOkResponseDto.statusOk());
         } else {
-            throw new MyInternalServerException("인증실패");
+            throw new MyForbiddenException("인증실패");
         }
     }
 
@@ -139,7 +140,7 @@ public class MemberRestController {
 
         if (result.equals("OK")) return ResponseEntity.ok(MemberStatusOkResponseDto.statusOk());
 
-        else throw new MyInternalServerException("이미 존재하는 아이디입니다.");
+        else throw new MyForbiddenException("이미 존재하는 아이디입니다.");
     }
 
     /**

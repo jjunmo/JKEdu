@@ -5,7 +5,9 @@ import com.example.jkedudemo.module.common.enums.member.PhoneAuth;
 import com.example.jkedudemo.module.common.enums.member.Role;
 import com.example.jkedudemo.module.common.enums.member.Status;
 import com.example.jkedudemo.module.common.util.Cer;
+import com.example.jkedudemo.module.handler.MyForbiddenException;
 import com.example.jkedudemo.module.handler.MyInternalServerException;
+import com.example.jkedudemo.module.handler.MyNotFoundException;
 import com.example.jkedudemo.module.jwt.TokenProvider;
 import com.example.jkedudemo.module.jwt.dto.TokenDto;
 import com.example.jkedudemo.module.jwt.entity.RefreshToken;
@@ -43,7 +45,7 @@ public class AuthService {
     @Transactional
     public MemberStatusOkResponseDto signup(MemberRequestDto requestDto) {
 
-        if (memberRepository.findByEmail(requestDto.getEmail()).isPresent()) throw new MyInternalServerException("이미 가입되어 있는 회원입니다");
+        if (memberRepository.findByEmail(requestDto.getEmail()).isPresent()) throw new MyForbiddenException("이미 가입되어 있는 회원입니다");
 
 
         //비밀번호 인코딩
@@ -54,11 +56,11 @@ public class AuthService {
         //휴대폰 인증 여부
         Optional<MemberPhoneAuth> memberPhoneAuthOptional = memberPhoneAuthRepository.findByPhoneAndCheckYnAndPhoneauth(requestDto.getPhone(),YN.Y, PhoneAuth.JOIN);
 
-        if(memberPhoneAuthOptional.isEmpty()) throw new MyInternalServerException("인증을 완료하세요");
+        if(memberPhoneAuthOptional.isEmpty()) throw new MyForbiddenException("인증을 완료하세요");
 
 
         //계정 상태 체크
-        if (memberRepository.existsByPhoneAndStatus(requestDto.getPhone(), Status.YELLOW)) throw new MyInternalServerException("회원가입이 정지된 고객정보입니다. 고객센터에 문의하세요.");
+        if (memberRepository.existsByPhoneAndStatus(requestDto.getPhone(), Status.YELLOW)) throw new MyForbiddenException("회원가입이 정지된 고객정보입니다. 고객센터에 문의하세요.");
         else memberPhoneAuthOptional.get().setMember(member);
 
 
@@ -84,17 +86,17 @@ public class AuthService {
 
         Optional<Member> memberOptional = memberRepository.findByEmailAndStatusIn(requestDto.getEmail(), List.of(Status.GREEN ,Status.YELLOW));
 
-        if (memberOptional.isEmpty()) throw new MyInternalServerException("아이디 혹은 비밀번호가 일치하지 않습니다.");
+        if (memberOptional.isEmpty()) throw new MyNotFoundException("아이디 혹은 비밀번호가 일치하지 않습니다.");
 
         Member member = memberOptional.get();
 
-        if (!passwordEncoder.matches(requestDto.getPassword(), member.getPassword())) throw new MyInternalServerException("아이디 혹은 비밀번호가 일치하지 않습니다.");
+        if (!passwordEncoder.matches(requestDto.getPassword(), member.getPassword())) throw new MyNotFoundException("아이디 혹은 비밀번호가 일치하지 않습니다.");
 
         //TODO: 비밀번호 유효성 체크 , 토큰이 남아있음.
 
         //Status 체크
 
-        if (member.getStatus().equals(Status.YELLOW)) throw new MyInternalServerException("정지 대상입니다.");
+        if (member.getStatus().equals(Status.YELLOW)) throw new MyForbiddenException("정지 대상입니다.");
 
         UsernamePasswordAuthenticationToken authenticationToken = requestDto.toAuthentication();
         Authentication authentication = managerBuilder.getObject().authenticate(authenticationToken);

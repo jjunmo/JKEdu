@@ -8,7 +8,9 @@ import com.example.jkedudemo.module.config.SecurityUtil;
 import com.example.jkedudemo.module.exam.entity.ExamResult;
 import com.example.jkedudemo.module.exam.repository.ExamPaperRepository;
 import com.example.jkedudemo.module.exam.repository.ExamResultRepository;
+import com.example.jkedudemo.module.handler.MyForbiddenException;
 import com.example.jkedudemo.module.handler.MyInternalServerException;
+import com.example.jkedudemo.module.handler.MyNotFoundException;
 import com.example.jkedudemo.module.member.dto.request.AcademyMemberRequestDto;
 import com.example.jkedudemo.module.member.dto.response.*;
 import com.example.jkedudemo.module.member.entity.Member;
@@ -51,7 +53,7 @@ public class MemberService {
 
     public Member isMemberCurrent() {
         return memberRepository.findById(SecurityUtil.getCurrentMemberId())
-                .orElseThrow(() -> new MyInternalServerException("로그인 유저 정보가 없습니다"));
+                .orElseThrow(() -> new MyForbiddenException("로그인 유저 정보가 없습니다"));
     }
 
     @Transactional
@@ -62,7 +64,7 @@ public class MemberService {
         if(phonauth.equals(PhoneAuth.JOIN)) {
             Optional<Member> memberOptional = memberRepository.findByPhoneAndStatusIn(phone, List.of(Status.GREEN, Status.YELLOW));
 
-            if (memberOptional.isPresent()) throw new MyInternalServerException("이미 사용중인 전화번호 입니다.");
+            if (memberOptional.isPresent()) throw new MyForbiddenException("이미 사용중인 전화번호 입니다.");
 
         }
 
@@ -106,7 +108,7 @@ public class MemberService {
     public String certifiedPhoneCheck(String phone ,String smscode , PhoneAuth phoneauth){
 
         Optional<MemberPhoneAuth> memberPhoneAuthOptional = memberPhoneAuthRepository.findByPhoneAndSmscodeAndPhoneauth(phone, smscode, phoneauth);
-        if(memberPhoneAuthOptional.isEmpty()) throw new MyInternalServerException("인증번호가 일치하지 않습니다.");
+        if(memberPhoneAuthOptional.isEmpty()) throw new MyForbiddenException("인증번호가 일치하지 않습니다.");
         else{
 
             MemberPhoneAuth memberPhoneAuth = memberPhoneAuthOptional.get();
@@ -130,7 +132,7 @@ public class MemberService {
         Member member = isMemberCurrent();
 
         if (!passwordEncoder.matches(exPassword, member.getPassword()))
-            throw new MyInternalServerException("현재 비밀번호가 옳지 않습니다.");
+            throw new MyForbiddenException("현재 비밀번호가 옳지 않습니다.");
 
         member.setPassword(passwordEncoder.encode((newPassword)));
         memberRepository.save(member);
@@ -144,7 +146,7 @@ public class MemberService {
         List<MemberPhoneAuth> memberPhoneAuth =memberPhoneAuthRepository.findByPhone(member.getPhone());
 
         if (!passwordEncoder.matches(password, member.getPassword()))
-            throw new MyInternalServerException("비밀번호가 맞지 않습니다");
+            throw new MyForbiddenException("비밀번호가 맞지 않습니다");
 
         //회원탈퇴시 기존 인증여부 N
         member.setStatus(Status.RED);
@@ -161,11 +163,11 @@ public class MemberService {
         if(result.equals("OK")){
             Optional<Member> memberOptional = memberRepository.findByPhoneAndStatusIn(phone,List.of(Status.GREEN,Status.YELLOW));
 
-            if(memberOptional.isEmpty()) throw new MyInternalServerException("해당 정보로 가입된 아이디가 없습니다.");
+            if(memberOptional.isEmpty()) throw new MyNotFoundException("해당 정보로 가입된 아이디가 없습니다.");
 
             Optional<MemberPhoneAuth> memberPhoneAuthOptional = memberPhoneAuthRepository.findByPhoneAndPhoneauth(phone, PhoneAuth.ID);
 
-            if(memberPhoneAuthOptional.isEmpty()) throw new MyInternalServerException("휴대폰 인증을 완료하세요.");
+            if(memberPhoneAuthOptional.isEmpty()) throw new MyForbiddenException("휴대폰 인증을 완료하세요.");
 
             MemberPhoneAuth memberPhoneAuth = memberPhoneAuthOptional.get();
             Member member=memberOptional.get();
@@ -173,7 +175,7 @@ public class MemberService {
 
             return MemberIdFindResopnseDto.idFind(member);
         }
-        throw new MyInternalServerException("인증이 실패하였습니다.");
+        throw new MyForbiddenException("인증이 실패하였습니다.");
     }
 
 
@@ -182,10 +184,10 @@ public class MemberService {
         Member member = isMemberCurrent();
 
         if(!member.getRole().equals(Role.ROLE_ACADEMY))
-            throw new MyInternalServerException("접근 권한이 없습니다.");
+            throw new MyForbiddenException("접근 권한이 없습니다.");
 
         if(requestDto.getPhone().isBlank()||requestDto.getPhone()==null)
-            throw new MyInternalServerException("전화번호를 입력하세요.");
+            throw new MyForbiddenException("전화번호를 입력하세요.");
 
         Optional<Member> memberOptional = memberRepository.findByPhoneAndRoleAndAcademyIdAndStatus(requestDto.getPhone(), Role.ROLE_ACADEMY_STUDENT, member.getAcademyId(),Status.GREEN);
 
@@ -248,31 +250,31 @@ public class MemberService {
 
         if(member.isEmpty()) return "OK";
 
-        else throw new MyInternalServerException("이미 가입된 이메일 입니다.");
+        else throw new MyForbiddenException("이미 가입된 이메일 입니다.");
 
     }
 
     @Transactional
     public MemberStatusOkResponseDto getNewPassword(String email, String phone , String smscode , PhoneAuth phoneauth){
 
-        if(email.isEmpty()) throw new MyInternalServerException("이메일을 입력하세요.");
+        if(email.isEmpty()) throw new MyForbiddenException("이메일을 입력하세요.");
 
         //인증번호 확인
         certifiedPhoneCheck(phone,smscode,phoneauth);
 
         Optional<Member> memberOptional = memberRepository.findByPhoneAndStatusIn(phone,List.of(Status.GREEN,Status.YELLOW));
 
-        if(memberOptional.isEmpty()) throw new MyInternalServerException("해당 정보로 가입된 아이디가 없습니다.");
+        if(memberOptional.isEmpty()) throw new MyNotFoundException("해당 정보로 가입된 아이디가 없습니다.");
 
 
         Member member=memberOptional.get();
 
-        if(!member.getEmail().equals(email)) throw new MyInternalServerException("해당 정보로 가입된 아이디가 없습니다.");
+        if(!member.getEmail().equals(email)) throw new MyNotFoundException("해당 정보로 가입된 아이디가 없습니다.");
 
 
         Optional<MemberPhoneAuth> memberPhoneAuthOptional = memberPhoneAuthRepository.findByPhoneAndCheckYnAndPhoneauth(phone,YN.Y, PhoneAuth.PW);
 
-        if(memberPhoneAuthOptional.isEmpty()) throw new MyInternalServerException("인증을 완료하세요");
+        if(memberPhoneAuthOptional.isEmpty()) throw new MyForbiddenException("인증을 완료하세요");
 
 
         memberPhoneAuthOptional.get().setMember(member);
@@ -304,7 +306,7 @@ public class MemberService {
             System.out.println(e.getCode());
         }
 
-        throw new MyInternalServerException("인증이 실패하였습니다.");
+        throw new MyForbiddenException("인증이 실패하였습니다.");
 
     }
 
@@ -340,7 +342,7 @@ public class MemberService {
 
         Optional<Member> memberOptional=memberRepository.findById(studentId);
 
-        if(memberOptional.isEmpty()) throw new MyInternalServerException("존재하지 않는 학생 입니다.");
+        if(memberOptional.isEmpty()) throw new MyNotFoundException("존재하지 않는 학생 입니다.");
 
         Member academyStudentMember=memberOptional.get();
         academyStudentMember.setStatus(Status.RED);

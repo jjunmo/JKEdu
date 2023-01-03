@@ -1,5 +1,8 @@
 package com.example.jkedudemo.module.handler;
-@Deprecated
+
+import lombok.Getter;
+
+@Getter
 public class MyNotFoundException extends RuntimeException {
     public MyNotFoundException(String message) {super(message);}
 }

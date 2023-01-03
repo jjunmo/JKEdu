@@ -28,12 +28,12 @@ public class MyControllerAdvice extends ResponseEntityExceptionHandler {
         );
     }
 
-    @Deprecated
+
     @ResponseBody
     @ExceptionHandler(MyNotFoundException.class)
     public ResponseEntity<MyErrorBody> handleNotFoundException(MyNotFoundException e) {
         return new ResponseEntity<>(
-                new MyErrorBody(e.getMessage()),
+                new MyErrorBody(e.getMessage(),"404"),
                 HttpStatus.NOT_FOUND
         );
     }
@@ -42,7 +42,7 @@ public class MyControllerAdvice extends ResponseEntityExceptionHandler {
     @ExceptionHandler(MyInternalServerException.class)
     public ResponseEntity<MyErrorBody> handleInternalServerException(MyInternalServerException e) {
         return new ResponseEntity<>(
-                new MyErrorBody(e.getMessage(),"400"),
+                new MyErrorBody(e.getMessage(),"500"),
                 HttpStatus.INTERNAL_SERVER_ERROR
         );
     }

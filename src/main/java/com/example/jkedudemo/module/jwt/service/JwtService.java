@@ -1,6 +1,7 @@
 package com.example.jkedudemo.module.jwt.service;
 
 import com.example.jkedudemo.module.config.SecurityUtil;
+import com.example.jkedudemo.module.handler.MyForbiddenException;
 import com.example.jkedudemo.module.handler.MyInternalServerException;
 import com.example.jkedudemo.module.jwt.TokenProvider;
 import com.example.jkedudemo.module.jwt.dto.TokenDto;
@@ -25,7 +26,7 @@ public class JwtService {
 
     public Member isMemberCurrent() {
         return memberRepository.findById(SecurityUtil.getCurrentMemberId())
-                .orElseThrow(() -> new MyInternalServerException("로그인 유저 정보가 없습니다"));
+                .orElseThrow(() -> new MyForbiddenException("로그인 유저 정보가 없습니다"));
     }
 
     public Map<String, String> validateRefreshToken(String refreshToken) {
@@ -65,7 +66,7 @@ public class JwtService {
             RefreshToken refresh = refreshTokenOptional.get();
             String createdAccessToken = tokenProvider.validateRefreshToken(refresh);
             return new TokenDto("200", "OK",createdAccessToken, refresh.getRefreshToken());
-        } else throw new MyInternalServerException("로그인을 다시 해주세요.");
+        } else throw new MyForbiddenException("로그인을 다시 해주세요.");
 
     }
 

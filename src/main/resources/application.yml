@@ -19,10 +19,10 @@ spring:
 #    url: jdbc:mysql://jkeduexam.cn3flekcns70.ap-northeast-2.rds.amazonaws.com:3306/jkedu?serverTimezone=Asia/Seoul
 #    username: admin
 #    password: a123456789
-root:
-  key: AnyKeyYouWantTo
-server:
-  port: '8080'
+#root:
+#  key: AnyKeyYouWantTo
+#server:
+#  port: '8080'
   h2:
     console:
       enabled: true

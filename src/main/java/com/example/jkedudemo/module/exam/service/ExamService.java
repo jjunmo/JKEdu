@@ -10,7 +10,9 @@ import com.example.jkedudemo.module.exam.dto.request.NextQuestRequest;
 import com.example.jkedudemo.module.exam.dto.response.*;
 import com.example.jkedudemo.module.exam.entity.*;
 import com.example.jkedudemo.module.exam.repository.*;
+import com.example.jkedudemo.module.handler.MyForbiddenException;
 import com.example.jkedudemo.module.handler.MyInternalServerException;
+import com.example.jkedudemo.module.handler.MyNotFoundException;
 import com.example.jkedudemo.module.member.entity.Member;
 import com.example.jkedudemo.module.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -43,13 +45,13 @@ public class ExamService {
     //로그인된 회원 확인
     public Member isMemberCurrent() {
         return memberRepository.findById(SecurityUtil.getCurrentMemberId())
-                .orElseThrow(() -> new MyInternalServerException("로그인 유저 정보가 없습니다"));
+                .orElseThrow(() -> new MyForbiddenException("로그인 유저 정보가 없습니다"));
     }
 
     //시험중인 답안지 확인
     public ExamPaper isExamPaper(Long id) {
         return examPaperRepository.findById(id)
-                .orElseThrow(() -> new MyInternalServerException("시험을 다시 시작하세요"));
+                .orElseThrow(() -> new MyForbiddenException("시험을 다시 시작하세요"));
     }
 
 
@@ -111,7 +113,7 @@ public class ExamService {
         Optional<ExamResult> examResultOptional = examResultRepository.findById(examId);
 
         if (examResultOptional.isEmpty())
-            throw new MyInternalServerException("잘못된 접근입니다. 시험을 처음부터 다시 시작하세요. examResult null");
+            throw new MyForbiddenException("잘못된 접근입니다. 시험을 처음부터 다시 시작하세요. examResult null");
 
         if (Objects.equals(member.getRole(), Role.ROLE_ACADEMY)) {
             Optional<Member> memberOptional = memberRepository.findById(studentId);
@@ -124,7 +126,7 @@ public class ExamService {
             Member memberAcademy = memberRepository.findByRoleAndAcademyId(Role.ROLE_ACADEMY, member.getAcademyId());
             if (Objects.equals(member.getRole(), Role.ROLE_ACADEMY_STUDENT))
 
-                if (memberAcademy.getTestCount() <= 0) throw new MyInternalServerException("해당 학원에 테스트 횟수가 없습니다.");
+                if (memberAcademy.getTestCount() <= 0) throw new MyForbiddenException("해당 학원에 테스트 횟수가 없습니다.");
                 else {
                     memberAcademy.setTestCount(memberAcademy.getTestCount() - 1);
                     memberRepository.save(memberAcademy);
@@ -136,7 +138,7 @@ public class ExamService {
             if (memberAnswerOptional.isPresent())
                 return TestResponseDto.statusOk(memberAnswerOptional.get().getMemberAnswerCategory().getExamPaper());
 
-            if (member.getTestCount() <= 0) throw new MyInternalServerException("테스트 횟수가 없습니다.");
+            if (member.getTestCount() <= 0) throw new MyForbiddenException("테스트 횟수가 없습니다.");
             else {
                 member.setTestCount(member.getTestCount() - 1);
                 memberRepository.save(member);
@@ -156,7 +158,7 @@ public class ExamService {
         ExamPaper examPaper = isExamPaper(examPaperId);
 
         List<MemberAnswerCategory> memberAnswerCategoryList = memberAnswerCategoryRepository.findByExamPaper(examPaper);
-        if (memberAnswerCategoryList.isEmpty()) throw new MyInternalServerException("올바른 접근이 아닙니다.no examPaper");
+        if (memberAnswerCategoryList.isEmpty()) throw new MyForbiddenException("올바른 접근이 아닙니다.no examPaper");
 
         if (Objects.equals(member.getRole(), Role.ROLE_ACADEMY)) {
             Optional<Member> memberOptional = memberRepository.findById(examPaper.getExamResult().getMember().getId());
@@ -172,7 +174,7 @@ public class ExamService {
         MemberAnswer memberAnswer = memberAnswerRepository.findByExamQuest_IdAndMemberAnswerCategory_ExamPaper(request.getExamId(), examPaper);
         memberAnswer.setMyAnswer(request.getMyAnswer());
 
-        if (examQuestOptional.isEmpty()) throw new MyInternalServerException("잘못된 접근입니다.");
+        if (examQuestOptional.isEmpty()) throw new MyForbiddenException("잘못된 접근입니다.");
 
         ExamQuest examQuest = examQuestOptional.get();
 
@@ -322,7 +324,7 @@ public class ExamService {
     public ExamResultCheckResponseDto resultCheck(Long examId) {
         Optional<ExamResult> examResultOptional = examResultRepository.findById(examId);
 
-        if (examResultOptional.isEmpty()) throw new MyInternalServerException("시험을 다시 시작하세요");
+        if (examResultOptional.isEmpty()) throw new MyForbiddenException("시험을 다시 시작하세요");
 
         ExamResult examResult = examResultOptional.get();
 
@@ -346,7 +348,7 @@ public class ExamService {
 
         Optional<ExamResult> examResultOptional = examResultRepository.findById(examId);
 
-        if (examResultOptional.isEmpty()) throw new MyInternalServerException("잘못된 접근입니다");
+        if (examResultOptional.isEmpty()) throw new MyForbiddenException("잘못된 접근입니다");
 
         ExamResult examResult = examResultOptional.get();
 
@@ -357,7 +359,7 @@ public class ExamService {
 
         List<ExamPaper> examPaperList = examPaperRepository.findByExamResult(examResult);
 
-        if(ObjectUtils.isEmpty(examPaperList)) throw new MyInternalServerException("응시한 시험이 없습니다.");
+        if(ObjectUtils.isEmpty(examPaperList)) throw new MyNotFoundException("응시한 시험이 없습니다.");
 
         List<ExamResultLevelDto> examResultLevelDtoList = new ArrayList<>();
 
@@ -370,7 +372,7 @@ public class ExamService {
                     examResultLevelDto.setProblemCount(ep.getExamCategory().getValue());
 
                     if(ep.getLevel() == null) {
-                        throw new MyInternalServerException(ep.getExamCategory().toString()+" 시험을 종료하고 결과를 확인해주세요.");
+                        throw new MyForbiddenException(ep.getExamCategory().toString()+" 시험을 종료하고 결과를 확인해주세요.");
                     }
                     else{
                         examResultLevelDto.setLevel(ep.getLevel());
