@@ -72,7 +72,7 @@ public class AuthController {
         log.info("refresh controller 실행");
         Map<String, String> map = jwtService.validateRefreshToken(bodyJson.get("refreshToken"));
 
-        if (map.get("status").equals("402")) {
+        if (map.get("status").equals("401")) {
             log.info("RefreshController - Refresh Token이 만료.");
             RefreshApiResponseMessage refreshApiResponseMessage = new RefreshApiResponseMessage(map);
             return new ResponseEntity<>(refreshApiResponseMessage, HttpStatus.UNAUTHORIZED);

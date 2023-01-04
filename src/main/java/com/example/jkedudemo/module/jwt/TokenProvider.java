@@ -1,5 +1,6 @@
 package com.example.jkedudemo.module.jwt;
 
+import com.example.jkedudemo.module.handler.MyForbiddenException;
 import com.example.jkedudemo.module.handler.MyUnAuthorizedException;
 import com.example.jkedudemo.module.jwt.dto.TokenDto;
 import com.example.jkedudemo.module.jwt.entity.RefreshToken;
@@ -87,7 +88,7 @@ public class TokenProvider {
     public Authentication getAuthentication(String accessToken) {
         Claims claims = parseClaims(accessToken);
 
-        if (claims.get(AUTHORITIES_ROLE) == null) throw new MyUnAuthorizedException("권한 정보가 없는 토큰입니다.");
+        if (claims.get(AUTHORITIES_ROLE) == null) throw new MyForbiddenException("권한 정보가 없음.");
 
         Collection<? extends GrantedAuthority> authorities =
                 Arrays.stream(claims.get(AUTHORITIES_ROLE).toString().split(","))

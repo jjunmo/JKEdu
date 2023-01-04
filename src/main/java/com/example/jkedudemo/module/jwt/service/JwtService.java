@@ -44,8 +44,8 @@ public class JwtService {
         Map<String, String> map = new HashMap<>();
 
         if(createdAccessToken == null){
-            map.put("errortype", "Refresh 토큰 Expired");
-            map.put("status", "402");
+            map.put("errortype", "refresh_expired");
+            map.put("status", "401");
             map.put("message", "Refresh 토큰이 만료되었습니다. 로그인이 필요합니다.");
 
             return map;
