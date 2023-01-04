@@ -50,9 +50,20 @@ public class AuthController {
     }
 
     /**
+     * 로그아웃
+     * @param userAgent 브라우저 환경
+     * @return refreshToken 삭제
+     */
+    @PostMapping("/member/logout")
+    @Operation(summary = "회원 로그아웃", description = "로그아웃 및 Refresh Token 삭제")
+    public HttpEntity<MemberStatusOkResponseDto> logout(@RequestHeader("User-Agent") String userAgent) {
+        return ResponseEntity.ok(jwtService.logout(userAgent));
+    }
+
+    /**
      * accessToken 재발급
      * @param bodyJson refreshToken
-     * @return
+     * @return accessToken
      */
     @PostMapping("/refresh")
     @Operation(summary = "토큰 재발급", description = "Refresh Token DB에서 확인 후 재발급")

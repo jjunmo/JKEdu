@@ -93,8 +93,6 @@ public class AuthService {
 
         //TODO: 비밀번호 유효성 체크 , 토큰이 남아있음.
 
-        //Status 체크
-
         if (member.getStatus().equals(Status.YELLOW)) throw new MyForbiddenException("정지 대상입니다.");
 
         UsernamePasswordAuthenticationToken authenticationToken = requestDto.toAuthentication();
@@ -107,6 +105,7 @@ public class AuthService {
                 .refreshToken(tokenDto.getRefreshToken())
                 .userAgent(userAgent)
                 .build();
+
 
         refreshTokenRepository.save(refreshToken);
 
