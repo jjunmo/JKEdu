@@ -2,18 +2,19 @@ package com.example.jkedudemo.module.jwt.service;
 
 import com.example.jkedudemo.module.config.SecurityUtil;
 import com.example.jkedudemo.module.handler.MyForbiddenException;
+import com.example.jkedudemo.module.handler.MyNotFoundException;
 import com.example.jkedudemo.module.jwt.TokenProvider;
 import com.example.jkedudemo.module.jwt.dto.TokenDto;
 import com.example.jkedudemo.module.jwt.entity.RefreshToken;
 import com.example.jkedudemo.module.jwt.repository.RefreshTokenRepository;
+import com.example.jkedudemo.module.member.dto.response.MemberStatusOkResponseDto;
 import com.example.jkedudemo.module.member.entity.Member;
 import com.example.jkedudemo.module.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import javax.transaction.Transactional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -60,13 +61,29 @@ public class JwtService {
 
     public TokenDto refresh(String userAgent) {
         Member member = isMemberCurrent();
-        Optional<RefreshToken> refreshTokenOptional = refreshTokenRepository.findByKeyIdAndUserAgent(member, userAgent);
-        if (refreshTokenOptional.isPresent()) {
-            RefreshToken refresh = refreshTokenOptional.get();
+        List<RefreshToken> refreshTokenList = refreshTokenRepository.findByKeyIdAndUserAgent(member, userAgent);
+
+        if(refreshTokenList==null| Objects.requireNonNull(refreshTokenList).isEmpty()){
+            throw new MyForbiddenException("로그인을 다시 해주세요.");
+        }else{
+            RefreshToken refresh = refreshTokenList.get(refreshTokenList.size()-1);
             String createdAccessToken = tokenProvider.validateRefreshToken(refresh);
             return new TokenDto("200", "OK",createdAccessToken, refresh.getRefreshToken());
-        } else throw new MyForbiddenException("로그인을 다시 해주세요.");
+        }
+    }
 
+    @Transactional
+    public MemberStatusOkResponseDto logout(String userAgent) {
+        Member member = isMemberCurrent();
+
+        List<RefreshToken> refreshTokenList = refreshTokenRepository.findByKeyIdAndUserAgent(member, userAgent);
+
+        if (refreshTokenList == null | Objects.requireNonNull(refreshTokenList).isEmpty()) {
+            throw new MyForbiddenException("잘못된 접근입니다");
+        } else {
+            refreshTokenRepository.deleteAll(refreshTokenList);
+            return MemberStatusOkResponseDto.statusOk();
+        }
     }
 
 }
