@@ -29,7 +29,7 @@ public class TokenProvider {
     private static final String AUTHORITIES_ROLE = "auth";
     private static final String BEARER_TYPE = "bearer";
     //토큰 만료시간
-    private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 30;
+    private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 30;
     private final Key key;
 
     //디코딩 메소드
@@ -48,7 +48,7 @@ public class TokenProvider {
         long now = (new Date()).getTime();
 
         Date tokenExpiresIn = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
-        Date refreshTokenExpiresIn = new Date(now + ACCESS_TOKEN_EXPIRE_TIME * 48);
+        Date refreshTokenExpiresIn = new Date(now + ACCESS_TOKEN_EXPIRE_TIME * 2);
 
         System.out.println(tokenExpiresIn);
         int idx = authorities.indexOf("_");
