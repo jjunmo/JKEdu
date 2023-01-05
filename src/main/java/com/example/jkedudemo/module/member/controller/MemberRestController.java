@@ -164,6 +164,7 @@ public class MemberRestController {
         return ResponseEntity.ok(memberService.setAcademyMember(request));
     }
 
+
     @GetMapping("/management")
     @Operation(summary = "학생 관리", description = "학원계정의 학원관리")
     public HttpEntity<AcademyManagementResponseDto> academyMemberList( @PageableDefault Pageable pageable){

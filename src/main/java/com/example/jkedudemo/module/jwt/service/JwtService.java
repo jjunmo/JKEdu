@@ -29,6 +29,11 @@ public class JwtService {
                 .orElseThrow(() -> new MyForbiddenException("로그인 유저 정보가 없습니다"));
     }
 
+    /**
+     * refreshToken 유효성 검증
+     * @param refreshToken
+     * @return access Token
+     */
     public Map<String, String> validateRefreshToken(String refreshToken) {
         Optional<RefreshToken> refreshTokenOptional =refreshTokenRepository.findByRefreshToken(refreshToken);
         if(refreshTokenOptional.isPresent()) {
@@ -39,6 +44,11 @@ public class JwtService {
         return null;
     }
 
+    /**
+     * accessToken 재발급
+     * @param createdAccessToken access 토큰 재발급
+     * @return
+     */
     public Map<String, String> createRefreshJson(String createdAccessToken){
 
         Map<String, String> map = new HashMap<>();
@@ -59,6 +69,11 @@ public class JwtService {
 
     }
 
+    /**
+     * 새로고침
+     * @param userAgent 로그인 한 Browser
+     * @return login
+     */
     public TokenDto refresh(String userAgent) {
         Member member = isMemberCurrent();
         List<RefreshToken> refreshTokenList = refreshTokenRepository.findByKeyIdAndUserAgent(member, userAgent);
@@ -72,6 +87,11 @@ public class JwtService {
         }
     }
 
+    /**
+     * 로그아웃
+     * @param userAgent 로그아웃 하는 Browser
+     * @return refrsehToken 삭제
+     */
     @Transactional
     public MemberStatusOkResponseDto logout(String userAgent) {
         Member member = isMemberCurrent();
