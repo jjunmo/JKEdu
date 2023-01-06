@@ -2,7 +2,6 @@ package com.example.jkedudemo.module.jwt.service;
 
 import com.example.jkedudemo.module.config.SecurityUtil;
 import com.example.jkedudemo.module.handler.MyForbiddenException;
-import com.example.jkedudemo.module.handler.MyNotFoundException;
 import com.example.jkedudemo.module.jwt.TokenProvider;
 import com.example.jkedudemo.module.jwt.dto.TokenDto;
 import com.example.jkedudemo.module.jwt.entity.RefreshToken;
@@ -33,7 +32,7 @@ public class JwtService {
 
     /**
      * refreshToken 유효성 검증
-     * @param refreshToken
+     * @param refreshToken refreshToken
      * @return access Token
      */
     public Map<String, String> validateRefreshToken(String refreshToken) {
@@ -50,7 +49,7 @@ public class JwtService {
     /**
      * accessToken 재발급
      * @param createdAccessToken access 토큰 재발급
-     * @return
+     * @return accessToken
      */
     public Map<String, String> createRefreshJson(String createdAccessToken){
 
@@ -103,7 +102,7 @@ public class JwtService {
 
         log.info(refreshTokenList.get(0).getRefreshToken()+ "refreshToken!!!");
 
-        if (refreshTokenList == null | Objects.requireNonNull(refreshTokenList,"refreshToken 없습니다 !!").isEmpty()) {
+        if (Objects.requireNonNull(refreshTokenList,"refreshToken 없습니다 !!").isEmpty()) {
             throw new MyForbiddenException("잘못된 접근입니다");
         } else {
             refreshTokenRepository.deleteAll(refreshTokenList);
