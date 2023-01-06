@@ -99,7 +99,7 @@ public class JwtService {
 
         List<RefreshToken> refreshTokenList = refreshTokenRepository.findByKeyIdAndUserAgent(member, userAgent);
 
-        if (refreshTokenList == null | Objects.requireNonNull(refreshTokenList).isEmpty()) {
+        if (refreshTokenList == null | Objects.requireNonNull(refreshTokenList,"refreshToken 없습니다 !!").isEmpty()) {
             throw new MyForbiddenException("잘못된 접근입니다");
         } else {
             refreshTokenRepository.deleteAll(refreshTokenList);
