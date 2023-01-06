@@ -11,12 +11,14 @@ import com.example.jkedudemo.module.member.dto.response.MemberStatusOkResponseDt
 import com.example.jkedudemo.module.member.entity.Member;
 import com.example.jkedudemo.module.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.*;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class JwtService {
 
@@ -98,6 +100,8 @@ public class JwtService {
         Member member = isMemberCurrent();
 
         List<RefreshToken> refreshTokenList = refreshTokenRepository.findByKeyIdAndUserAgent(member, userAgent);
+
+        log.info(refreshTokenList.get(0).getRefreshToken()+ "refreshToken!!!");
 
         if (refreshTokenList == null | Objects.requireNonNull(refreshTokenList,"refreshToken 없습니다 !!").isEmpty()) {
             throw new MyForbiddenException("잘못된 접근입니다");
