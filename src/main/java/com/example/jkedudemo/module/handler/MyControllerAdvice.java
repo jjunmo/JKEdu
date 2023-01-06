@@ -12,7 +12,7 @@ public class MyControllerAdvice extends ResponseEntityExceptionHandler {
 
     @ResponseBody
     @ExceptionHandler(MyUnAuthorizedException.class)
-    public ResponseEntity<MyErrorBody> handleForbiddenException(MyUnAuthorizedException e) {
+    public ResponseEntity<MyErrorBody> handleUnAuthorizedException(MyUnAuthorizedException e) {
         return new ResponseEntity<>(
                 new MyErrorBody("access_expired",e.getMessage(),"401"),
                 HttpStatus.UNAUTHORIZED

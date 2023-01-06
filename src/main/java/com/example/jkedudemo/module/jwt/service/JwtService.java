@@ -41,7 +41,8 @@ public class JwtService {
             String createdAccessToken = tokenProvider.validateRefreshToken(refresh);
             return createRefreshJson(createdAccessToken);
         }
-        return null;
+
+        return Map.of("refreshToken",refreshToken);
     }
 
     /**
