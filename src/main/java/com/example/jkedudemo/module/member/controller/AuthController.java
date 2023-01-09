@@ -15,6 +15,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -56,8 +58,8 @@ public class AuthController {
      */
     @PostMapping("/member/logout")
     @Operation(summary = "회원 로그아웃", description = "로그아웃 및 Refresh Token 삭제")
-    public HttpEntity<MemberStatusOkResponseDto> logout(@RequestHeader("User-Agent") String userAgent) {
-        return ResponseEntity.ok(jwtService.logout(userAgent));
+    public HttpEntity<MemberStatusOkResponseDto> logout(HttpServletRequest request, @RequestHeader("User-Agent") String userAgent) {
+        return ResponseEntity.ok(jwtService.logout(request,userAgent));
     }
 
     /**

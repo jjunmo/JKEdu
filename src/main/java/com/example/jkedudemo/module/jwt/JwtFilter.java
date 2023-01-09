@@ -1,8 +1,11 @@
 package com.example.jkedudemo.module.jwt;
 
+import com.example.jkedudemo.module.handler.MyForbiddenException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -11,7 +14,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Objects;
 
+@Component
 @RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
     public static final String AUTHORIZATION_HEADER = "Authorization";
@@ -36,4 +42,25 @@ public class JwtFilter extends OncePerRequestFilter {
         }
         filterChain.doFilter(request, response);
     }
+
+    public Long getCurrentMemberId2(HttpServletRequest request) {
+        final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null || authentication.getName() == null) throw new MyForbiddenException("Security Context에 인증 정보가 없습니다.");
+
+        try{
+            return Long.parseLong(authentication.getName());
+        }catch (NumberFormatException e){
+            return getTokenPayLoad(request);
+        }
+    }
+
+    public Long getTokenPayLoad(HttpServletRequest request) {
+        String token = resolveAccessToken(request);
+        // 만료된 Access Token을 디코딩하여 Payload 값을 가져옴
+        HashMap<String, String> payloadMap = JwtUtil.getPayloadByToken(Objects.requireNonNull(token));
+
+        return Long.parseLong(Objects.requireNonNull(payloadMap).get("sub"));
+    }
+
 }

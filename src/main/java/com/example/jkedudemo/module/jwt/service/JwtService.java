@@ -2,6 +2,7 @@ package com.example.jkedudemo.module.jwt.service;
 
 import com.example.jkedudemo.module.config.SecurityUtil;
 import com.example.jkedudemo.module.handler.MyForbiddenException;
+import com.example.jkedudemo.module.jwt.JwtFilter;
 import com.example.jkedudemo.module.jwt.TokenProvider;
 import com.example.jkedudemo.module.jwt.dto.TokenDto;
 import com.example.jkedudemo.module.jwt.entity.RefreshToken;
@@ -13,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.util.*;
 
@@ -24,11 +26,20 @@ public class JwtService {
     private final RefreshTokenRepository refreshTokenRepository;
     private final TokenProvider tokenProvider;
     private final MemberRepository memberRepository;
+    private final JwtFilter jwtFilter;
+
+    protected HttpServletRequest request;
 
     public Member isMemberCurrent() {
         return memberRepository.findById(SecurityUtil.getCurrentMemberId())
                 .orElseThrow(() -> new MyForbiddenException("로그인 유저 정보가 없습니다"));
     }
+
+    public Member isMemberCurrent2(HttpServletRequest request){
+        return memberRepository.findById(jwtFilter.getCurrentMemberId2(request))
+                .orElseThrow(() ->new MyForbiddenException("로그인 유저 정보가 없습니다."));
+    }
+
 
     /**
      * refreshToken 유효성 검증
@@ -95,8 +106,13 @@ public class JwtService {
      * @return refrsehToken 삭제
      */
     @Transactional
-    public MemberStatusOkResponseDto logout(String userAgent) {
-        Member member = isMemberCurrent();
+    public MemberStatusOkResponseDto logout(HttpServletRequest request,String userAgent) {
+//        Long token = jwtFilter.getTokenPayLoad(request);
+//
+//        Member member = memberRepository.findById(token)
+//                    .orElseThrow(() ->new MyForbiddenException("로그인 유저 정보가 없습니다."));
+
+        Member member =isMemberCurrent2(request);
 
         List<RefreshToken> refreshTokenList = refreshTokenRepository.findByKeyIdAndUserAgent(member, userAgent);
 
