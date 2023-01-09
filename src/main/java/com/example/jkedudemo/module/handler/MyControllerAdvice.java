@@ -14,7 +14,7 @@ public class MyControllerAdvice extends ResponseEntityExceptionHandler {
     @ExceptionHandler(MyUnAuthorizedException.class)
     public ResponseEntity<MyErrorBody> handleUnAuthorizedException(MyUnAuthorizedException e) {
         return new ResponseEntity<>(
-                new MyErrorBody("access_expired",e.getMessage(),"401"),
+                new MyErrorBody("access_expired","401",e.getMessage()),
                 HttpStatus.UNAUTHORIZED
         );
     }
@@ -23,7 +23,7 @@ public class MyControllerAdvice extends ResponseEntityExceptionHandler {
     @ExceptionHandler(MyForbiddenException.class)
     public ResponseEntity<MyErrorBody> handleForbiddenException(MyForbiddenException e) {
         return new ResponseEntity<>(
-                new MyErrorBody("접근 권한이 없습니다.",e.getMessage(),"403"),
+                new MyErrorBody("접근 권한이 없습니다.","403",e.getMessage()),
                 HttpStatus.FORBIDDEN
         );
     }
