@@ -23,7 +23,7 @@ public class MyControllerAdvice extends ResponseEntityExceptionHandler {
     @ExceptionHandler(MyForbiddenException.class)
     public ResponseEntity<MyErrorBody> handleForbiddenException(MyForbiddenException e) {
         return new ResponseEntity<>(
-                new MyErrorBody(e.getMessage(),"403"),
+                new MyErrorBody("권한이 없습니다.",e.getMessage(),"403"),
                 HttpStatus.FORBIDDEN
         );
     }
