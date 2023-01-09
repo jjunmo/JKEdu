@@ -1,6 +1,7 @@
 package com.example.jkedudemo.module.jwt;
 
 import com.example.jkedudemo.module.handler.MyForbiddenException;
+import com.example.jkedudemo.module.handler.MyNotFoundException;
 import com.example.jkedudemo.module.jwt.dto.TokenDto;
 import com.example.jkedudemo.module.jwt.entity.RefreshToken;
 import com.example.jkedudemo.module.member.dto.CustomUser;
@@ -105,7 +106,7 @@ public class TokenProvider {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return true;
         } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
-            log.info("잘못된 JWT 서명입니다.");
+            throw new MyNotFoundException("");
         } catch (ExpiredJwtException e) {
             log.info("만료된 JWT 토큰입니다.");
         } catch (UnsupportedJwtException e) {
