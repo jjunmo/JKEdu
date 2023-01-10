@@ -2,13 +2,9 @@ package com.example.jkedudemo.module.config;
 
 import com.example.jkedudemo.module.handler.MyForbiddenException;
 import com.example.jkedudemo.module.handler.MyUnAuthorizedException;
-import com.example.jkedudemo.module.jwt.JwtFilter;
-import com.example.jkedudemo.module.jwt.JwtUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-
-import javax.servlet.http.HttpServletRequest;
 
 @Slf4j
 public class SecurityUtil {

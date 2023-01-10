@@ -2,8 +2,6 @@ package com.example.jkedudemo.module.handler;
 
 import lombok.Getter;
 
-import java.util.Map;
-
 @Getter
 public class MyErrorBody {
 
