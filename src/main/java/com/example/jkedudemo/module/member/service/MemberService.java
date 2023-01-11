@@ -356,8 +356,8 @@ public class MemberService {
         Member member = isMemberCurrent();
 
         if (Objects.equals(member.getRole(), Role.ROLE_ACADEMY)) {
-            Optional<Member> memberOptional = memberRepository.findById(id);
-            member = memberOptional.orElseThrow(()->new MyBadRequestException("잘못된 요청입니다."));
+            if(id == null) throw new MyBadRequestException("잘못된 요청입니다.");
+            member =  memberRepository.findById(id).orElseThrow(()->new MyBadRequestException("학생을 다시 선택하세요."));
         }
 
         Slice<ResultListDto> resultListDtoSlice=examResultRepository.findByMemberOrderByIdAsc(member,pageable)

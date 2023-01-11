@@ -10,6 +10,7 @@ import com.example.jkedudemo.module.exam.dto.request.NextQuestRequest;
 import com.example.jkedudemo.module.exam.dto.response.*;
 import com.example.jkedudemo.module.exam.entity.*;
 import com.example.jkedudemo.module.exam.repository.*;
+import com.example.jkedudemo.module.handler.MyBadRequestException;
 import com.example.jkedudemo.module.handler.MyForbiddenException;
 import com.example.jkedudemo.module.handler.MyNotFoundException;
 import com.example.jkedudemo.module.member.entity.Member;
@@ -347,7 +348,7 @@ public class ExamService {
 
         Optional<ExamResult> examResultOptional = examResultRepository.findById(examId);
 
-        if (examResultOptional.isEmpty()) throw new MyForbiddenException("잘못된 접근입니다");
+        if (examResultOptional.isEmpty()) throw new MyBadRequestException("잘못된 접근입니다");
 
         ExamResult examResult = examResultOptional.get();
 
