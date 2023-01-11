@@ -18,7 +18,5 @@ public class MemberStatusOkResponseDto {
                 .status("200")
                 .message("OK")
                 .build();
+      }
     }
-
-
-}

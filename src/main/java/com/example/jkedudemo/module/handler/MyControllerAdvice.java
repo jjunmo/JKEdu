@@ -47,4 +47,13 @@ public class MyControllerAdvice extends ResponseEntityExceptionHandler {
         );
     }
 
+    @ResponseBody
+    @ExceptionHandler(MyBadRequestException.class)
+    public ResponseEntity<MyErrorBody> handleBadRequestException(MyBadRequestException e) {
+        return new ResponseEntity<>(
+                new MyErrorBody(e.getMessage(),"400"),
+                HttpStatus.BAD_REQUEST
+        );
+    }
+
 }

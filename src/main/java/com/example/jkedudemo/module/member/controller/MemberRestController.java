@@ -135,12 +135,12 @@ public class MemberRestController {
      */
     @GetMapping("/excheck")
     @Operation(summary = "아이디 중복확인", description = "로그인시 아이디 중복 확인")
-    public HttpEntity<MemberStatusOkResponseDto> exEmail(String email) {
+    public HttpEntity<Object> exEmail(String email) {
         String result = memberService.exEmailCheck(email);
 
         if (result.equals("OK")) return ResponseEntity.ok(MemberStatusOkResponseDto.statusOk());
 
-        else throw new MyForbiddenException("이미 존재하는 아이디입니다.");
+        else return ResponseEntity.badRequest().body("중복된 아이디입니다.");
     }
 
     /**

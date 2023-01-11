@@ -99,6 +99,7 @@ public class AuthService {
         UsernamePasswordAuthenticationToken authenticationToken = requestDto.toAuthentication();
         Authentication authentication = managerBuilder.getObject().authenticate(authenticationToken);
 
+
         TokenDto tokenDto=tokenProvider.generateTokenDto(authentication,member.getName());
 
         RefreshToken refreshToken = RefreshToken.builder()
