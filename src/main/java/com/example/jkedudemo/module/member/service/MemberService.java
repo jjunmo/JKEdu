@@ -322,6 +322,9 @@ public class MemberService {
 
     public AcademyManagementResponseDto findAll(Pageable pageable){
         Member member = isMemberCurrent();
+
+        if(member.getRole().equals(Role.ROLE_USER)) throw new MyBadRequestException("잘못된 요청입니다. 넌 학생임");
+
         Slice<AcademyMemberListResponseDto> academyMemberListResponseDtoList=
                 memberRepository.findByAcademyIdAndRoleAndStatusOrderByIdAsc(member.getAcademyId(),Role.ROLE_ACADEMY_STUDENT,Status.GREEN,pageable)
                 .map(AcademyMemberListResponseDto::find);

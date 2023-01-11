@@ -4,14 +4,11 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.GetObjectRequest;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectInputStream;
-import com.example.jkedudemo.module.common.enums.member.Role;
-import com.example.jkedudemo.module.common.enums.member.Status;
 import com.example.jkedudemo.module.exam.entity.ExamCategory;
 import com.example.jkedudemo.module.exam.entity.ExamMultipleChoice;
 import com.example.jkedudemo.module.exam.entity.ExamQuest;
 import com.example.jkedudemo.module.exam.repository.ExamCategoryRepository;
 import com.example.jkedudemo.module.exam.repository.ExamQuestRepository;
-import com.example.jkedudemo.module.member.entity.Member;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,10 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.text.SimpleDateFormat;
 import java.util.Optional;
 
 
@@ -44,7 +39,7 @@ public class S3Service {
      */
     @SneakyThrows
     @Transactional
-    public void readObject(String storedFileName) throws IOException {
+    public void readObject(String storedFileName) {
         S3Object o = amazonS3.getObject(new GetObjectRequest(bucket, storedFileName));
         S3ObjectInputStream ois = null;
         BufferedReader br = null;
@@ -109,11 +104,11 @@ public class S3Service {
                     em.persist(examMultipleChoice);
                 }
 
-                if(storedFileName.contains("data")) {
-                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-                    Member member= new Member("010-1234-1234",data[0],format.parse(data[1]), Role.ROLE_ACADEMY_STUDENT,data[2], Status.GREEN);
-                    em.persist(member);
-                }
+//                if(storedFileName.contains("data")) {
+//                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+//                    Member member= new Member("010-1234-1234",data[0],format.parse(data[1]), Role.ROLE_ACADEMY_STUDENT,data[2], Status.GREEN);
+//                    em.persist(member);
+//                }
 
             }
         } finally {
