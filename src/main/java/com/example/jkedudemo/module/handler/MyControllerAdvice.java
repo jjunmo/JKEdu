@@ -31,7 +31,7 @@ public class MyControllerAdvice extends ResponseEntityExceptionHandler {
     @ExceptionHandler(MyNotFoundException.class)
     public ResponseEntity<MyErrorBody> handleNotFoundException(MyNotFoundException e) {
         return new ResponseEntity<>(
-                new MyErrorBody("Not Found",e.getMessage(),"404"),
+                new MyErrorBody("Not Found","404",e.getMessage()),
                 HttpStatus.NOT_FOUND
         );
     }
@@ -40,7 +40,7 @@ public class MyControllerAdvice extends ResponseEntityExceptionHandler {
     @ExceptionHandler(MyInternalServerException.class)
     public ResponseEntity<MyErrorBody> handleInternalServerException(MyInternalServerException e) {
         return new ResponseEntity<>(
-                new MyErrorBody("Server error",e.getMessage(),"500"),
+                new MyErrorBody("Server error","500",e.getMessage()),
                 HttpStatus.INTERNAL_SERVER_ERROR
         );
     }
@@ -49,7 +49,7 @@ public class MyControllerAdvice extends ResponseEntityExceptionHandler {
     @ExceptionHandler(MyBadRequestException.class)
     public final ResponseEntity<MyErrorBody> handleBadRequestException(Exception e) {
         return new ResponseEntity<>(
-                new MyErrorBody("BadRequest!",e.getMessage(),"400"),
+                new MyErrorBody("BadRequest!","400",e.getMessage()),
                 HttpStatus.BAD_REQUEST
         );
     }

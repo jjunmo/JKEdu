@@ -47,7 +47,9 @@ public class JwtService {
      * @return access Token
      */
     public Map<String, String> validateRefreshToken(String refreshToken) {
+
         Optional<RefreshToken> refreshTokenOptional =refreshTokenRepository.findByRefreshToken(refreshToken);
+
         if(refreshTokenOptional.isPresent()) {
             RefreshToken refresh = refreshTokenOptional.get();
             String createdAccessToken = tokenProvider.validateRefreshToken(refresh);
@@ -64,7 +66,7 @@ public class JwtService {
      */
     public Map<String, String> createRefreshJson(String createdAccessToken){
 
-        Map<String, String> map = new HashMap<>();
+        Map<String, String> map = new HashMap<String,String>();
 
         if(createdAccessToken == null){
             map.put("errortype", "refresh_expired");
