@@ -54,4 +54,12 @@ public class MyControllerAdvice extends ResponseEntityExceptionHandler {
         );
     }
 
+    @ExceptionHandler(MyUnAuthorizedException2.class)
+    public final ResponseEntity<MyErrorBody> handleBadRequestException(MyUnAuthorizedException2 e) {
+        return new ResponseEntity<>(
+                new MyErrorBody("refresh_expired", "401", e.getMessage()),
+                HttpStatus.UNAUTHORIZED
+        );
+    }
+
 }

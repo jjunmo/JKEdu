@@ -3,6 +3,7 @@ package com.example.jkedudemo.module.jwt.service;
 import com.example.jkedudemo.module.config.SecurityUtil;
 import com.example.jkedudemo.module.handler.MyForbiddenException;
 import com.example.jkedudemo.module.handler.MyNotFoundException;
+import com.example.jkedudemo.module.handler.MyUnAuthorizedException2;
 import com.example.jkedudemo.module.jwt.JwtFilter;
 import com.example.jkedudemo.module.jwt.TokenProvider;
 import com.example.jkedudemo.module.jwt.dto.TokenDto;
@@ -70,11 +71,7 @@ public class JwtService {
         Map<String, String> map = new HashMap<String,String>();
 
         if(createdAccessToken == null){
-            map.put("errortype", "refresh_expired");
-            map.put("status", "401");
-            map.put("message", "Refresh 토큰이 만료되었습니다. 로그인이 필요합니다.");
-
-            return map;
+            throw new MyUnAuthorizedException2("로그인을 다시 해주세요.");
         }
         //기존에 존재하는 accessToken 제거
         map.put("status", "200");
