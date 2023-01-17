@@ -1,6 +1,6 @@
 package com.example.jkedudemo.module.upload;
 
-import com.example.jkedudemo.module.common.util.BaseTime;
+import com.example.jkedudemo.module.common.utility.BaseTime;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 

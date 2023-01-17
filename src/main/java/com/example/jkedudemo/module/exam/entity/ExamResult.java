@@ -1,6 +1,6 @@
 package com.example.jkedudemo.module.exam.entity;
 
-import com.example.jkedudemo.module.common.util.BaseTime;
+import com.example.jkedudemo.module.common.utility.BaseTime;
 import com.example.jkedudemo.module.member.entity.Member;
 import lombok.*;
 import org.hibernate.annotations.Comment;

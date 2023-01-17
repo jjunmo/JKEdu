@@ -1,7 +1,7 @@
 package com.example.jkedudemo.module.config;
 
-import com.example.jkedudemo.module.common.util.ExamCategoryConverter;
-import com.example.jkedudemo.module.common.util.PhoneAuthConverter;
+import com.example.jkedudemo.module.common.utility.ExamCategoryConverter;
+import com.example.jkedudemo.module.common.utility.PhoneAuthConverter;
 import com.example.jkedudemo.module.jwt.JwtAccessDeniedHandler;
 import com.example.jkedudemo.module.jwt.JwtAuthenticationEntryPoint;
 import com.example.jkedudemo.module.jwt.TokenProvider;

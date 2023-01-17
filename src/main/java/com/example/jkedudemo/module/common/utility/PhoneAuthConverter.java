@@ -1,4 +1,4 @@
-package com.example.jkedudemo.module.common.util;
+package com.example.jkedudemo.module.common.utility;
 
 import com.example.jkedudemo.module.common.enums.member.PhoneAuth;
 import org.springframework.core.convert.converter.Converter;

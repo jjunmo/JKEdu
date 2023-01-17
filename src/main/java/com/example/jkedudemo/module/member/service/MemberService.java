@@ -34,8 +34,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import static com.example.jkedudemo.module.common.util.Cer.getCerNum;
-import static com.example.jkedudemo.module.common.util.Cer.getStrStrCerNum;
+import static com.example.jkedudemo.module.common.utility.Cer.getCerNum;
+import static com.example.jkedudemo.module.common.utility.Cer.getStrStrCerNum;
 
 @Service
 @Slf4j
