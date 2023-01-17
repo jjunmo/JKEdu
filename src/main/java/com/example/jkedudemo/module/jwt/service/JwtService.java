@@ -3,7 +3,6 @@ package com.example.jkedudemo.module.jwt.service;
 import com.example.jkedudemo.module.config.SecurityUtil;
 import com.example.jkedudemo.module.handler.MyForbiddenException;
 import com.example.jkedudemo.module.handler.MyNotFoundException;
-import com.example.jkedudemo.module.handler.MyUnAuthorizedException;
 import com.example.jkedudemo.module.jwt.JwtFilter;
 import com.example.jkedudemo.module.jwt.TokenProvider;
 import com.example.jkedudemo.module.jwt.dto.TokenDto;
