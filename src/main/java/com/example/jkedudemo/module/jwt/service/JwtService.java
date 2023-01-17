@@ -2,6 +2,8 @@ package com.example.jkedudemo.module.jwt.service;
 
 import com.example.jkedudemo.module.config.SecurityUtil;
 import com.example.jkedudemo.module.handler.MyForbiddenException;
+import com.example.jkedudemo.module.handler.MyNotFoundException;
+import com.example.jkedudemo.module.handler.MyUnAuthorizedException;
 import com.example.jkedudemo.module.jwt.JwtFilter;
 import com.example.jkedudemo.module.jwt.TokenProvider;
 import com.example.jkedudemo.module.jwt.dto.TokenDto;
@@ -56,7 +58,7 @@ public class JwtService {
             return createRefreshJson(createdAccessToken);
         }
 
-        return Map.of("refreshToken",refreshToken);
+        throw new MyNotFoundException("로그인을 다시 해주세요.");
     }
 
     /**
@@ -93,7 +95,7 @@ public class JwtService {
         Member member = isMemberCurrent();
         List<RefreshToken> refreshTokenList = refreshTokenRepository.findByKeyIdAndUserAgent(member, userAgent);
 
-        if(refreshTokenList==null| Objects.requireNonNull(refreshTokenList).isEmpty()){
+        if(refreshTokenList==null || Objects.requireNonNull(refreshTokenList).isEmpty()){
             throw new MyForbiddenException("로그인을 다시 해주세요.");
         }else{
             RefreshToken refresh = refreshTokenList.get(refreshTokenList.size()-1);
