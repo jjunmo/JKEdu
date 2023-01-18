@@ -41,6 +41,6 @@ class MemberRepositoryTest {
         assertEquals(member.getPhone(),member1.getPhone());
         assertEquals(member.getStatus(),member1.getStatus());
         assertEquals(member,member1);
-    }
 
+    }
 }

@@ -29,6 +29,7 @@ public class Member extends Basetime {
 
     private String phone;
 
+    @Enumerated(EnumType.STRING)
     private Status status;
 
 }
