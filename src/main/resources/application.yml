@@ -1,8 +1,18 @@
 spring:
+  data:
+#    mongodb:
+#      host: localhost
+#      port: 27017
+#      authentication-database: admin
+#      username: jjunmo
+#      password: a123456
+#      database: jkedu
+#      # uri: mongodb: //localhost:27017/jkedu
   jpa:
     hibernate:
       ddl-auto: create-drop
       naming:
+        # CamelCase -> SnakeCase
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     properties:
       hibernate:
