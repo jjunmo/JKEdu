@@ -6,16 +6,16 @@ import lombok.Data;
 @Data
 public class MemberInsertDTO {
 
-    private String loginId;
+    private String loginId = "";
 
-    private String password;
+    private String password = "";
 
-    private String email;
+    private String email = "";
 
-    private String name;
+    private String name = "";
 
-    private String phone;
+    private String phone = "";
 
-    private Status status;
+    private Status status=Status.WHITE;
 
 }
