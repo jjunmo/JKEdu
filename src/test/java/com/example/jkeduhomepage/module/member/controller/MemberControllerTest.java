@@ -5,25 +5,35 @@ import com.example.jkeduhomepage.module.member.dto.MemberUpdateDTO;
 import com.example.jkeduhomepage.module.member.service.MemberService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.RestDocumentationContextProvider;
+import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
+import org.springframework.restdocs.payload.FieldDescriptor;
+import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 import java.time.LocalDate;
 
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
-@AutoConfigureMockMvc
 @ActiveProfiles("dev")
-@AutoConfigureRestDocs
+@ExtendWith({RestDocumentationExtension.class, SpringExtension.class})
 @TestInstance(value = TestInstance.Lifecycle.PER_CLASS)
 class MemberControllerTest {
     private final String URL = "/member";
@@ -31,8 +41,15 @@ class MemberControllerTest {
     @Autowired
     MemberService memberService;
 
-    @Autowired
-    MockMvc mockMvc;
+    private MockMvc mockMvc;
+
+    @BeforeEach
+    public void setUp(WebApplicationContext webApplicationContext,
+                      RestDocumentationContextProvider restDocumentation) {
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
+                .apply(MockMvcRestDocumentation.documentationConfiguration(restDocumentation))
+                .build();
+    }
 
     @BeforeAll
     public void all() {
@@ -74,7 +91,7 @@ class MemberControllerTest {
         // Object -> json String
         String paramString = objectMapper.writeValueAsString(memberInsertDTO);
 
-        mockMvc.perform(
+        this.mockMvc.perform(
                         post(URL)
                                 .content(paramString) // body
                                 .accept(MediaType.ALL)
@@ -116,26 +133,31 @@ class MemberControllerTest {
     }
 
     @Test
-    @DisplayName("3. 멤버 리스트 조회")
+    @DisplayName("3. Member 리스트 조회")
     public void member_list() throws Exception {
         saveMember();
-        saveMember();
-        saveMember();
+
         mockMvc.perform(
                         get(URL).contentType(MediaType.APPLICATION_JSON_VALUE)
                                 .accept(MediaType.ALL)
                 )
-                .andExpect(jsonPath("[0].loginId").value("aaa"))
-                .andExpect(jsonPath("[0].password").value("123456"))
-                .andExpect(jsonPath("[0].email").value("aa@aa"))
-                .andExpect(jsonPath("[0].name").value("momo"))
-                .andExpect(jsonPath("[0].phone").value("123456789"))
-                .andExpect(jsonPath("[0].status").value("WHITE"))
-                .andExpect(jsonPath("[0].createDate").value(String.valueOf(LocalDate.now())))
-                .andExpect(jsonPath("[0].updateDate").value(String.valueOf(LocalDate.now())))
-                .andExpect(status().isOk())
-                .andDo(print());
+                .andDo(print())
+                .andDo(document("Member-List", // 1
+                        preprocessResponse(prettyPrint()), // 2
+                        responseFields( // 3
+                                subsectionWithPath("[]").description("회원가입 멤버"),
+                                getDescription("[].id", "회원 고유번호(PK)").type(JsonFieldType.NUMBER),// 5
+                                getDescription("[].loginId", "회원 로그인 아이디").type(JsonFieldType.STRING),
+                                getDescription("[].password","회원 비밀번호").type(JsonFieldType.STRING),
+                                getDescription("[].email", "회원 이메일").type(JsonFieldType.STRING),
+                                getDescription("[].name","회원 이름").type(JsonFieldType.STRING),
+                                getDescription("[].phone", "회원 휴대번호").type(JsonFieldType.STRING),
+                                getDescription("[].status","회원 상태").type(JsonFieldType.STRING),
+                                getDescription("[].createDate", "회원가입 날짜").type(JsonFieldType.STRING),
+                                getDescription("[].updateDate","회원수정 날짜").type(JsonFieldType.STRING))
 
+                ))
+                .andExpect(status().isOk()); // 7
     }
 
     @Test
@@ -249,5 +271,9 @@ class MemberControllerTest {
                 .andDo(print());
     }
 
+    private FieldDescriptor getDescription(String name, String description) {
+        return fieldWithPath(name)
+                .description(description);
+    }
 
 }
