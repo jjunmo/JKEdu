@@ -28,11 +28,11 @@ public class MemberController {
      */
     @PostMapping
     public HttpEntity<Object> save(@RequestBody MemberInsertDTO memberInsertDTO){
-        if(memberInsertDTO.getLoginId().equals("")) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        if(memberInsertDTO.getPassword().equals("")) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        if(memberInsertDTO.getEmail().equals("")) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        if(memberInsertDTO.getName().equals("")) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        if(memberInsertDTO.getPhone().equals("")) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        if(memberInsertDTO.getLoginId().equals("")) return new ResponseEntity<>("ID를 입력하세요.",HttpStatus.BAD_REQUEST);
+        if(memberInsertDTO.getPassword().equals("")) return new ResponseEntity<>("비밀번호를 입력하세요.",HttpStatus.BAD_REQUEST);
+        if(memberInsertDTO.getEmail().equals("")) return new ResponseEntity<>("이메일을 입력하세요.",HttpStatus.BAD_REQUEST);
+        if(memberInsertDTO.getName().equals("")) return new ResponseEntity<>("이름을 입력하세요.",HttpStatus.BAD_REQUEST);
+        if(memberInsertDTO.getPhone().equals("")) return new ResponseEntity<>("휴대폰 번호를 입력하세요.",HttpStatus.BAD_REQUEST);
 
         return new ResponseEntity<>(memberService.save(memberInsertDTO),HttpStatus.OK);
     }
@@ -57,23 +57,22 @@ public class MemberController {
     /**
      * 회원정보 수정
      * @param memberUpdateDTO email , password
-     * @param id
+     * @param id memberId
      * @return member
      */
     @PutMapping("/{id}")
     public HttpEntity<Object> updateMember(@RequestBody MemberUpdateDTO memberUpdateDTO, @PathVariable Long id){
 
-        if(memberUpdateDTO.getEmail().equals("")) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        if(memberUpdateDTO.getPassword().equals("")) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        if(memberUpdateDTO.getEmail().equals("")) return new ResponseEntity<>("이메일을 입력하세요.",HttpStatus.BAD_REQUEST);
+        if(memberUpdateDTO.getPassword().equals("")) return new ResponseEntity<>("비밀번호를 입력하세요.",HttpStatus.BAD_REQUEST);
 
         Optional<Member> memberOptional=memberService.updateMember(memberUpdateDTO,id);
 
-        if(memberOptional.isEmpty()) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        if(memberOptional.isEmpty()) return new ResponseEntity<>("해당 정보가 없습니다.",HttpStatus.BAD_REQUEST);
 
         Member member=memberOptional.get();
 
         return new ResponseEntity<>(member,HttpStatus.OK);
-
     }
 
     /**
