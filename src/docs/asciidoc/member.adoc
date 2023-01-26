@@ -1,0 +1,88 @@
+ifndef::snippets[]
+:snippets: ./build/generated-snippets
+endif::[]
+
+= JK-Boston-Gang
+JK-Boston-Homepage;
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 4
+:sectlinks:
+
+== Member
+=== MemberSaveFail
+HttpRequest
+include::{snippets}/Member-Save-Fail/http-request.adoc[]
+RequestFields
+include::{snippets}/Member-Save-Fail/request-fields.adoc[]
+
+HttpResponse
+include::{snippets}/Member-Save-Fail/http-response.adoc[]
+
+=== MemberSaveSuccess
+HttpRequest
+include::{snippets}/Member-Save-Success/http-request.adoc[]
+RequestFields
+include::{snippets}/Member-Save-Success/request-fields.adoc[]
+
+HttpResponse
+include::{snippets}/Member-Save-Success/http-response.adoc[]
+ResponseFields
+include::{snippets}/Member-Save-Success/response-fields.adoc[]
+
+=== MemberList
+HttpRequest
+include::{snippets}/Member-List/http-request.adoc[]
+
+HttpResponse
+include::{snippets}/Member-List/http-response.adoc[]
+ResponseFields
+include::{snippets}/Member-List/response-fields.adoc[]
+
+=== MemberSearch
+HttpRequest
+include::{snippets}/Member-Search/http-request.adoc[]
+
+HttpResponse
+include::{snippets}/Member-Search/http-response.adoc[]
+ResponseFields
+include::{snippets}/Member-Search/response-fields.adoc[]
+
+=== MemberSearchFail
+HttpRequest
+include::{snippets}/Member-Search-Fail/http-request.adoc[]
+
+HttpResponse
+include::{snippets}/Member-Search-Fail/http-response.adoc[]
+
+
+=== MemberUpdateFail ( id )
+HttpRequest
+include::{snippets}/Member-Update-id-Fail/http-request.adoc[]
+RequestFields
+include::{snippets}/Member-Update-id-Fail/request-fields.adoc[]
+
+HttpResponse
+include::{snippets}/Member-Update-id-Fail/http-response.adoc[]
+
+=== MemberUpdateFail ( body )
+HttpRequest
+include::{snippets}/Member-Update-body-Fail/http-request.adoc[]
+
+HttpResponse
+include::{snippets}/Member-Update-body-Fail/http-response.adoc[]
+
+=== MemberUpdateSuccess
+HttpRequest
+include::{snippets}/Member-Update-Success/http-request.adoc[]
+RequestFields
+include::{snippets}/Member-Update-Success/request-fields.adoc[]
+
+HttpResponse
+include::{snippets}/Member-Update-Success/http-response.adoc[]
+ResponseFields
+include::{snippets}/Member-Update-Success/response-fields.adoc[]
+
+
