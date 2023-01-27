@@ -10,27 +10,41 @@ import com.example.jkedudemo.module.member.service.MemberService;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.RestDocumentationContextProvider;
+import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
+import org.springframework.restdocs.payload.FieldDescriptor;
+import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.context.WebApplicationContext;
 
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@AutoConfigureMockMvc
-@ExtendWith(SpringExtension.class)
+@ExtendWith({RestDocumentationExtension.class, SpringExtension.class})
 @ActiveProfiles("dev")
 @SpringBootTest
 @TestInstance(value = TestInstance.Lifecycle.PER_CLASS)
 public class MemberRestControllerTest {
-    @Autowired
+
+    //TODO: Test 코드
+    //1. 문자 인증 요청
+    //2. 회원가입 실패 (정보 미기재)
+    //3. 회원가입 성공
+    //4.
+
     private MockMvc mockMvc;
 
     @Autowired
@@ -41,6 +55,14 @@ public class MemberRestControllerTest {
 
     @Autowired
     private MemberPhoneAuthRepository memberPhoneAuthRepository;
+
+    @BeforeEach
+    public void setUp(WebApplicationContext webApplicationContext,
+                      RestDocumentationContextProvider restDocumentation) {
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
+                .apply(MockMvcRestDocumentation.documentationConfiguration(restDocumentation))
+                .build();
+    }
 
     private final String URL = "/member";
 
@@ -73,12 +95,8 @@ public class MemberRestControllerTest {
     }
 
 
-    @BeforeEach
-    public void each(){
-    }
-
     @Test
-    @DisplayName("문자 인증 테스트")
+    @DisplayName("1. 문자 인증 요청")
     public void sendSMSTest()throws Exception{
         MultiValueMap<String, String> param = new LinkedMultiValueMap<>();
 
@@ -86,30 +104,25 @@ public class MemberRestControllerTest {
         param.add("phoneauth","JOIN");
 
         mockMvc.perform(get(URL+"/cert")
-                .params(param)
-                        .contentType(MediaType.APPLICATION_JSON_VALUE)
-                        .accept(MediaType.ALL))
+                        .params(param)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .accept(MediaType.ALL))
                 .andExpect(status().isOk())
-                .andDo(print());
-
+                .andDo(print())
+                .andDo(document("phoneAuthCert-JOIN", // 1
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        responseFields(
+                                getDescription("status", "성공여부").type(JsonFieldType.STRING),
+                                getDescription("message", "메시지").type(JsonFieldType.STRING))
+                ));
     }
 
 
 
-
-    @Test
-    @DisplayName("hateoas 값 확인 (테스트 X)")
-    public void test() throws Exception {
-        mockMvc.perform(
-                        get(URL + "/hateoas")
-                                .accept(MediaType.ALL)
-                                .contentType(MediaTypes.HAL_JSON_VALUE)
-                )
-                .andDo(print());
-
+    private FieldDescriptor getDescription(String name, String description) {
+        return fieldWithPath(name)
+                .description(description);
     }
-
-
-
 
 }
