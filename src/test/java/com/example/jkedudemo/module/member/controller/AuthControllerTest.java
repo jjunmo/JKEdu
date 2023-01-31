@@ -62,6 +62,8 @@ class AuthControllerTest {
                 .build();
     }
 
+    private final ObjectMapper objectMapper = new ObjectMapper();
+
     private final String URL = "/auth";
 
     @BeforeAll
@@ -93,7 +95,6 @@ class AuthControllerTest {
     @Test
     @DisplayName("1. 회원가입 실패 (휴대폰 인증 미완료)")
     public void memberSaveTest_Fail_PhoneAuth()throws Exception{
-        ObjectMapper objectMapper = new ObjectMapper();
 
         MemberRequestDto memberRequestDto=MemberRequestDto.builder()
                 .email("aaaa2")
@@ -135,7 +136,6 @@ class AuthControllerTest {
     @Test
     @DisplayName("2. 회원가입 실패 (중복된 이메일)")
     public void memberSaveTest_Fail_ID()throws Exception{
-        ObjectMapper objectMapper = new ObjectMapper();
 
         MemberRequestDto memberRequestDto=MemberRequestDto.builder()
                 .email("aaaa")
@@ -177,7 +177,6 @@ class AuthControllerTest {
     @Test
     @DisplayName("3. 회원가입 성공")
     public void memberSaveTest_Success()throws Exception{
-        ObjectMapper objectMapper = new ObjectMapper();
 
         MemberPhoneAuth memberPhoneAuth=new MemberPhoneAuth();
         memberPhoneAuth.setSmscode("0000");
@@ -225,7 +224,6 @@ class AuthControllerTest {
     @Test
     @DisplayName("4. 로그인 실패")
     public void memberLogin_Fail()throws Exception{
-        ObjectMapper objectMapper = new ObjectMapper();
 
         MemberRequestDto memberRequestDto=MemberRequestDto.builder()
                 .email("aaaa2")
@@ -262,7 +260,6 @@ class AuthControllerTest {
     @Test
     @DisplayName("5. 로그인 성공")
     public void memberLogin_Success()throws Exception{
-        ObjectMapper objectMapper = new ObjectMapper();
 
         MemberRequestDto memberRequestDto=MemberRequestDto.builder()
                 .email("aaaa")
@@ -298,6 +295,8 @@ class AuthControllerTest {
                                 getDescription("keyId","로그인한 멤버의 고유번호").type(JsonFieldType.STRING))
                 ));
     }
+
+
 
 
 
