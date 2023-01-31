@@ -1,0 +1,88 @@
+ifndef::snippets[]
+:snippets: ./build/generated-snippets
+endif::[]
+
+= JK-Boston-Gang
+JK-Boston-Homepage;
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 4
+:sectlinks:
+
+== Member
+
+=== MemberSaveFail ( Email )
+HttpRequest
+include::{snippets}/Member-Save-Fail-EMAIL/http-request.adoc[]
+
+HttpResponse
+include::{snippets}/Member-Save-Fail-EMAIL/http-response.adoc[]
+ResponseFields
+include::{snippets}/Member-Save-Fail-EMAIL/response-fields.adoc[]
+
+=== MemberSaveFail ( PhoneAuth )
+HttpRequest
+include::{snippets}/Member-Save-Fail-PhoheAuth/http-request.adoc[]
+
+HttpResponse
+include::{snippets}/Member-Save-Fail-PhoheAuth/http-response.adoc[]
+ResponseFields
+include::{snippets}/Member-Save-Fail-PhoheAuth/response-fields.adoc[]
+
+=== MemberSaveSuccess
+HttpRequest
+include::{snippets}/Member-Save-Success/http-request.adoc[]
+RequestFields
+include::{snippets}/Member-Save-Success/request-fields.adoc[]
+
+HttpResponse
+include::{snippets}/Member-Save-Success/http-response.adoc[]
+ResponseFields
+include::{snippets}/Member-Save-Success/response-fields.adoc[]
+
+=== MemberLoginFail
+HttpRequest
+include::{snippets}/MemberLogin-Fail/http-request.adoc[]
+
+HttpResponse
+include::{snippets}/MemberLogin-Fail/http-response.adoc[]
+
+=== MemberLoginSuccess
+HttpRequest
+include::{snippets}/MemberLogin-Success/http-request.adoc[]
+RequestBody
+include::{snippets}/MemberLogin-Success/request-body.adoc[]
+
+HttpResponse
+include::{snippets}/MemberLogin-Success/http-response.adoc[]
+ResponseBody
+include::{snippets}/MemberLogin-Success/response-body.adoc[]
+
+
+=== PhoneAuthCert ( JOIN )
+HttpRequest
+include::{snippets}/PhoneAuthCert-JOIN/http-request.adoc[]
+
+HttpResponse
+include::{snippets}/PhoneAuthCert-JOIN/http-response.adoc[]
+
+=== PhoneAuthCertCheckFail ( JOIN )
+HttpRequest
+include::{snippets}/PhoneAuthCert-JOIN-CHECK-FAIL/http-request.adoc[]
+
+HttpResponse
+include::{snippets}/PhoneAuthCert-JOIN-CHECK-FAIL/http-response.adoc[]
+ResponseBody
+include::{snippets}/PhoneAuthCert-JOIN-CHECK-FAIL/response-body.adoc[]
+
+=== PhoneAuthCertCheckSuccess ( JOIN )
+HttpRequest
+include::{snippets}/PhoneAuthCert-JOIN-CHECK-SUCCESS/http-request.adoc[]
+
+HttpResponse
+include::{snippets}/PhoneAuthCert-JOIN-CHECK-SUCCESS/http-response.adoc[]
+ResponseBody
+include::{snippets}/PhoneAuthCert-JOIN-CHECK-SUCCESS/response-body.adoc[]
+
