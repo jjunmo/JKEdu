@@ -45,19 +45,16 @@ public class AuthService {
     @Transactional
     public MemberStatusOkResponseDto signup(MemberRequestDto requestDto) {
 
-        if (memberRepository.findByEmail(requestDto.getEmail()).isPresent()) throw new MyForbiddenException("이미 가입되어 있는 회원입니다");
-
-
-        //비밀번호 인코딩
-        Member reqMember = requestDto.toMember(passwordEncoder);
-        Member member = memberRepository.save(reqMember);
-
+        if (memberRepository.findByEmail(requestDto.getEmail()).isPresent()) throw new MyForbiddenException("이미 가입되어 있는 회원입니다.");
 
         //휴대폰 인증 여부
         Optional<MemberPhoneAuth> memberPhoneAuthOptional = memberPhoneAuthRepository.findByPhoneAndCheckYnAndPhoneauth(requestDto.getPhone(),YN.Y, PhoneAuth.JOIN);
 
-        if(memberPhoneAuthOptional.isEmpty()) throw new MyForbiddenException("인증을 완료하세요");
+        if(memberPhoneAuthOptional.isEmpty()) throw new MyForbiddenException("인증을 완료하세요.");
 
+        //비밀번호 인코딩
+        Member reqMember = requestDto.toMember(passwordEncoder);
+        Member member = memberRepository.save(reqMember);
 
         //계정 상태 체크
         if (memberRepository.existsByPhoneAndStatus(requestDto.getPhone(), Status.YELLOW)) throw new MyForbiddenException("회원가입이 정지된 고객정보입니다. 고객센터에 문의하세요.");

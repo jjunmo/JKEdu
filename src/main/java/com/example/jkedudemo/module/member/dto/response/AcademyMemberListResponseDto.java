@@ -1,6 +1,7 @@
 package com.example.jkedudemo.module.member.dto.response;
 
 import com.example.jkedudemo.module.member.entity.Member;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,6 +13,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class AcademyMemberListResponseDto {
     Long studentId;
     String name;
