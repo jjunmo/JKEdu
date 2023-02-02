@@ -166,8 +166,6 @@ include::{snippets}/Member-FindId-Success/response-body.adoc[]
 === MemberMyInfo
 HttpRequest
 include::{snippets}/Member-MyInfo/http-request.adoc[]
-RequestParameters
-include::{snippets}/Member-MyInfo/request-body.adoc[]
 
 HttpResponse
 include::{snippets}/Member-MyInfo/http-response.adoc[]
@@ -177,15 +175,123 @@ include::{snippets}/Member-MyInfo/response-body.adoc[]
 === MemberMyInfoFail
 HttpRequest
 include::{snippets}/Member-MyInfo-Fail/http-request.adoc[]
-RequestParameters
-include::{snippets}/Member-MyInfo-Fail/request-body.adoc[]
 
 HttpResponse
 include::{snippets}/Member-MyInfo-Fail/http-response.adoc[]
 ResponseBody
 include::{snippets}/Member-MyInfo-Fail/response-body.adoc[]
 
+=== MemberFindPW
+HttpRequest
+include::{snippets}/Member-FindPw/http-request.adoc[]
+RequestParameters
+include::{snippets}/Member-FindPw/request-parameters.adoc[]
 
+HttpResponse
+include::{snippets}/Member-FindPw/http-response.adoc[]
+ResponseBody
+include::{snippets}/Member-FindPw/response-body.adoc[]
 
+=== MemberFindPWFail ( NoID )
+HttpRequest
+include::{snippets}/Member-FindPw-Fail-NoID/http-request.adoc[]
+RequestParameters
+include::{snippets}/Member-FindPw-Fail-NoID/request-parameters.adoc[]
 
+HttpResponse
+include::{snippets}/Member-FindPw-Fail-NoID/http-response.adoc[]
+ResponseBody
+include::{snippets}/Member-FindPw-Fail-NoID/response-body.adoc[]
 
+=== MemberFindPWFail ( PhoneAuth )
+HttpRequest
+include::{snippets}/Member-FindPw-Fail-PhoneAuth/http-request.adoc[]
+RequestParameters
+include::{snippets}/Member-FindPw-Fail-PhoneAuth/request-parameters.adoc[]
+
+HttpResponse
+include::{snippets}/Member-FindPw-Fail-PhoneAuth/http-response.adoc[]
+ResponseBody
+include::{snippets}/Member-FindPw-Fail-PhoneAuth/response-body.adoc[]
+
+=== MemberExCheckFail
+HttpRequest
+include::{snippets}/MemberId-ExCheck-Fail/http-request.adoc[]
+RequestParameters
+include::{snippets}/MemberId-ExCheck-Fail/request-parameters.adoc[]
+
+HttpResponse
+include::{snippets}/MemberId-ExCheck-Fail//http-response.adoc[]
+ResponseBody
+include::{snippets}/MemberId-ExCheck-Fail//response-body.adoc[]
+
+=== MemberExCheck
+HttpRequest
+include::{snippets}/MemberId-ExCheck/http-request.adoc[]
+RequestParameters
+include::{snippets}/MemberId-ExCheck/request-parameters.adoc[]
+
+HttpResponse
+include::{snippets}/MemberId-ExCheck/http-response.adoc[]
+ResponseBody
+include::{snippets}/MemberId-ExCheck/response-body.adoc[]
+
+=== MemberLogout
+HttpRequest
+include::{snippets}/MemberLogout-Success/http-request.adoc[]
+
+HttpResponse
+include::{snippets}/MemberLogout-Success/http-response.adoc[]
+ResponseBody
+include::{snippets}/MemberLogout-Success/response-body.adoc[]
+
+=== MemberLogoutFail
+HttpRequest
+include::{snippets}/MemberLogout-Fail/http-request.adoc[]
+
+HttpResponse
+include::{snippets}/MemberLogout-Fail/http-response.adoc[]
+ResponseBody
+include::{snippets}/MemberLogout-Fail/response-body.adoc[]
+
+=== MemberLogoutSuccess
+HttpRequest
+include::{snippets}/MemberLogout-Success/http-request.adoc[]
+
+HttpResponse
+include::{snippets}/MemberLogout-Success/http-response.adoc[]
+ResponseBody
+include::{snippets}/MemberLogout-Success/response-body.adoc[]
+
+=== MemberTestCountFail
+HttpRequest
+include::{snippets}/MemberTestCount-Fail/http-request.adoc[]
+RequestBody
+include::{snippets}/MemberTestCount-Fail/request-body.adoc[]
+
+HttpResponse
+include::{snippets}/MemberTestCount-Fail/http-response.adoc[]
+ResponseBody
+include::{snippets}/MemberTestCount-Fail/response-body.adoc[]
+
+=== MemberTestCountSuccess
+HttpRequest
+include::{snippets}/MemberTestCount-Success/http-request.adoc[]
+RequestBody
+include::{snippets}/MemberTestCount-Success/request-body.adoc[]
+
+HttpResponse
+include::{snippets}/MemberTestCount-Success/http-response.adoc[]
+ResponseBody
+include::{snippets}/MemberTestCount-Success/response-body.adoc[]
+
+=== RefreshTokenValidate
+HttpRequest
+include::{snippets}/RefreshTokenValidate/http-request.adoc[]
+RequestBody
+include::{snippets}/RefreshTokenValidate/request-body.adoc[]
+
+HttpResponse
+include::{snippets}/RefreshTokenValidate/http-response.adoc[]
+ResponseBody
+include::{snippets}/RefreshTokenValidate/response-body.adoc[]

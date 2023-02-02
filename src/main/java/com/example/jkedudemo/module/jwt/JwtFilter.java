@@ -45,7 +45,7 @@ public class JwtFilter extends OncePerRequestFilter {
     public Long getCurrentMemberId2(HttpServletRequest request) {
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        if (authentication == null || authentication.getName() == null) throw new MyForbiddenException("Security Context에 인증 정보가 없습니다.");
+        if (authentication == null || authentication.getName() == null) throw new MyForbiddenException("로그인 유저 정보가 없습니다.");
 
         try{
             return Long.parseLong(authentication.getName());

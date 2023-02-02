@@ -467,6 +467,17 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_memberfindidsuccess">MemberFindIdSuccess</a></li>
 <li><a href="#_membermyinfo">MemberMyInfo</a></li>
 <li><a href="#_membermyinfofail">MemberMyInfoFail</a></li>
+<li><a href="#_memberfindpw">MemberFindPW</a></li>
+<li><a href="#_memberfindpwfail_noid">MemberFindPWFail ( NoID )</a></li>
+<li><a href="#_memberfindpwfail_phoneauth">MemberFindPWFail ( PhoneAuth )</a></li>
+<li><a href="#_memberexcheckfail">MemberExCheckFail</a></li>
+<li><a href="#_memberexcheck">MemberExCheck</a></li>
+<li><a href="#_memberlogout">MemberLogout</a></li>
+<li><a href="#_memberlogoutfail">MemberLogoutFail</a></li>
+<li><a href="#_memberlogoutsuccess">MemberLogoutSuccess</a></li>
+<li><a href="#_membertestcountfail">MemberTestCountFail</a></li>
+<li><a href="#_membertestcountsuccess">MemberTestCountSuccess</a></li>
+<li><a href="#_refreshtokenvalidate">RefreshTokenValidate</a></li>
 </ul>
 </li>
 </ul>
@@ -563,10 +574,10 @@ Content-Length: 109
 Host: localhost:8080
 
 {
-  "email" : "aaaa2",
+  "email" : "bbbb",
   "password" : "123456",
-  "phone" : "0101010",
-  "name" : "asdf",
+  "phone" : "00000000",
+  "name" : "abcd",
   "role" : "user"
 }</code></pre>
 </div>
@@ -632,11 +643,11 @@ Content-Length: 95
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /auth/member/register HTTP/1.1
 Content-Type: application/json;charset=utf-8
 Accept: */*
-Content-Length: 118
+Content-Length: 117
 Host: localhost:8080
 
 {
-  "email" : "aaaa2",
+  "email" : "bbbb",
   "password" : "123456",
   "phone" : "010-1234-1234",
   "name" : "asdf",
@@ -808,14 +819,14 @@ Host: localhost:8080
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 506
+Content-Length: 502
 
 {
   "grantType" : "bearer",
   "status" : "200",
   "message" : "OK",
-  "accessToken" : "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IkFDQURFTVkiLCJhdWQiOiLspIDrqqgiLCJleHAiOjE2NzUxNTYxODh9.ALWqtEP7Sqfzy_0H47oDfa-L99ALWyQ4VbJ6On7xAm6D2eFhRy7P703v_zAQ3zJNGC4MdIBqujMxLcU4xbBV2A",
-  "refreshToken" : "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IkFDQURFTVkiLCJhdWQiOiLspIDrqqgiLCJleHAiOjE2NzUxNTYyMTh9.1W2MqWwzdg_kB94m727M3IksNAfWQx1uVlFEx6vnPN5nqXZ_h75ye76y7OEW0QIpNtS_K6wI4llOj4ICoHnx2Q",
+  "accessToken" : "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IkFDQURFTVkiLCJhdWQiOiJtb21vIiwiZXhwIjoxNjc1Mjk3NDIxfQ.mTKHlieg69sSGNOPd8Semv3-c-tWiPFuR2F5-xSr6TLzFSNuW-fyS3dkkGetpo--bJ3R_3QX3wK2y0GeDz8UBQ",
+  "refreshToken" : "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IkFDQURFTVkiLCJhdWQiOiJtb21vIiwiZXhwIjoxNjc1Mjk3NDUxfQ.SIe4mqDd4Qaqhx5cUFZDWGSH4JlKttP0xAYuoHOJz-008LMkKyTCWcF3zxKs-EujpyDIczlLAvMTbITUNpG5dQ",
   "keyId" : "1"
 }</code></pre>
 </div>
@@ -829,8 +840,8 @@ Content-Length: 506
   "grantType" : "bearer",
   "status" : "200",
   "message" : "OK",
-  "accessToken" : "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IkFDQURFTVkiLCJhdWQiOiLspIDrqqgiLCJleHAiOjE2NzUxNTYxODh9.ALWqtEP7Sqfzy_0H47oDfa-L99ALWyQ4VbJ6On7xAm6D2eFhRy7P703v_zAQ3zJNGC4MdIBqujMxLcU4xbBV2A",
-  "refreshToken" : "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IkFDQURFTVkiLCJhdWQiOiLspIDrqqgiLCJleHAiOjE2NzUxNTYyMTh9.1W2MqWwzdg_kB94m727M3IksNAfWQx1uVlFEx6vnPN5nqXZ_h75ye76y7OEW0QIpNtS_K6wI4llOj4ICoHnx2Q",
+  "accessToken" : "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IkFDQURFTVkiLCJhdWQiOiJtb21vIiwiZXhwIjoxNjc1Mjk3NDIxfQ.mTKHlieg69sSGNOPd8Semv3-c-tWiPFuR2F5-xSr6TLzFSNuW-fyS3dkkGetpo--bJ3R_3QX3wK2y0GeDz8UBQ",
+  "refreshToken" : "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IkFDQURFTVkiLCJhdWQiOiJtb21vIiwiZXhwIjoxNjc1Mjk3NDUxfQ.SIe4mqDd4Qaqhx5cUFZDWGSH4JlKttP0xAYuoHOJz-008LMkKyTCWcF3zxKs-EujpyDIczlLAvMTbITUNpG5dQ",
   "keyId" : "1"
 }</code></pre>
 </div>
@@ -1402,26 +1413,19 @@ Host: localhost:8080</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>RequestParameters</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-none hljs"></code></pre>
-</div>
-</div>
-<div class="paragraph">
 <p>HttpResponse</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 108
+Content-Length: 127
 
 {
   "status" : "200",
   "message" : "OK",
   "email" : "aaaa",
+  "name" : "momo",
   "phone" : "01091097122",
   "testCount" : 0
 }</code></pre>
@@ -1436,6 +1440,7 @@ Content-Length: 108
   "status" : "200",
   "message" : "OK",
   "email" : "aaaa",
+  "name" : "momo",
   "phone" : "01091097122",
   "testCount" : 0
 }</code></pre>
@@ -1456,7 +1461,527 @@ Host: localhost:8080</code></pre>
 </div>
 </div>
 <div class="paragraph">
+<p>HttpResponse</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 403 Forbidden
+Content-Type: application/json
+Content-Length: 108
+
+{
+  "errortype" : "forbidden",
+  "status" : "403",
+  "message" : "로그인 유저 정보가 없습니다"
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>ResponseBody</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-none hljs">{
+  "errortype" : "forbidden",
+  "status" : "403",
+  "message" : "로그인 유저 정보가 없습니다"
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_memberfindpw"><a class="link" href="#_memberfindpw">MemberFindPW</a></h3>
+<div class="paragraph">
+<p>HttpRequest</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /member/check HTTP/1.1
+Content-Type: application/json;charset=utf-8
+Accept: */*
+Host: localhost:8080
+
+email=aaaa3&amp;phone=33333333&amp;smscode=1111&amp;phoneauth=PW</code></pre>
+</div>
+</div>
+<div class="paragraph">
 <p>RequestParameters</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>email</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">가입한 이메일</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>phone</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">가입자 연락처</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>smscode</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">PW 재발급 인증번호</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>phoneauth</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">인증유형</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>HttpResponse</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 42
+
+{
+  "status" : "200",
+  "message" : "OK"
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>ResponseBody</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-none hljs">{
+  "status" : "200",
+  "message" : "OK"
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_memberfindpwfail_noid"><a class="link" href="#_memberfindpwfail_noid">MemberFindPWFail ( NoID )</a></h3>
+<div class="paragraph">
+<p>HttpRequest</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /member/check HTTP/1.1
+Content-Type: application/json;charset=utf-8
+Accept: */*
+Host: localhost:8080
+
+email=asdf&amp;phone=44444444&amp;smscode=1111&amp;phoneauth=PW</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>RequestParameters</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>email</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">가입한 이메일</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>phone</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">가입자 연락처</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>smscode</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">PW 재발급 인증번호</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>phoneauth</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">인증유형</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>HttpResponse</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 404 Not Found
+Content-Type: application/json
+Content-Length: 122
+
+{
+  "errortype" : "not_found",
+  "status" : "404",
+  "message" : "해당 정보로 가입된 아이디가 없습니다."
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>ResponseBody</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-none hljs">{
+  "errortype" : "not_found",
+  "status" : "404",
+  "message" : "해당 정보로 가입된 아이디가 없습니다."
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_memberfindpwfail_phoneauth"><a class="link" href="#_memberfindpwfail_phoneauth">MemberFindPWFail ( PhoneAuth )</a></h3>
+<div class="paragraph">
+<p>HttpRequest</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /member/check HTTP/1.1
+Content-Type: application/json;charset=utf-8
+Accept: */*
+Host: localhost:8080
+
+email=aaaa3&amp;phone=33333333&amp;smscode=2222&amp;phoneauth=PW</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>RequestParameters</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>email</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">가입한 이메일</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>phone</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">가입자 연락처</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>smscode</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">PW 재발급 인증번호</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>phoneauth</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">인증유형</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>HttpResponse</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 403 Forbidden
+Content-Type: application/json
+Content-Length: 111
+
+{
+  "errortype" : "forbidden",
+  "status" : "403",
+  "message" : "인증번호가 일치하지 않습니다."
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>ResponseBody</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-none hljs">{
+  "errortype" : "forbidden",
+  "status" : "403",
+  "message" : "인증번호가 일치하지 않습니다."
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_memberexcheckfail"><a class="link" href="#_memberexcheckfail">MemberExCheckFail</a></h3>
+<div class="paragraph">
+<p>HttpRequest</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /member/excheck?email=aaaa HTTP/1.1
+Content-Type: application/json;charset=utf-8
+Accept: */*
+Host: localhost:8080</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>RequestParameters</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>email</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">이메일 아이디</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>HttpResponse</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 403 Forbidden
+Content-Type: application/json
+Content-Length: 106
+
+{
+  "errortype" : "forbidden",
+  "status" : "403",
+  "message" : "이미 가입된 이메일 입니다."
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>ResponseBody</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-none hljs">{
+  "errortype" : "forbidden",
+  "status" : "403",
+  "message" : "이미 가입된 이메일 입니다."
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_memberexcheck"><a class="link" href="#_memberexcheck">MemberExCheck</a></h3>
+<div class="paragraph">
+<p>HttpRequest</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /member/excheck?email=aaaa4 HTTP/1.1
+Content-Type: application/json;charset=utf-8
+Accept: */*
+Host: localhost:8080</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>RequestParameters</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>email</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">이메일 아이디</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>HttpResponse</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 42
+
+{
+  "status" : "200",
+  "message" : "OK"
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>ResponseBody</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-none hljs">{
+  "status" : "200",
+  "message" : "OK"
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_memberlogout"><a class="link" href="#_memberlogout">MemberLogout</a></h3>
+<div class="paragraph">
+<p>HttpRequest</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /auth/member/logout HTTP/1.1
+Content-Type: application/json;charset=utf-8
+User-Agent: aaa
+Accept: */*
+Host: localhost:8080</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>HttpResponse</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 42
+
+{
+  "status" : "200",
+  "message" : "OK"
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>ResponseBody</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-none hljs">{
+  "status" : "200",
+  "message" : "OK"
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_memberlogoutfail"><a class="link" href="#_memberlogoutfail">MemberLogoutFail</a></h3>
+<div class="paragraph">
+<p>HttpRequest</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /auth/member/logout HTTP/1.1
+Content-Type: application/json;charset=utf-8
+User-Agent: aaa
+Accept: */*
+Host: localhost:8080</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>HttpResponse</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 403 Forbidden
+Content-Type: application/json
+Content-Length: 109
+
+{
+  "errortype" : "forbidden",
+  "status" : "403",
+  "message" : "로그인 유저 정보가 없습니다."
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>ResponseBody</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-none hljs">{
+  "errortype" : "forbidden",
+  "status" : "403",
+  "message" : "로그인 유저 정보가 없습니다."
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_memberlogoutsuccess"><a class="link" href="#_memberlogoutsuccess">MemberLogoutSuccess</a></h3>
+<div class="paragraph">
+<p>HttpRequest</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /auth/member/logout HTTP/1.1
+Content-Type: application/json;charset=utf-8
+User-Agent: aaa
+Accept: */*
+Host: localhost:8080</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>HttpResponse</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 42
+
+{
+  "status" : "200",
+  "message" : "OK"
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>ResponseBody</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-none hljs">{
+  "status" : "200",
+  "message" : "OK"
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_membertestcountfail"><a class="link" href="#_membertestcountfail">MemberTestCountFail</a></h3>
+<div class="paragraph">
+<p>HttpRequest</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /member/exam HTTP/1.1
+Content-Type: application/json;charset=utf-8
+Accept: */*
+Host: localhost:8080</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>RequestBody</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1470,12 +1995,12 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 403 Forbidden
 Content-Type: application/json
-Content-Length: 119
+Content-Length: 108
 
 {
   "errortype" : "forbidden",
   "status" : "403",
-  "message" : "Security Context에 인증 정보가 없습니다."
+  "message" : "로그인 유저 정보가 없습니다"
 }</code></pre>
 </div>
 </div>
@@ -1487,7 +2012,120 @@ Content-Length: 119
 <pre class="highlightjs highlight nowrap"><code class="language-none hljs">{
   "errortype" : "forbidden",
   "status" : "403",
-  "message" : "Security Context에 인증 정보가 없습니다."
+  "message" : "로그인 유저 정보가 없습니다"
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_membertestcountsuccess"><a class="link" href="#_membertestcountsuccess">MemberTestCountSuccess</a></h3>
+<div class="paragraph">
+<p>HttpRequest</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /member/exam HTTP/1.1
+Content-Type: application/json;charset=utf-8
+Accept: */*
+Host: localhost:8080</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>RequestBody</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-none hljs"></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>HttpResponse</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 80
+
+{
+  "status" : "200",
+  "message" : "OK",
+  "name" : "momo",
+  "testCount" : 0
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>ResponseBody</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-none hljs">{
+  "status" : "200",
+  "message" : "OK",
+  "name" : "momo",
+  "testCount" : 0
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_refreshtokenvalidate"><a class="link" href="#_refreshtokenvalidate">RefreshTokenValidate</a></h3>
+<div class="paragraph">
+<p>HttpRequest</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /auth/refresh HTTP/1.1
+Content-Type: application/json;charset=utf-8
+Accept: */*
+Content-Length: 211
+Host: localhost:8080
+
+{
+  "refreshToken" : "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIzIiwiYXV0aCI6IkFDQURFTVkiLCJhdWQiOiJhc2RmIiwiZXhwIjoxNjc1Mjk3NDUxfQ.ek93episaVwMwwNkHORQAsAbrEw_oYLFRilfMmOeVi9uVjZ2L85WNhtYh3CQgQiPiDkMLJ_Ijndr2pImLJl92Q"
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>RequestBody</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-none hljs">{
+  "refreshToken" : "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIzIiwiYXV0aCI6IkFDQURFTVkiLCJhdWQiOiJhc2RmIiwiZXhwIjoxNjc1Mjk3NDUxfQ.ek93episaVwMwwNkHORQAsAbrEw_oYLFRilfMmOeVi9uVjZ2L85WNhtYh3CQgQiPiDkMLJ_Ijndr2pImLJl92Q"
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>HttpResponse</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 355
+
+{
+  "refreshResponseMap" : {
+    "message" : "Refresh 토큰을 통한 Access Token 생성이 완료되었습니다.",
+    "accessToken" : "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIzIiwiYXV0aCI6IkFDQURFTVkiLCJhdWQiOiJhc2RmIiwiZXhwIjoxNjc1Mjk3NDIxfQ.09vPq1g4S_SZNkKdlQhJpg6exHOjICnQm-7X6IEvME74SccEItVCxexg2KREtVMKZeyItEmFytKvh5HueA8wcQ",
+    "status" : "200"
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>ResponseBody</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-none hljs">{
+  "refreshResponseMap" : {
+    "message" : "Refresh 토큰을 통한 Access Token 생성이 완료되었습니다.",
+    "accessToken" : "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIzIiwiYXV0aCI6IkFDQURFTVkiLCJhdWQiOiJhc2RmIiwiZXhwIjoxNjc1Mjk3NDIxfQ.09vPq1g4S_SZNkKdlQhJpg6exHOjICnQm-7X6IEvME74SccEItVCxexg2KREtVMKZeyItEmFytKvh5HueA8wcQ",
+    "status" : "200"
+  }
 }</code></pre>
 </div>
 </div>
@@ -1498,7 +2136,7 @@ Content-Length: 119
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2023-01-31 18:06:46 +0900
+Last updated 2023-02-02 09:15:07 +0900
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">
