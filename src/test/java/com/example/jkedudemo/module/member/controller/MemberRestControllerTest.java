@@ -75,6 +75,8 @@ public class MemberRestControllerTest {
 
     private Long SECURITY_DELETE_ID;
 
+    private Long SECURITY_UPDATE_ID;
+
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -97,6 +99,7 @@ public class MemberRestControllerTest {
         SECURITY_MEMBER_ID=memberRepository.save(Member.builder()
                 .email("aaaa")
                 .phone("01091097122")
+                .name("momo")
                 .role(Role.ROLE_ACADEMY)
                 .password(passwordEncoder.encode("1234"))
                 .status(Status.GREEN)
@@ -104,7 +107,17 @@ public class MemberRestControllerTest {
 
         SECURITY_DELETE_ID=memberRepository.save(Member.builder()
                 .email("aaaa2")
-                .phone("01010101")
+                .phone("22222222")
+                .name("momo2")
+                .role(Role.ROLE_ACADEMY)
+                .password(passwordEncoder.encode("1111"))
+                .status(Status.GREEN)
+                .build()).getId();
+
+        SECURITY_UPDATE_ID=memberRepository.save(Member.builder()
+                .email("aaaa3")
+                .phone("33333333")
+                .name("momo3")
                 .role(Role.ROLE_ACADEMY)
                 .password(passwordEncoder.encode("1111"))
                 .status(Status.GREEN)
@@ -115,6 +128,7 @@ public class MemberRestControllerTest {
     public void accountCleanup() {
         memberRepository.deleteById(SECURITY_MEMBER_ID);
         memberRepository.deleteById(SECURITY_DELETE_ID);
+        memberRepository.deleteById(SECURITY_UPDATE_ID);
     }
 
 
@@ -236,7 +250,7 @@ public class MemberRestControllerTest {
                 .andDo(print())
                 .andExpect(jsonPath("errortype").value("forbidden"))
                 .andExpect(jsonPath("status").value("403"))
-                .andExpect(jsonPath("message").value("Security Context에 인증 정보가 없습니다."))
+                .andExpect(jsonPath("message").value("로그인 유저 정보가 없습니다"))
                 .andDo(document("Member-MyInfo-Fail", // 1
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
@@ -267,6 +281,7 @@ public class MemberRestControllerTest {
                                 getDescription("phone", "연락처").type(JsonFieldType.STRING),
                                 getDescription("message", "메시지").type(JsonFieldType.STRING),
                                 getDescription("email", "이메일").type(JsonFieldType.STRING),
+                                getDescription("name","이름").type(JsonFieldType.STRING),
                                 getDescription("testCount", "보유한 테스트 횟수").type(JsonFieldType.NUMBER))
                 ));
     }
@@ -477,7 +492,7 @@ public class MemberRestControllerTest {
 
     @Test
     @DisplayName("12.ID 찾기")
-    public void memberFindID_Fail_Success() throws Exception{
+    public void memberFindID_Success() throws Exception{
         memberPhoneAuthRepository.save(MemberPhoneAuth.builder()
                 .phone("01091097122")
                 .smscode("1111")
@@ -511,6 +526,235 @@ public class MemberRestControllerTest {
                                 getDescription("email","찾은 아이디").type(JsonFieldType.STRING))
                 ));
     }
+
+    @Test
+    @DisplayName("12.PW 재발급 실패 ( 존재하지 않는 아이디 )")
+    public void memberFindPW_Fail_NoID() throws Exception{
+        memberPhoneAuthRepository.save(MemberPhoneAuth.builder()
+                .phone("44444444")
+                .smscode("1111")
+                .phoneauth(PhoneAuth.PW)
+                .build());
+
+        MultiValueMap<String, String> param = new LinkedMultiValueMap<>();
+        param.add("email","asdf");
+        param.add("phone","44444444");
+        param.add("smscode","1111");
+        param.add("phoneauth","PW");
+
+
+        mockMvc.perform(post(URL+"/check")
+                        .params(param)
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .characterEncoding("utf-8")
+                        .accept(MediaType.ALL))
+                .andDo(print())
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("errortype").value("not_found"))
+                .andExpect(jsonPath("status").value("404"))
+                .andExpect(jsonPath("message").value("해당 정보로 가입된 아이디가 없습니다."))
+                .andDo(document("Member-FindPw-Fail-NoID", // 1
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestParameters(
+                                parameterWithName("email").description("가입한 이메일"),
+                                parameterWithName("phone").description("가입자 연락처"),
+                                parameterWithName("smscode").description("PW 재발급 인증번호"),
+                                parameterWithName("phoneauth").description("인증유형")),
+                        responseFields(
+                                getDescription("errortype", "에러유형").type(JsonFieldType.STRING),
+                                getDescription("status", "성공여부").type(JsonFieldType.STRING),
+                                getDescription("message", "메시지").type(JsonFieldType.STRING))
+                ));
+    }
+
+    @Test
+    @DisplayName("13.PW 재발급 실패 ( 비밀번호 재발급 인증 실패 )")
+    public void memberFindPW_Fail_PhoneAuth() throws Exception{
+        memberPhoneAuthRepository.save(MemberPhoneAuth.builder()
+                .phone("33333333")
+                .smscode("1111")
+                .phoneauth(PhoneAuth.PW)
+                .build());
+
+        MultiValueMap<String, String> param = new LinkedMultiValueMap<>();
+        param.add("email","aaaa3");
+        param.add("phone","33333333");
+        param.add("smscode","2222");
+        param.add("phoneauth","PW");
+
+
+        mockMvc.perform(post(URL+"/check")
+                        .params(param)
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .characterEncoding("utf-8")
+                        .accept(MediaType.ALL))
+                .andDo(print())
+                .andExpect(status().isForbidden())
+                .andExpect(jsonPath("errortype").value("forbidden"))
+                .andExpect(jsonPath("status").value("403"))
+                .andExpect(jsonPath("message").value("인증번호가 일치하지 않습니다."))
+                .andDo(document("Member-FindPw-Fail-PhoneAuth", // 1
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestParameters(
+                                parameterWithName("email").description("가입한 이메일"),
+                                parameterWithName("phone").description("가입자 연락처"),
+                                parameterWithName("smscode").description("PW 재발급 인증번호"),
+                                parameterWithName("phoneauth").description("인증유형")),
+                        responseFields(
+                                getDescription("errortype", "에러유형").type(JsonFieldType.STRING),
+                                getDescription("status", "성공여부").type(JsonFieldType.STRING),
+                                getDescription("message", "메시지").type(JsonFieldType.STRING))
+                ));
+    }
+
+    @Test
+    @DisplayName("14.PW 재발급")
+    public void memberFindPW_Success() throws Exception{
+        memberPhoneAuthRepository.save(MemberPhoneAuth.builder()
+                .phone("33333333")
+                .smscode("1111")
+                .phoneauth(PhoneAuth.PW)
+                .build());
+
+        MultiValueMap<String, String> param = new LinkedMultiValueMap<>();
+        param.add("email","aaaa3");
+        param.add("phone","33333333");
+        param.add("smscode","1111");
+        param.add("phoneauth","PW");
+
+
+        mockMvc.perform(post(URL+"/check")
+                        .params(param)
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .characterEncoding("utf-8")
+                        .accept(MediaType.ALL))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("status").value("200"))
+                .andExpect(jsonPath("message").value("OK"))
+                .andDo(document("Member-FindPw", // 1
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestParameters(
+                                parameterWithName("email").description("가입한 이메일"),
+                                parameterWithName("phone").description("가입자 연락처"),
+                                parameterWithName("smscode").description("PW 재발급 인증번호"),
+                                parameterWithName("phoneauth").description("인증유형")),
+                        responseFields(
+                                getDescription("status", "성공여부").type(JsonFieldType.STRING),
+                                getDescription("message", "메시지").type(JsonFieldType.STRING))
+                ));
+    }
+
+    @Test
+    @DisplayName("15. 회원가입 아이디 중복체크 실패")
+    public void memberID_ExCheck_Fail() throws Exception{
+
+        MultiValueMap<String, String> param = new LinkedMultiValueMap<>();
+        param.add("email","aaaa");
+
+        mockMvc.perform(get(URL+"/excheck")
+                        .params(param)
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .characterEncoding("utf-8")
+                        .accept(MediaType.ALL))
+                .andDo(print())
+                .andExpect(status().isForbidden())
+                .andExpect(jsonPath("errortype").value("forbidden"))
+                .andExpect(jsonPath("status").value("403"))
+                .andExpect(jsonPath("message").value("이미 가입된 이메일 입니다."))
+                .andDo(document("MemberId-ExCheck-Fail", // 1
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestParameters(
+                                parameterWithName("email").description("이메일 아이디")),
+                        responseFields(
+                                getDescription("errortype", "에러유형").type(JsonFieldType.STRING),
+                                getDescription("status", "성공여부").type(JsonFieldType.STRING),
+                                getDescription("message", "메시지").type(JsonFieldType.STRING))
+                ));
+    }
+
+    @Test
+    @DisplayName("16. 회원가입 중복된 아이디 통과")
+    public void memberID_ExCheck() throws Exception{
+
+        MultiValueMap<String, String> param = new LinkedMultiValueMap<>();
+        param.add("email","aaaa4");
+
+        mockMvc.perform(get(URL+"/excheck")
+                        .params(param)
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .characterEncoding("utf-8")
+                        .accept(MediaType.ALL))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("status").value("200"))
+                .andExpect(jsonPath("message").value("OK"))
+                .andDo(document("MemberId-ExCheck", // 1
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestParameters(
+                                parameterWithName("email").description("이메일 아이디")),
+                        responseFields(
+                                getDescription("status", "성공여부").type(JsonFieldType.STRING),
+                                getDescription("message", "메시지").type(JsonFieldType.STRING))
+                ));
+    }
+
+    @Test
+    @DisplayName("17. 보유한테스트 횟수 ( 로그인 안함 )")
+    public void memberTestCount_Fail() throws Exception{
+
+        mockMvc.perform(get(URL+"/exam")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .characterEncoding("utf-8")
+                        .accept(MediaType.ALL))
+                .andDo(print())
+                .andExpect(status().isForbidden())
+                .andExpect(jsonPath("errortype").value("forbidden"))
+                .andExpect(jsonPath("status").value("403"))
+                .andExpect(jsonPath("message").value("로그인 유저 정보가 없습니다"))
+                .andDo(document("MemberTestCount-Fail", // 1
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        responseFields(
+                                getDescription("errortype","에러코드").type(JsonFieldType.STRING),
+                                getDescription("status", "성공여부").type(JsonFieldType.STRING),
+                                getDescription("message", "메시지").type(JsonFieldType.STRING))
+                ));
+    }
+
+    @Test
+    @WithUserDetails(value = "aaaa")
+    @DisplayName("18. 보유한테스트 횟수")
+    public void memberTestCount() throws Exception{
+
+        mockMvc.perform(get(URL+"/exam")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .characterEncoding("utf-8")
+                        .accept(MediaType.ALL))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("status").value("200"))
+                .andExpect(jsonPath("message").value("OK"))
+                .andExpect(jsonPath("name").value("momo"))
+                .andExpect(jsonPath("testCount").value(0))
+                .andDo(document("MemberTestCount-Success", // 1
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        responseFields(
+                                getDescription("status", "성공여부").type(JsonFieldType.STRING),
+                                getDescription("message", "메시지").type(JsonFieldType.STRING),
+                                getDescription("name","로그인 유저 정보").type(JsonFieldType.STRING),
+                                getDescription("testCount","테스트 횟수").type(JsonFieldType.NUMBER))
+                ));
+    }
+
+
+
 
 
 

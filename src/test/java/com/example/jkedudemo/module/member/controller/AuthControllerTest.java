@@ -2,11 +2,16 @@ package com.example.jkedudemo.module.member.controller;
 
 import com.example.jkedudemo.module.common.enums.YN;
 import com.example.jkedudemo.module.common.enums.member.PhoneAuth;
+import com.example.jkedudemo.module.common.enums.member.Role;
+import com.example.jkedudemo.module.common.enums.member.Status;
 import com.example.jkedudemo.module.member.dto.request.MemberRequestDto;
+import com.example.jkedudemo.module.member.entity.Member;
 import com.example.jkedudemo.module.member.entity.MemberPhoneAuth;
 import com.example.jkedudemo.module.member.repository.MemberPhoneAuthRepository;
-import com.example.jkedudemo.module.member.service.AuthService;
+import com.example.jkedudemo.module.member.repository.MemberRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +22,17 @@ import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
 import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.transaction.AfterTransaction;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+
+import java.util.HashMap;
 
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
@@ -48,11 +59,22 @@ class AuthControllerTest {
 
     private MockMvc mockMvc;
 
+    private final ObjectMapper objectMapper = new ObjectMapper();
+
+
     @Autowired
     private MemberPhoneAuthRepository memberPhoneAuthRepository;
 
     @Autowired
-    private AuthService authService;
+    private MemberRepository memberRepository;
+
+    private Long SECURITY_MEMBER_ID;
+
+    private Long SECURITY_DELETE_ID;
+
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @BeforeEach
     public void setUp(WebApplicationContext webApplicationContext,
@@ -61,46 +83,49 @@ class AuthControllerTest {
                 .apply(MockMvcRestDocumentation.documentationConfiguration(restDocumentation))
                 .build();
     }
-
-    private final ObjectMapper objectMapper = new ObjectMapper();
-
     private final String URL = "/auth";
 
     @BeforeAll
-    public void all() {
-        saveMember();
+    public void all(){saveMember();}
+
+
+
+    public void saveMember() {
+        SECURITY_MEMBER_ID=memberRepository.save(Member.builder()
+                .email("aaaa")
+                .phone("01091097122")
+                .name("momo")
+                .role(Role.ROLE_ACADEMY)
+                .password(passwordEncoder.encode("1234"))
+                .status(Status.GREEN)
+                .build()).getId();
+
+        SECURITY_DELETE_ID=memberRepository.save(Member.builder()
+                .email("aaaa2")
+                .phone("01010101")
+                .name("momo2")
+                .role(Role.ROLE_ACADEMY)
+                .password(passwordEncoder.encode("1111"))
+                .status(Status.GREEN)
+                .build()).getId();
     }
 
-    private void saveMember() {
-
-        MemberPhoneAuth memberPhoneAuth=new MemberPhoneAuth();
-        memberPhoneAuth.setSmscode("0000");
-        memberPhoneAuth.setPhone("010-9109-7122");
-        memberPhoneAuth.setCheckYn(YN.Y);
-        memberPhoneAuth.setPhoneauth(PhoneAuth.JOIN);
-
-        memberPhoneAuthRepository.save(memberPhoneAuth);
-
-
-        MemberRequestDto memberRequestDto = new MemberRequestDto();
-        memberRequestDto.setName("준모");
-        memberRequestDto.setEmail("aaaa");
-        memberRequestDto.setPassword("1234");
-        memberRequestDto.setPhone("010-9109-7122");
-        memberRequestDto.setRole("academy");
-
-        authService.signup(memberRequestDto);
+    @AfterTransaction
+    public void accountCleanup() {
+        memberRepository.deleteById(SECURITY_MEMBER_ID);
+        memberRepository.deleteById(SECURITY_DELETE_ID);
     }
+
 
     @Test
     @DisplayName("1. 회원가입 실패 (휴대폰 인증 미완료)")
     public void memberSaveTest_Fail_PhoneAuth()throws Exception{
 
         MemberRequestDto memberRequestDto=MemberRequestDto.builder()
-                .email("aaaa2")
+                .email("bbbb")
                 .password("123456")
-                .phone("0101010")
-                .name("asdf")
+                .phone("00000000")
+                .name("abcd")
                 .role("user")
                 .build();
 
@@ -187,7 +212,7 @@ class AuthControllerTest {
         memberPhoneAuthRepository.save(memberPhoneAuth);
 
         MemberRequestDto memberRequestDto=MemberRequestDto.builder()
-                .email("aaaa2")
+                .email("bbbb")
                 .password("123456")
                 .phone("010-1234-1234")
                 .name("asdf")
@@ -296,9 +321,117 @@ class AuthControllerTest {
                 ));
     }
 
+    @Test
+    @DisplayName("6. 로그아웃 실패")
+    public void memberLogout_Fail()throws Exception{
 
+        mockMvc.perform(post(URL+"/member/logout")
+                        .header("User-Agent","aaa")
+                        .accept(MediaType.ALL)
+                        .characterEncoding("utf-8")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                )
+                .andDo(print())
+                .andExpect(status().isForbidden())
+                .andExpect(jsonPath("errortype").value("forbidden"))
+                .andExpect(jsonPath("status").value("403"))
+                .andExpect(jsonPath("message").value("로그인 유저 정보가 없습니다."))
+                .andDo(document("MemberLogout-Fail", // 1
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        responseFields(
+                                getDescription("errortype", "에러유형").type(JsonFieldType.STRING),
+                                getDescription("status", "상태코드").type(JsonFieldType.STRING),
+                                getDescription("message", "메시지").type(JsonFieldType.STRING))
+                ));
+    }
 
+    @Test
+    @WithUserDetails("aaaa")
+    @DisplayName("7. 로그아웃")
+    public void memberLogout()throws Exception{
+        MemberRequestDto memberRequestDto=MemberRequestDto.builder()
+                .email("aaaa")
+                .password("1234")
+                .build();
 
+        String paramString = objectMapper.writeValueAsString(memberRequestDto);
+
+        mockMvc.perform(post(URL+"/member/login")
+                .content(paramString)
+                .header("User-Agent","aaa")
+                .accept(MediaType.ALL)
+                .characterEncoding("utf-8")
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+        );
+
+        mockMvc.perform(post(URL+"/member/logout")
+                        .header("User-Agent","aaa")
+                        .accept(MediaType.ALL)
+                        .characterEncoding("utf-8")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("status").value("200"))
+                .andExpect(jsonPath("message").value("OK"))
+                .andDo(document("MemberLogout-Success", // 1
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        responseFields(
+                                getDescription("status", "상태코드").type(JsonFieldType.STRING),
+                                getDescription("message", "메시지").type(JsonFieldType.STRING))
+                ));
+    }
+
+    @Test
+    @DisplayName("8. RefreshToken 재발급")
+    public void memberRefreshToken() throws Exception{
+        MemberRequestDto memberRequestDto=MemberRequestDto.builder()
+                .email("bbbb")
+                .password("123456")
+                .build();
+
+        String paramString = objectMapper.writeValueAsString(memberRequestDto);
+
+        MvcResult result = mockMvc.perform(post(URL+"/member/login")
+                .content(paramString)
+                .header("User-Agent","aaa")
+                .accept(MediaType.ALL)
+                .characterEncoding("utf-8")
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+        ).andReturn();
+
+        JSONParser paser = new JSONParser();
+
+        JSONObject jsonObject= (JSONObject) paser.parse(result.getResponse().getContentAsString());
+
+        HashMap<String,String> hashMap2=new HashMap<>();
+        hashMap2.put("refreshToken", (String) jsonObject.get("refreshToken"));
+
+        String paramString2=objectMapper.writeValueAsString(hashMap2);
+
+        mockMvc.perform(post(URL+"/refresh")
+                        .content(paramString2)
+                        .accept(MediaType.ALL)
+                        .characterEncoding("utf-8")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("refreshResponseMap.message").value("Refresh 토큰을 통한 Access Token 생성이 완료되었습니다."))
+                .andExpect(jsonPath("refreshResponseMap.status").value("200"))
+                .andDo(document("RefreshTokenValidate", // 1
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestFields(
+                                getDescription("refreshToken","검증할 refreshToken")),
+                        responseFields(
+                                getDescription("refreshResponseMap.message", "재발급 메세지").type(JsonFieldType.STRING),
+                                getDescription("refreshResponseMap.accessToken", "새로 발급된 AccessToken").type(JsonFieldType.STRING),
+                                getDescription("refreshResponseMap.status","상태코드"))
+                ));
+    }
 
 
 
