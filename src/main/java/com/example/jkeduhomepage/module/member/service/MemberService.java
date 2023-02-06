@@ -1,6 +1,7 @@
 package com.example.jkeduhomepage.module.member.service;
 
 
+import com.example.jkeduhomepage.module.common.enums.Role;
 import com.example.jkeduhomepage.module.common.enums.Status;
 import com.example.jkeduhomepage.module.member.dto.MemberInsertDTO;
 import com.example.jkeduhomepage.module.member.dto.MemberUpdateDTO;
@@ -12,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.OptionalInt;
 
 @Service
 @RequiredArgsConstructor
@@ -29,6 +29,7 @@ public class MemberService {
         member.setName(memberInsertDTO.getName());
         member.setPhone(memberInsertDTO.getPhone());
         member.setStatus(Status.WHITE);
+        member.setRole(Role.ROLE_USER);
 
         return memberRepository.save(member);
     }
