@@ -1,9 +1,9 @@
 package com.example.jkeduhomepage.module.member.repository;
 
+import com.example.jkeduhomepage.module.common.enums.Role;
 import com.example.jkeduhomepage.module.common.enums.Status;
 import com.example.jkeduhomepage.module.member.entity.Member;
 import jakarta.transaction.Transactional;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -14,7 +14,7 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(SpringExtension.class)
 @ActiveProfiles("dev")
@@ -30,7 +30,7 @@ class MemberRepositoryTest {
     @Rollback(value = false)
     @DisplayName("save Member")
     public void testMember(){
-        Member member=new Member(null,"aaaa","a123456","a@a","momo","12341234", Status.GREEN);
+        Member member=new Member(null,"aaaa","a123456","a@a","momo","12341234", Status.GREEN, Role.ROLE_USER);
         Member member1 =memberRepository.save(member);
 
         assertEquals(member.getId(),member1.getId());

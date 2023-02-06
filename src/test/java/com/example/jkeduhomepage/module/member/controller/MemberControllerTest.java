@@ -12,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.context.ActiveProfiles;
@@ -25,6 +26,8 @@ import java.time.LocalDate;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -49,6 +52,7 @@ class MemberControllerTest {
                 .apply(MockMvcRestDocumentation.documentationConfiguration(restDocumentation))
                 .build();
     }
+
 
     @BeforeAll
     public void all() {
@@ -90,12 +94,10 @@ class MemberControllerTest {
         // Object -> json String
         String paramString = objectMapper.writeValueAsString(memberInsertDTO);
 
-        this.mockMvc.perform(
-                        post(URL)
-                                .content(paramString) // body
-                                .accept(MediaType.ALL)
-                                .contentType(MediaType.APPLICATION_JSON)
-                )
+        mockMvc.perform(post(URL)
+                        .content(paramString) // body
+                        .accept(MediaType.ALL)
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andDo(document("Member-Save-Fail", // 1
@@ -126,12 +128,11 @@ class MemberControllerTest {
         // Object -> json String
         String paramString = objectMapper.writeValueAsString(memberInsertDTO);
 
-        mockMvc.perform(
-                        post(URL)
-                                .content(paramString) // body
-                                .accept(MediaType.ALL)
-                                .contentType(MediaType.APPLICATION_JSON)
-                )
+        mockMvc.perform(post(URL)
+                        .content(paramString) // body
+                        .accept(MediaType.ALL)
+                        .characterEncoding("utf-8")
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("loginId").value("memeberLoginId"))
                 .andExpect(jsonPath("password").value("memberPassword"))
                 .andExpect(jsonPath("email").value("memberEmail"))
@@ -158,6 +159,7 @@ class MemberControllerTest {
                                 getDescription("name","회원 이름").type(JsonFieldType.STRING),
                                 getDescription("phone", "회원 휴대번호").type(JsonFieldType.STRING),
                                 getDescription("status","회원 상태").type(JsonFieldType.STRING),
+                                getDescription("role","회원 등급").type(JsonFieldType.STRING),
                                 getDescription("createDate", "회원가입 날짜").type(JsonFieldType.STRING),
                                 getDescription("updateDate","회원수정 날짜").type(JsonFieldType.STRING))
                 ));
@@ -168,10 +170,9 @@ class MemberControllerTest {
     public void member_list() throws Exception {
         saveMember();
 
-        mockMvc.perform(
-                        get(URL).contentType(MediaType.APPLICATION_JSON_VALUE)
-                                .accept(MediaType.ALL)
-                )
+        mockMvc.perform(get(URL)
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .accept(MediaType.ALL))
                 .andDo(print())
                 .andExpect(status().isOk()) // 7
                 .andDo(document("Member-List", // 1
@@ -196,8 +197,7 @@ class MemberControllerTest {
 
         // When && Then
         // 조회
-        mockMvc.perform(
-                        get(URL + "/{id}", 1)
+        mockMvc.perform(RestDocumentationRequestBuilders.get(URL + "/{id}", 1)
                                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                                 .accept(MediaType.ALL)
                 )
@@ -212,7 +212,11 @@ class MemberControllerTest {
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andDo(document("Member-Search",
+                        preprocessRequest(),
                         preprocessResponse(prettyPrint()),
+                        pathParameters(
+                          parameterWithName("id").description("MemberId")
+                        ),
                         responseFields(
                                 getDescription("id", "회원 고유번호(PK)").type(JsonFieldType.NUMBER),
                                 getDescription("loginId", "회원 로그인 아이디").type(JsonFieldType.STRING),
@@ -221,6 +225,7 @@ class MemberControllerTest {
                                 getDescription("name","회원 이름").type(JsonFieldType.STRING),
                                 getDescription("phone", "회원 휴대번호").type(JsonFieldType.STRING),
                                 getDescription("status","회원 상태").type(JsonFieldType.STRING),
+                                getDescription("role","회원 등급").type(JsonFieldType.STRING),
                                 getDescription("createDate", "회원가입 날짜").type(JsonFieldType.STRING),
                                 getDescription("updateDate","회원수정 날짜").type(JsonFieldType.STRING))
                 ));
@@ -229,13 +234,17 @@ class MemberControllerTest {
     @Test
     @DisplayName("5. member 조회 실패 ( id 값이 없을 때 )")
     public void member_fail() throws Exception {
-        mockMvc.perform(get(URL +"/{id}",1000)
+        mockMvc.perform(RestDocumentationRequestBuilders.get(URL +"/{id}",1000)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .accept(MediaType.ALL)
                 )
                 .andExpect(status().isBadRequest())
                 .andDo(print())
-                .andDo(document("Member-Search-Fail"));
+                .andDo(document("Member-Search-Fail" ,
+                        preprocessRequest(prettyPrint()),
+                        pathParameters(
+                                parameterWithName("id").description("MemberId"))
+                ));
     }
 
     @Test
@@ -251,8 +260,7 @@ class MemberControllerTest {
         // Object -> json String
         String paramString = objectMapper.writeValueAsString(memberUpdateDTO);
 
-        mockMvc.perform(
-                        put(URL + "/1")
+        mockMvc.perform(RestDocumentationRequestBuilders.put(URL + "/{id}",1)
                                 .content(paramString)
                                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                                 .accept(MediaType.ALL)
@@ -270,9 +278,13 @@ class MemberControllerTest {
                 .andDo(document("Member-Update-Success", // 1
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
+                        pathParameters(
+                                parameterWithName("id").description("MemberId")
+                        ),
                         requestFields(
                                 getDescription("email", "회원 이메일").type(JsonFieldType.STRING),
-                                getDescription("password","회원 비밀번호").type(JsonFieldType.STRING)),
+                                getDescription("password","회원 비밀번호").type(JsonFieldType.STRING)
+                        ),
                         responseFields(
                                 getDescription("id", "회원 고유번호(PK)").type(JsonFieldType.NUMBER),
                                 getDescription("loginId", "회원 로그인 아이디").type(JsonFieldType.STRING),
@@ -281,6 +293,7 @@ class MemberControllerTest {
                                 getDescription("name","회원 이름").type(JsonFieldType.STRING),
                                 getDescription("phone", "회원 휴대번호").type(JsonFieldType.STRING),
                                 getDescription("status","회원 상태").type(JsonFieldType.STRING),
+                                getDescription("role","회원 등급").type(JsonFieldType.STRING),
                                 getDescription("createDate", "회원가입 날짜").type(JsonFieldType.STRING),
                                 getDescription("updateDate","회원수정 날짜").type(JsonFieldType.STRING))
                 ));
@@ -300,8 +313,7 @@ class MemberControllerTest {
         // Object -> json String
         String paramString = objectMapper.writeValueAsString(memberUpdateDTO);
 
-        mockMvc.perform(
-                        put(URL + "/1000")
+        mockMvc.perform(RestDocumentationRequestBuilders.put(URL + "/{id}",1000)
                                 .content(paramString)
                                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                                 .accept(MediaType.ALL)
@@ -310,6 +322,9 @@ class MemberControllerTest {
                 .andDo(print())
                 .andDo(document("Member-Update-id-Fail",
                         preprocessRequest(prettyPrint()),
+                        pathParameters(
+                                parameterWithName("id").description("MemberId")
+                        ),
                         requestFields(
                                 getDescription("email", "회원 이메일").type(JsonFieldType.STRING),
                                 getDescription("password","회원 비밀번호").type(JsonFieldType.STRING))
@@ -327,8 +342,7 @@ class MemberControllerTest {
         // Object -> json String
         String paramString = objectMapper.writeValueAsString(memberUpdateDTO);
 
-        mockMvc.perform(
-                        put(URL + "/1")
+        mockMvc.perform(RestDocumentationRequestBuilders.put(URL + "/{id}",1)
                                 .content(paramString)
                                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                                 .accept(MediaType.ALL)
@@ -336,7 +350,14 @@ class MemberControllerTest {
                 .andExpect(status().isBadRequest())
                 .andDo(print())
                 .andDo(document("Member-Update-body-Fail",
-                        preprocessRequest(prettyPrint())));
+                        preprocessRequest(prettyPrint()),
+                        pathParameters(
+                                parameterWithName("id").description("MemberId")
+                        ),
+                        requestFields(
+                                getDescription("email", "회원 이메일").type(JsonFieldType.STRING),
+                                getDescription("password","회원 비밀번호").type(JsonFieldType.STRING))
+                ));
     }
 
     private FieldDescriptor getDescription(String name, String description) {

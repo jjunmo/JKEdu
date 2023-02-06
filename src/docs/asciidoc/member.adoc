@@ -44,6 +44,9 @@ include::{snippets}/Member-List/response-fields.adoc[]
 === MemberSearch
 HttpRequest
 include::{snippets}/Member-Search/http-request.adoc[]
+RequestPathParameters
+include::{snippets}/Member-Search/path-parameters.adoc[]
+
 
 HttpResponse
 include::{snippets}/Member-Search/http-response.adoc[]
@@ -53,6 +56,8 @@ include::{snippets}/Member-Search/response-fields.adoc[]
 === MemberSearchFail
 HttpRequest
 include::{snippets}/Member-Search-Fail/http-request.adoc[]
+RequestPathParameters
+include::{snippets}/Member-Search-Fail/path-parameters.adoc[]
 
 HttpResponse
 include::{snippets}/Member-Search-Fail/http-response.adoc[]
@@ -61,6 +66,8 @@ include::{snippets}/Member-Search-Fail/http-response.adoc[]
 === MemberUpdateFail ( id )
 HttpRequest
 include::{snippets}/Member-Update-id-Fail/http-request.adoc[]
+RequestPathParameters
+include::{snippets}/Member-Update-id-Fail/path-parameters.adoc[]
 RequestFields
 include::{snippets}/Member-Update-id-Fail/request-fields.adoc[]
 
@@ -70,6 +77,10 @@ include::{snippets}/Member-Update-id-Fail/http-response.adoc[]
 === MemberUpdateFail ( body )
 HttpRequest
 include::{snippets}/Member-Update-body-Fail/http-request.adoc[]
+RequestPathParameters
+include::{snippets}/Member-Update-body-Fail/path-parameters.adoc[]
+RequestFields
+include::{snippets}/Member-Update-body-Fail/request-fields.adoc[]
 
 HttpResponse
 include::{snippets}/Member-Update-body-Fail/http-response.adoc[]
@@ -77,6 +88,8 @@ include::{snippets}/Member-Update-body-Fail/http-response.adoc[]
 === MemberUpdateSuccess
 HttpRequest
 include::{snippets}/Member-Update-Success/http-request.adoc[]
+RequestPathParameters
+include::{snippets}/Member-Update-body-Fail/path-parameters.adoc[]
 RequestFields
 include::{snippets}/Member-Update-Success/request-fields.adoc[]
 
