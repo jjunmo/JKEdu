@@ -1,6 +1,7 @@
 package com.example.jkeduhomepage.module.member.controller;
 
 import com.example.jkeduhomepage.module.member.dto.MemberInsertDTO;
+import com.example.jkeduhomepage.module.member.dto.MemberResponseDTO;
 import com.example.jkeduhomepage.module.member.dto.MemberUpdateDTO;
 import com.example.jkeduhomepage.module.member.entity.Member;
 import com.example.jkeduhomepage.module.member.service.MemberService;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+
+import static com.example.jkeduhomepage.module.member.dto.MemberResponseDTO.*;
 
 @RestController
 @RequestMapping(value = "/member")
@@ -34,7 +37,7 @@ public class MemberController {
         if(memberInsertDTO.getName().equals("")) return new ResponseEntity<>("이름을 입력하세요.",HttpStatus.BAD_REQUEST);
         if(memberInsertDTO.getPhone().equals("")) return new ResponseEntity<>("휴대폰 번호를 입력하세요.",HttpStatus.BAD_REQUEST);
 
-        return new ResponseEntity<>(memberService.save(memberInsertDTO),HttpStatus.OK);
+        return new ResponseEntity<>(saveMember(memberService.save(memberInsertDTO)),HttpStatus.OK);
     }
 
     /**
@@ -43,7 +46,7 @@ public class MemberController {
      * @return member 정보
      */
     @GetMapping("/{id}")
-    public HttpEntity<Object> choiceMember(@PathVariable Long id){
+    public HttpEntity<Object> choice(@PathVariable Long id){
         Optional<Member> memberOptional=memberService.getMember(id);
 
         if(memberOptional.isEmpty())
@@ -51,7 +54,7 @@ public class MemberController {
 
         Member member=memberOptional.get();
 
-        return new ResponseEntity<>(member,HttpStatus.OK);
+        return new ResponseEntity<>(choiceMember(member),HttpStatus.OK);
     }
 
     /**
@@ -61,7 +64,7 @@ public class MemberController {
      * @return member
      */
     @PutMapping("/{id}")
-    public HttpEntity<Object> updateMember(@RequestBody MemberUpdateDTO memberUpdateDTO, @PathVariable Long id){
+    public HttpEntity<Object> update(@RequestBody MemberUpdateDTO memberUpdateDTO, @PathVariable Long id){
 
         if(memberUpdateDTO.getEmail().equals("")) return new ResponseEntity<>("이메일을 입력하세요.",HttpStatus.BAD_REQUEST);
         if(memberUpdateDTO.getPassword().equals("")) return new ResponseEntity<>("비밀번호를 입력하세요.",HttpStatus.BAD_REQUEST);
@@ -72,7 +75,7 @@ public class MemberController {
 
         Member member=memberOptional.get();
 
-        return new ResponseEntity<>(member,HttpStatus.OK);
+        return new ResponseEntity<>("비밀번호가 변경 되었습니다.",HttpStatus.OK);
     }
 
     /**
@@ -80,10 +83,10 @@ public class MemberController {
      * @return memberList
      */
     @GetMapping
-    public HttpEntity<Collection<Member>> memberList(){
+    public HttpEntity<Collection<MemberResponseDTO>> memberList(){
 
         List<Member> memberList = memberService.allList();
 
-        return new ResponseEntity<>(memberList,HttpStatus.OK);
+        return new ResponseEntity<>(listMember(memberList),HttpStatus.OK);
     }
 }

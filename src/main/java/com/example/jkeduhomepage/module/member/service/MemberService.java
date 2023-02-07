@@ -14,6 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
+import static com.example.jkeduhomepage.module.config.SecurityUtil.getCurrentMemberId;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -35,6 +37,7 @@ public class MemberService {
     }
 
     public Optional<Member> getMember(Long id){
+
         return memberRepository.findById(id);
     }
 
