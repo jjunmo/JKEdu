@@ -30,8 +30,7 @@ import static org.springframework.restdocs.request.RequestDocumentation.paramete
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @ActiveProfiles("dev")
@@ -134,11 +133,9 @@ class MemberControllerTest {
                         .characterEncoding("utf-8")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("loginId").value("memeberLoginId"))
-                .andExpect(jsonPath("password").value("memberPassword"))
                 .andExpect(jsonPath("email").value("memberEmail"))
                 .andExpect(jsonPath("name").value("memberName"))
                 .andExpect(jsonPath("phone").value("memberPhone"))
-                .andExpect(jsonPath("status").value("WHITE"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andDo(document("Member-Save-Success", // 1
@@ -152,16 +149,10 @@ class MemberControllerTest {
                                 getDescription("phone", "회원 휴대번호").type(JsonFieldType.STRING),
                                 getDescription("status","회원 상태").type(JsonFieldType.STRING)),
                         responseFields(
-                                getDescription("id", "회원 고유번호(PK)").type(JsonFieldType.NUMBER),
                                 getDescription("loginId", "회원 로그인 아이디").type(JsonFieldType.STRING),
-                                getDescription("password","회원 비밀번호").type(JsonFieldType.STRING),
                                 getDescription("email", "회원 이메일").type(JsonFieldType.STRING),
                                 getDescription("name","회원 이름").type(JsonFieldType.STRING),
-                                getDescription("phone", "회원 휴대번호").type(JsonFieldType.STRING),
-                                getDescription("status","회원 상태").type(JsonFieldType.STRING),
-                                getDescription("role","회원 등급").type(JsonFieldType.STRING),
-                                getDescription("createDate", "회원가입 날짜").type(JsonFieldType.STRING),
-                                getDescription("updateDate","회원수정 날짜").type(JsonFieldType.STRING))
+                                getDescription("phone", "회원 휴대번호").type(JsonFieldType.STRING))
                 ));
     }
 
@@ -181,13 +172,12 @@ class MemberControllerTest {
                                 subsectionWithPath("[]").description("회원가입 멤버"),
                                 getDescription("[].id", "회원 고유번호(PK)").type(JsonFieldType.NUMBER),// 5
                                 getDescription("[].loginId", "회원 로그인 아이디").type(JsonFieldType.STRING),
-                                getDescription("[].password","회원 비밀번호").type(JsonFieldType.STRING),
                                 getDescription("[].email", "회원 이메일").type(JsonFieldType.STRING),
                                 getDescription("[].name","회원 이름").type(JsonFieldType.STRING),
                                 getDescription("[].phone", "회원 휴대번호").type(JsonFieldType.STRING),
                                 getDescription("[].status","회원 상태").type(JsonFieldType.STRING),
-                                getDescription("[].createDate", "회원가입 날짜").type(JsonFieldType.STRING),
-                                getDescription("[].updateDate","회원수정 날짜").type(JsonFieldType.STRING))
+                                getDescription("[].createdDate", "회원가입 날짜").type(JsonFieldType.STRING),
+                                getDescription("[].updatedDate","회원수정 날짜").type(JsonFieldType.STRING))
                 ));
     }
 
@@ -202,15 +192,14 @@ class MemberControllerTest {
                                 .accept(MediaType.ALL)
                 )
                 .andExpect(jsonPath("loginId").value("aaa"))
-                .andExpect(jsonPath("password").value("123456"))
                 .andExpect(jsonPath("email").value("aa@aa"))
                 .andExpect(jsonPath("name").value("momo"))
                 .andExpect(jsonPath("phone").value("123456789"))
                 .andExpect(jsonPath("status").value("WHITE"))
-                .andExpect(jsonPath("createDate").value(String.valueOf(LocalDate.now())))
-                .andExpect(jsonPath("updateDate").value(String.valueOf(LocalDate.now())))
-                .andExpect(status().isOk())
+                .andExpect(jsonPath("createdDate").value(String.valueOf(LocalDate.now())))
+                .andExpect(jsonPath("updatedDate").value(String.valueOf(LocalDate.now())))
                 .andDo(print())
+                .andExpect(status().isOk())
                 .andDo(document("Member-Search",
                         preprocessRequest(),
                         preprocessResponse(prettyPrint()),
@@ -218,16 +207,14 @@ class MemberControllerTest {
                           parameterWithName("id").description("MemberId")
                         ),
                         responseFields(
-                                getDescription("id", "회원 고유번호(PK)").type(JsonFieldType.NUMBER),
                                 getDescription("loginId", "회원 로그인 아이디").type(JsonFieldType.STRING),
-                                getDescription("password","회원 비밀번호").type(JsonFieldType.STRING),
                                 getDescription("email", "회원 이메일").type(JsonFieldType.STRING),
                                 getDescription("name","회원 이름").type(JsonFieldType.STRING),
                                 getDescription("phone", "회원 휴대번호").type(JsonFieldType.STRING),
                                 getDescription("status","회원 상태").type(JsonFieldType.STRING),
                                 getDescription("role","회원 등급").type(JsonFieldType.STRING),
-                                getDescription("createDate", "회원가입 날짜").type(JsonFieldType.STRING),
-                                getDescription("updateDate","회원수정 날짜").type(JsonFieldType.STRING))
+                                getDescription("createdDate", "회원가입 날짜").type(JsonFieldType.STRING),
+                                getDescription("updatedDate","회원수정 날짜").type(JsonFieldType.STRING))
                 ));
     }
 
@@ -238,6 +225,7 @@ class MemberControllerTest {
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .accept(MediaType.ALL)
                 )
+                .andExpect(content().string("얘는 누구냐"))
                 .andExpect(status().isBadRequest())
                 .andDo(print())
                 .andDo(document("Member-Search-Fail" ,
@@ -262,19 +250,13 @@ class MemberControllerTest {
 
         mockMvc.perform(RestDocumentationRequestBuilders.put(URL + "/{id}",1)
                                 .content(paramString)
+                                .characterEncoding("UTF-8")
                                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                                 .accept(MediaType.ALL)
                 )
-                .andExpect(jsonPath("loginId").value("aaa"))
-                .andExpect(jsonPath("password").value("modifyPassword"))
-                .andExpect(jsonPath("email").value("modifyEmail"))
-                .andExpect(jsonPath("name").value("momo"))
-                .andExpect(jsonPath("phone").value("123456789"))
-                .andExpect(jsonPath("status").value("WHITE"))
-                .andExpect(jsonPath("createDate").value(String.valueOf(LocalDate.now())))
-                .andExpect(jsonPath("updateDate").value(String.valueOf(LocalDate.now())))
-                .andExpect(status().isOk())
                 .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string("비밀번호가 변경 되었습니다."))
                 .andDo(document("Member-Update-Success", // 1
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
@@ -284,18 +266,7 @@ class MemberControllerTest {
                         requestFields(
                                 getDescription("email", "회원 이메일").type(JsonFieldType.STRING),
                                 getDescription("password","회원 비밀번호").type(JsonFieldType.STRING)
-                        ),
-                        responseFields(
-                                getDescription("id", "회원 고유번호(PK)").type(JsonFieldType.NUMBER),
-                                getDescription("loginId", "회원 로그인 아이디").type(JsonFieldType.STRING),
-                                getDescription("password","회원 비밀번호").type(JsonFieldType.STRING),
-                                getDescription("email", "회원 이메일").type(JsonFieldType.STRING),
-                                getDescription("name","회원 이름").type(JsonFieldType.STRING),
-                                getDescription("phone", "회원 휴대번호").type(JsonFieldType.STRING),
-                                getDescription("status","회원 상태").type(JsonFieldType.STRING),
-                                getDescription("role","회원 등급").type(JsonFieldType.STRING),
-                                getDescription("createDate", "회원가입 날짜").type(JsonFieldType.STRING),
-                                getDescription("updateDate","회원수정 날짜").type(JsonFieldType.STRING))
+                        )
                 ));
 
     }
@@ -318,6 +289,7 @@ class MemberControllerTest {
                                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                                 .accept(MediaType.ALL)
                 )
+                .andExpect(content().string("해당 정보가 없습니다."))
                 .andExpect(status().isBadRequest())
                 .andDo(print())
                 .andDo(document("Member-Update-id-Fail",
@@ -347,6 +319,7 @@ class MemberControllerTest {
                                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                                 .accept(MediaType.ALL)
                 )
+                .andExpect(content().string("이메일을 입력하세요."))
                 .andExpect(status().isBadRequest())
                 .andDo(print())
                 .andDo(document("Member-Update-body-Fail",
