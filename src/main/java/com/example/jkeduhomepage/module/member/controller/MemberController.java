@@ -15,6 +15,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
+import static com.example.jkeduhomepage.module.config.SecurityUtil.getCurrentMemberId;
 import static com.example.jkeduhomepage.module.member.dto.MemberResponseDTO.*;
 
 @RestController
@@ -84,6 +85,7 @@ public class MemberController {
      */
     @GetMapping
     public HttpEntity<Collection<MemberResponseDTO>> memberList(){
+        Long id=getCurrentMemberId();
 
         List<Member> memberList = memberService.allList();
 
