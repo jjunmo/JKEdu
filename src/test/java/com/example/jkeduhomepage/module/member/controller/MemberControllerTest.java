@@ -198,7 +198,7 @@ class MemberControllerTest {
                 .andExpect(jsonPath("email").value("aa@aa"))
                 .andExpect(jsonPath("name").value("momo"))
                 .andExpect(jsonPath("phone").value("123456789"))
-                .andExpect(jsonPath("status").value("WHITE"))
+                .andExpect(jsonPath("status").value("RED"))
                 .andExpect(jsonPath("createdDate").value(String.valueOf(LocalDate.now())))
                 .andExpect(jsonPath("updatedDate").value(String.valueOf(LocalDate.now())))
                 .andDo(print())

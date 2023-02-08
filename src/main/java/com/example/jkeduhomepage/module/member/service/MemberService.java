@@ -30,7 +30,7 @@ public class MemberService {
         member.setEmail(memberInsertDTO.getEmail());
         member.setName(memberInsertDTO.getName());
         member.setPhone(memberInsertDTO.getPhone());
-        member.setStatus(Status.WHITE);
+        member.setStatus(Status.RED);
         member.setRole(Role.ROLE_USER);
 
         return memberRepository.save(member);

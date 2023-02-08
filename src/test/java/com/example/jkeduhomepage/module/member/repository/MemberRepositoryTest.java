@@ -30,7 +30,7 @@ class MemberRepositoryTest {
     @Rollback(value = false)
     @DisplayName("save Member")
     public void testMember(){
-        Member member=new Member(null,"aaaa","a123456","a@a","momo","12341234", Status.GREEN, Role.ROLE_USER);
+        Member member=new Member(null,"aaaa","a123456","a@a","momo","12341234",Status.RED, Role.ROLE_USER);
         Member member1 =memberRepository.save(member);
 
         assertEquals(member.getId(),member1.getId());

@@ -96,6 +96,6 @@ include::{snippets}/Member-Update-Success/request-fields.adoc[]
 HttpResponse
 include::{snippets}/Member-Update-Success/http-response.adoc[]
 ResponseFields
-include::{snippets}/Member-Update-Success/response-fields.adoc[]
+include::{snippets}/Member-Update-Success/response-body.adoc[]
 
 

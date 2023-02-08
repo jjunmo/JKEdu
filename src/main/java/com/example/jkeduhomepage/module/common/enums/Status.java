@@ -1,6 +1,6 @@
 package com.example.jkeduhomepage.module.common.enums;
 
 public enum Status {
-    WHITE, GREEN
-    //대기 , 사용가능
+    GREEN ,RED
+    //승인 , 승인대기
 }

@@ -85,8 +85,6 @@ public class MemberController {
      */
     @GetMapping
     public HttpEntity<Collection<MemberResponseDTO>> memberList(){
-        Long id=getCurrentMemberId();
-
         List<Member> memberList = memberService.allList();
 
         return new ResponseEntity<>(listMember(memberList),HttpStatus.OK);
