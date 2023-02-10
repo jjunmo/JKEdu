@@ -30,6 +30,11 @@ public class WebSecurityConfig implements WebMvcConfigurer {
     private final TokenProvider tokenProvider;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
+
+    private static final String FRONT_LOCAL ="http://localhost:3000";
+    private static final String DOMAIN = "http://jkboston.co.kr";
+
+    private static final String FRONT_IP="";
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -75,9 +80,9 @@ public class WebSecurityConfig implements WebMvcConfigurer {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.addAllowedOrigin("http://localhost:3000");
-        config.addAllowedOrigin("");// 프론트 IPv4 주소
-        config.addAllowedOrigin("");//도메인 주소
+        config.addAllowedOrigin(FRONT_LOCAL);
+        config.addAllowedOrigin(FRONT_IP);// 프론트 IPv4 주소
+        config.addAllowedOrigin(DOMAIN);//도메인 주소
         config.addAllowedMethod("*");
         config.addAllowedHeader("*");
         config.setAllowCredentials(true);
