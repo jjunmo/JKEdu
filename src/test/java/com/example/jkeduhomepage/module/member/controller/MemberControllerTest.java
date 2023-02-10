@@ -96,6 +96,7 @@ class MemberControllerTest {
         mockMvc.perform(post(URL)
                         .content(paramString) // body
                         .accept(MediaType.ALL)
+                        .characterEncoding("UTF-8")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
@@ -130,7 +131,7 @@ class MemberControllerTest {
         mockMvc.perform(post(URL)
                         .content(paramString) // body
                         .accept(MediaType.ALL)
-                        .characterEncoding("utf-8")
+                        .characterEncoding("UTF-8")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("loginId").value("memeberLoginId"))
                 .andExpect(jsonPath("email").value("memberEmail"))
@@ -163,6 +164,7 @@ class MemberControllerTest {
 
         mockMvc.perform(get(URL)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .characterEncoding("UTF-8")
                         .accept(MediaType.ALL))
                 .andDo(print())
                 .andExpect(status().isOk()) // 7
@@ -189,13 +191,14 @@ class MemberControllerTest {
         // 조회
         mockMvc.perform(RestDocumentationRequestBuilders.get(URL + "/{id}", 1)
                                 .contentType(MediaType.APPLICATION_JSON_VALUE)
+                                .characterEncoding("UTF-8")
                                 .accept(MediaType.ALL)
                 )
                 .andExpect(jsonPath("loginId").value("aaa"))
                 .andExpect(jsonPath("email").value("aa@aa"))
                 .andExpect(jsonPath("name").value("momo"))
                 .andExpect(jsonPath("phone").value("123456789"))
-                .andExpect(jsonPath("status").value("WHITE"))
+                .andExpect(jsonPath("status").value("RED"))
                 .andExpect(jsonPath("createdDate").value(String.valueOf(LocalDate.now())))
                 .andExpect(jsonPath("updatedDate").value(String.valueOf(LocalDate.now())))
                 .andDo(print())
@@ -223,6 +226,7 @@ class MemberControllerTest {
     public void member_fail() throws Exception {
         mockMvc.perform(RestDocumentationRequestBuilders.get(URL +"/{id}",1000)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .characterEncoding("UTF-8")
                         .accept(MediaType.ALL)
                 )
                 .andExpect(content().string("얘는 누구냐"))
@@ -286,6 +290,7 @@ class MemberControllerTest {
 
         mockMvc.perform(RestDocumentationRequestBuilders.put(URL + "/{id}",1000)
                                 .content(paramString)
+                                .characterEncoding("UTF-8")
                                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                                 .accept(MediaType.ALL)
                 )
@@ -316,6 +321,7 @@ class MemberControllerTest {
 
         mockMvc.perform(RestDocumentationRequestBuilders.put(URL + "/{id}",1)
                                 .content(paramString)
+                                .characterEncoding("UTF-8")
                                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                                 .accept(MediaType.ALL)
                 )
@@ -332,6 +338,8 @@ class MemberControllerTest {
                                 getDescription("password","회원 비밀번호").type(JsonFieldType.STRING))
                 ));
     }
+
+
 
     private FieldDescriptor getDescription(String name, String description) {
         return fieldWithPath(name)

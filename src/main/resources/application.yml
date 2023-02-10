@@ -1,13 +1,8 @@
 spring:
-#  data:
-#    mongodb:
-#      host: localhost
-#      port: 27017
-#      authentication-database: admin
-#      username: jjunmo
-#      password: a123456
-#      database: jkedu
-#      # uri: mongodb: //localhost:27017/jkedu
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 200MB
   jpa:
     hibernate:
       ddl-auto: create-drop
@@ -31,3 +26,15 @@ spring:
     driver-class-name: org.h2.Driver
 jwt:
   secret: c3ByaW5nLWJvb3Qtc2VjdXJpdHktand0LXR1dG9yaWFsLWppd29vbi1zcHJpbmctYm9vdC1zZWN1cml0eS1qd3QtdHV0b3JpYWwK
+cloud:
+  aws:
+    s3:
+      bucket: jkboston
+    credentials:
+      access-key: AKIA4OTF2RFBNW42IR5C
+      secret-key: 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
+    region:
+      static: ap-northeast-2
+      auto: false
+    stack:
+      auto: false

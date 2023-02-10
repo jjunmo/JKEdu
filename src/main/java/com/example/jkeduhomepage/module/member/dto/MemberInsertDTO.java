@@ -16,6 +16,6 @@ public class MemberInsertDTO {
 
     private String phone = "";
 
-    private Status status=Status.WHITE;
+    private Status status=Status.RED;
 
 }
