@@ -1,19 +1,17 @@
 package com.example.jkeduhomepage.module.article.controller;
 
+import com.example.jkeduhomepage.module.article.dto.ArticleRequestDTO;
+import com.example.jkeduhomepage.module.article.entity.UploadFile;
+import com.example.jkeduhomepage.module.article.service.ArticleService;
 import com.example.jkeduhomepage.module.article.service.AwsS3Service;
-import com.example.jkeduhomepage.module.common.utility.S3Utils;
+import com.example.jkeduhomepage.module.member.entity.Member;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.io.ByteArrayResource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RequiredArgsConstructor
 @Controller
@@ -21,19 +19,30 @@ import java.util.Map;
 public class ArticleController {
 
     private final AwsS3Service awsS3Service;
+    private final ArticleService articleService;
 
-    @PostMapping("/file")
-    public ResponseEntity<Object> uploadFile(
-            @RequestParam("category") String category,
-            @RequestPart(value = "file") MultipartFile multipartFile) {
-        Map<String,String> fileMap=new HashMap<>();
-        String URL = awsS3Service.uploadFile(category, multipartFile);
-        fileMap.put(multipartFile.getOriginalFilename(), URL);
-        return ResponseEntity.ok(fileMap);
+
+    @PostMapping
+    public ResponseEntity<Object> save(@RequestBody ArticleRequestDTO articleRequestDTO){
+        Member member=articleService.isMemberCurrent();
+
+        if(articleRequestDTO.getTitle().equals(""))
+            return ResponseEntity.badRequest().body("제목을 작성하세요");
+
+        articleService.saveArticle(member,articleRequestDTO);
+
+        return ResponseEntity.ok().body("저장 완료");
     }
 
-    @PostMapping("/files")
-    public ResponseEntity<List<String>> uploadFile(@RequestParam("category") String category,@RequestPart(value = "file")  List<MultipartFile> multipartFile) {
+
+
+    @PostMapping("/file")
+    public ResponseEntity<List<UploadFile>> uploadFile(@RequestParam("category") String category,@RequestPart(value = "file")  List<MultipartFile> multipartFile) {
+//        Member member=articleService.isMemberCurrent();
+        if(category.equalsIgnoreCase("GALLERY")){
+            throw new RuntimeException("썸넬 이미지 만들어야함");
+        }
+
         return ResponseEntity.ok(awsS3Service.uploadFile(category,multipartFile));
     }
 
