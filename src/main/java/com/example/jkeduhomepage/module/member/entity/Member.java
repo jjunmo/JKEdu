@@ -12,7 +12,6 @@ import lombok.*;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @Table(name="MEMBER")
 public class Member extends Basetime {
 

@@ -5,6 +5,8 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.example.jkeduhomepage.module.article.entity.UploadFile;
+import com.example.jkeduhomepage.module.article.repository.UploadFileRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,10 +18,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -32,6 +31,8 @@ public class AwsS3Service {
     private static final String TIME_SEPARATOR = "_";
 
     private final AmazonS3Client amazonS3Client;
+
+    private final UploadFileRepository uploadFileRepository;
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucketName;
@@ -55,30 +56,36 @@ public class AwsS3Service {
         return amazonS3Client.getUrl(bucketName, fileName).toString();
     }
 
-    public List<String> uploadFile(String category,List<MultipartFile> multipartFile) {
-        List<String> fileNameList = new ArrayList<>();
-
+    public List<UploadFile> uploadFile(String category,List<MultipartFile> multipartFile) {
+        List<UploadFile> uploadFileList = new ArrayList<>();
         // forEach 구문을 통해 multipartFile로 넘어온 파일들 하나씩 fileNameList에 추가
         multipartFile.forEach(file -> {
-            String fileName = buildFileName(category, Objects.requireNonNull(file.getOriginalFilename()));
-            ObjectMetadata objectMetadata = new ObjectMetadata();
-            objectMetadata.setContentLength(file.getSize());
-            objectMetadata.setContentType(file.getContentType());
+            String fileName = file.getOriginalFilename();
+            String customFileName = buildFileName(category, Objects.requireNonNull(fileName));
 
-            try(InputStream inputStream = file.getInputStream()) {
-                amazonS3Client.putObject(new PutObjectRequest(bucketName, fileName, inputStream, objectMetadata)
-                        .withCannedAcl(CannedAccessControlList.PublicRead));
+            UploadFile uploadFile =new UploadFile();
+            uploadFile.setFileName(fileName);
+            uploadFile.setCustomFileName(customFileName);
+            uploadFile.setUrl(amazonS3Client.getUrl(bucketName,customFileName).toString());
+            uploadFileRepository.save(uploadFile);
 
-                //TODO : articleRepository.save()
+                    ObjectMetadata objectMetadata = new ObjectMetadata();
+                    objectMetadata.setContentLength(file.getSize());
+                    objectMetadata.setContentType(file.getContentType());
 
-            } catch(IOException e) {
-                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "파일 업로드에 실패했습니다.");
-            }
+                    try (InputStream inputStream = file.getInputStream()) {
+                        amazonS3Client.putObject(new PutObjectRequest(bucketName, customFileName, inputStream, objectMetadata)
+                                .withCannedAcl(CannedAccessControlList.PublicRead));
 
-            fileNameList.add(fileName);
-        });
+                        //TODO : articleRepository.save()
 
-        return fileNameList;
+                    } catch (IOException e) {
+                        throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "파일 업로드에 실패했습니다.");
+                    }
+            uploadFileList.add(uploadFile);
+                }
+        );
+        return uploadFileList;
     }
 
     public void deleteFile(String category,String fileName) {
@@ -108,26 +115,5 @@ public class AwsS3Service {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "잘못된 형식의 파일(" + fileName + ") 입니다.");
         }
     }
-
-
-//    public byte[] downloadFile(String resourcePath) {
-//        validateFileExistsAtUrl(resourcePath);
-//
-//        S3Object s3Object = amazonS3Client.getObject(bucketName, resourcePath);
-//        S3ObjectInputStream inputStream = s3Object.getObjectContent();
-//        try {
-//            return IOUtils.toByteArray(inputStream);
-//        } catch (IOException e) {
-//            throw new RuntimeException("다운 실패");
-//        }
-//    }
-
-//    private void validateFileExistsAtUrl(String resourcePath) {
-//        if (!amazonS3Client.doesObjectExist(bucketName, resourcePath)) {
-//            throw new NotFoundException("파일을 찾지못함");
-//        }
-//    }
-
-
 
     }
