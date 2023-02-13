@@ -12,7 +12,5 @@ import lombok.NoArgsConstructor;
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class TokenDto {
-    private String grantType;
     private String accessToken;
-    private Long tokenExpiresIn;
 }

@@ -1,6 +1,7 @@
 package com.example.jkeduhomepage.module.member.controller;
 
-import com.example.jkeduhomepage.module.member.dto.MemberInsertDTO;
+import com.example.jkeduhomepage.module.jwt.TokenDto;
+import com.example.jkeduhomepage.module.member.dto.MemberRequestDTO;
 import com.example.jkeduhomepage.module.member.dto.MemberResponseDTO;
 import com.example.jkeduhomepage.module.member.dto.MemberUpdateDTO;
 import com.example.jkeduhomepage.module.member.entity.Member;
@@ -15,7 +16,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-import static com.example.jkeduhomepage.module.config.SecurityUtil.getCurrentMemberId;
 import static com.example.jkeduhomepage.module.member.dto.MemberResponseDTO.*;
 
 @RestController
@@ -27,18 +27,37 @@ public class MemberController {
 
     /**
      * 회원가입
-     * @param memberInsertDTO 입력한 정보
+     * @param memberRequestDTO 입력한 정보
      * @return 회원가입 member
      */
     @PostMapping
-    public HttpEntity<Object> save(@RequestBody MemberInsertDTO memberInsertDTO){
-        if(memberInsertDTO.getLoginId().equals("")) return new ResponseEntity<>("ID를 입력하세요.",HttpStatus.BAD_REQUEST);
-        if(memberInsertDTO.getPassword().equals("")) return new ResponseEntity<>("비밀번호를 입력하세요.",HttpStatus.BAD_REQUEST);
-        if(memberInsertDTO.getEmail().equals("")) return new ResponseEntity<>("이메일을 입력하세요.",HttpStatus.BAD_REQUEST);
-        if(memberInsertDTO.getName().equals("")) return new ResponseEntity<>("이름을 입력하세요.",HttpStatus.BAD_REQUEST);
-        if(memberInsertDTO.getPhone().equals("")) return new ResponseEntity<>("휴대폰 번호를 입력하세요.",HttpStatus.BAD_REQUEST);
+    public HttpEntity<Object> save(@RequestBody MemberRequestDTO memberRequestDTO){
+        if(memberRequestDTO.getLoginId().equals("")) return new ResponseEntity<>("ID를 입력하세요.",HttpStatus.BAD_REQUEST);
+        if(memberRequestDTO.getPassword().equals("")) return new ResponseEntity<>("비밀번호를 입력하세요.",HttpStatus.BAD_REQUEST);
+        if(memberRequestDTO.getEmail().equals("")) return new ResponseEntity<>("이메일을 입력하세요.",HttpStatus.BAD_REQUEST);
+        if(memberRequestDTO.getName().equals("")) return new ResponseEntity<>("이름을 입력하세요.",HttpStatus.BAD_REQUEST);
+        if(memberRequestDTO.getPhone().equals("")) return new ResponseEntity<>("휴대폰 번호를 입력하세요.",HttpStatus.BAD_REQUEST);
 
-        return new ResponseEntity<>(saveMember(memberService.save(memberInsertDTO)),HttpStatus.OK);
+        return new ResponseEntity<>(saveMember(memberService.save(memberRequestDTO)),HttpStatus.OK);
+    }
+
+    @PostMapping("/login")
+    public HttpEntity<Object> login(@RequestBody MemberRequestDTO memberRequestDTO){
+        if(memberRequestDTO.getLoginId().equals("")) return  ResponseEntity.badRequest().body("아이디를 입력하세요.");
+        if(memberRequestDTO.getPassword().equals("")) return ResponseEntity.badRequest().body("비밀번호를 입력하세요.");
+
+        Object result=memberService.login(memberRequestDTO);
+
+        if(result.equals("id_fail")){
+            return ResponseEntity.badRequest().body("존재하지 않는 아이디 입니다.");
+        }
+
+        if(result.equals("pw_fail")){
+            return ResponseEntity.badRequest().body("비밀번호가 일치하지 않습니다.");
+        }
+
+
+        return ResponseEntity.ok().body(result);
     }
 
     /**

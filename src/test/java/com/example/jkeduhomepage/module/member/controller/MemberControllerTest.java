@@ -1,6 +1,6 @@
 package com.example.jkeduhomepage.module.member.controller;
 
-import com.example.jkeduhomepage.module.member.dto.MemberInsertDTO;
+import com.example.jkeduhomepage.module.member.dto.MemberRequestDTO;
 import com.example.jkeduhomepage.module.member.dto.MemberUpdateDTO;
 import com.example.jkeduhomepage.module.member.service.MemberService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -59,14 +59,14 @@ class MemberControllerTest {
     }
 
     private void saveMember() {
-        MemberInsertDTO memberInsertDTO = new MemberInsertDTO();
-        memberInsertDTO.setLoginId("aaa");
-        memberInsertDTO.setPassword("123456");
-        memberInsertDTO.setEmail("aa@aa");
-        memberInsertDTO.setName("momo");
-        memberInsertDTO.setPhone("123456789");
+        MemberRequestDTO memberRequestDTO = new MemberRequestDTO();
+        memberRequestDTO.setLoginId("aaa");
+        memberRequestDTO.setPassword("123456");
+        memberRequestDTO.setEmail("aa@aa");
+        memberRequestDTO.setName("momo");
+        memberRequestDTO.setPhone("123456789");
 
-        memberService.save(memberInsertDTO);
+        memberService.save(memberRequestDTO);
     }
 
     @BeforeEach
@@ -88,10 +88,10 @@ class MemberControllerTest {
 
         ObjectMapper objectMapper = new ObjectMapper();
 
-        MemberInsertDTO memberInsertDTO = new MemberInsertDTO();
+        MemberRequestDTO memberRequestDTO = new MemberRequestDTO();
 
         // Object -> json String
-        String paramString = objectMapper.writeValueAsString(memberInsertDTO);
+        String paramString = objectMapper.writeValueAsString(memberRequestDTO);
 
         mockMvc.perform(post(URL)
                         .content(paramString) // body
@@ -118,15 +118,15 @@ class MemberControllerTest {
     public void member_save() throws Exception {
         ObjectMapper objectMapper = new ObjectMapper();
 
-        MemberInsertDTO memberInsertDTO = new MemberInsertDTO();
-        memberInsertDTO.setLoginId("memeberLoginId");
-        memberInsertDTO.setPassword("memberPassword");
-        memberInsertDTO.setEmail("memberEmail");
-        memberInsertDTO.setName("memberName");
-        memberInsertDTO.setPhone("memberPhone");
+        MemberRequestDTO memberRequestDTO = new MemberRequestDTO();
+        memberRequestDTO.setLoginId("memeberLoginId");
+        memberRequestDTO.setPassword("memberPassword");
+        memberRequestDTO.setEmail("memberEmail");
+        memberRequestDTO.setName("memberName");
+        memberRequestDTO.setPhone("memberPhone");
 
         // Object -> json String
-        String paramString = objectMapper.writeValueAsString(memberInsertDTO);
+        String paramString = objectMapper.writeValueAsString(memberRequestDTO);
 
         mockMvc.perform(post(URL)
                         .content(paramString) // body
@@ -198,7 +198,7 @@ class MemberControllerTest {
                 .andExpect(jsonPath("email").value("aa@aa"))
                 .andExpect(jsonPath("name").value("momo"))
                 .andExpect(jsonPath("phone").value("123456789"))
-                .andExpect(jsonPath("status").value("RED"))
+                .andExpect(jsonPath("status").value("GREEN"))
                 .andExpect(jsonPath("createdDate").value(String.valueOf(LocalDate.now())))
                 .andExpect(jsonPath("updatedDate").value(String.valueOf(LocalDate.now())))
                 .andDo(print())

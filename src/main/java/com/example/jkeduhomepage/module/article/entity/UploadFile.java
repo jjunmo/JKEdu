@@ -29,7 +29,7 @@ public class UploadFile {
     private String thumbnailImageUrl;
 
     @ManyToOne
-    @JoinColumn(name="article_id",referencedColumnName = "id")
+    @JoinColumn(name = "article_id")
     private Article article;
 
 }
