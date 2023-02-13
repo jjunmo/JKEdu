@@ -22,7 +22,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String loginId) throws UsernameNotFoundException {
         return memberRepository.findByLoginId(loginId)
                 .map(this::createUserDetails)
-                .orElseThrow(() -> new UsernameNotFoundException(loginId + " 을 DB에서 찾을 수 없습니다"));
+                .orElseThrow(() -> new UsernameNotFoundException(loginId + " 해당 유저 정보가 없습니다."));
     }
 
     private UserDetails createUserDetails(Member member) {

@@ -56,18 +56,17 @@ public class AwsS3Service {
         return amazonS3Client.getUrl(bucketName, fileName).toString();
     }
 
-    public List<UploadFile> uploadFile(String category,List<MultipartFile> multipartFile) {
+    public List<UploadFile> uploadFile(String filePath,List<MultipartFile> multipartFile) {
         List<UploadFile> uploadFileList = new ArrayList<>();
         // forEach 구문을 통해 multipartFile로 넘어온 파일들 하나씩 fileNameList에 추가
         multipartFile.forEach(file -> {
             String fileName = file.getOriginalFilename();
-            String customFileName = buildFileName(category, Objects.requireNonNull(fileName));
+            String customFileName = buildFileName(filePath, Objects.requireNonNull(fileName));
 
             UploadFile uploadFile =new UploadFile();
             uploadFile.setFileName(fileName);
             uploadFile.setCustomFileName(customFileName);
             uploadFile.setUrl(amazonS3Client.getUrl(bucketName,customFileName).toString());
-            uploadFileRepository.save(uploadFile);
 
                     ObjectMetadata objectMetadata = new ObjectMetadata();
                     objectMetadata.setContentLength(file.getSize());
