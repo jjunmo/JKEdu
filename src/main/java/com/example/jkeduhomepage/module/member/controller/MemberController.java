@@ -56,7 +56,6 @@ public class MemberController {
             return ResponseEntity.badRequest().body("비밀번호가 일치하지 않습니다.");
         }
 
-
         return ResponseEntity.ok().body(result);
     }
 

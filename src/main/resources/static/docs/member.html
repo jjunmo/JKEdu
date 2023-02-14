@@ -458,6 +458,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_memberupdatefail_id">MemberUpdateFail ( id )</a></li>
 <li><a href="#_memberupdatefail_body">MemberUpdateFail ( body )</a></li>
 <li><a href="#_memberupdatesuccess">MemberUpdateSuccess</a></li>
+<li><a href="#_memberloginfail">MemberLoginFail</a></li>
+<li><a href="#_memberloginsuccess">MemberLoginSuccess</a></li>
+<li><a href="#_fileupload">FileUpload</a></li>
+<li><a href="#_articlesavefail">ArticleSaveFail</a></li>
+<li><a href="#_articlesavesuccess">ArticleSaveSuccess</a></li>
 </ul>
 </li>
 </ul>
@@ -477,16 +482,15 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /member HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Accept: */*
-Content-Length: 106
+Content-Length: 100
 Host: localhost:8080
 
 {
   "loginId" : "",
   "password" : "",
-  "email" : "",
-  "name" : "",
-  "phone" : "",
-  "status" : "RED"
+  "email" : "test",
+  "name" : "test",
+  "phone" : "010101"
 }</code></pre>
 </div>
 </div>
@@ -531,11 +535,6 @@ Host: localhost:8080
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>phone</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">회원 휴대번호</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>status</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">회원 상태</p></td>
 </tr>
 </tbody>
 </table>
@@ -562,7 +561,7 @@ ID를 입력하세요.</code></pre>
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /member HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Accept: */*
-Content-Length: 166
+Content-Length: 146
 Host: localhost:8080
 
 {
@@ -570,8 +569,7 @@ Host: localhost:8080
   "password" : "memberPassword",
   "email" : "memberEmail",
   "name" : "memberName",
-  "phone" : "memberPhone",
-  "status" : "RED"
+  "phone" : "memberPhone"
 }</code></pre>
 </div>
 </div>
@@ -616,11 +614,6 @@ Host: localhost:8080
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>phone</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">회원 휴대번호</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>status</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">회원 상태</p></td>
 </tr>
 </tbody>
 </table>
@@ -661,22 +654,22 @@ Content-Length: 113
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>loginId</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">회원 로그인 아이디</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">회원가입된 아이디</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>email</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">회원 이메일</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">회원가입된 이메일</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>name</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">회원 이름</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">회원가입된 이름</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>phone</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">회원 휴대번호</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">회원가입된 휴대번호</p></td>
 </tr>
 </tbody>
 </table>
@@ -701,26 +694,17 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 374
+Content-Length: 197
 
 [ {
   "id" : 1,
-  "loginId" : "aaa",
+  "loginId" : "memberTest",
   "email" : "aa@aa",
   "name" : "momo",
   "phone" : "123456789",
-  "status" : "RED",
-  "createdDate" : "2023-02-08",
-  "updatedDate" : "2023-02-08"
-}, {
-  "id" : 2,
-  "loginId" : "aaa",
-  "email" : "aa@aa",
-  "name" : "momo",
-  "phone" : "123456789",
-  "status" : "RED",
-  "createdDate" : "2023-02-08",
-  "updatedDate" : "2023-02-08"
+  "status" : "GREEN",
+  "createdDate" : "2023-02-14",
+  "updatedDate" : "2023-02-14"
 } ]</code></pre>
 </div>
 </div>
@@ -831,17 +815,17 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 196
+Content-Length: 205
 
 {
-  "loginId" : "aaa",
+  "loginId" : "memberTest",
   "email" : "aa@aa",
   "role" : "ROLE_USER",
   "name" : "momo",
   "phone" : "123456789",
-  "status" : "RED",
-  "createdDate" : "2023-02-08",
-  "updatedDate" : "2023-02-08"
+  "status" : "GREEN",
+  "createdDate" : "2023-02-14",
+  "updatedDate" : "2023-02-14"
 }</code></pre>
 </div>
 </div>
@@ -1201,10 +1185,522 @@ Content-Length: 39
 비밀번호가 변경 되었습니다.</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>ResponseFields
-Unresolved directive in member.adoc - include::./build/generated-snippets/Member-Update-Success/response-fields.adoc[]</p>
 </div>
+<div class="sect2">
+<h3 id="_memberloginfail"><a class="link" href="#_memberloginfail">MemberLoginFail</a></h3>
+<div class="paragraph">
+<p>HttpRequest</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /member/login HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+Accept: */*
+Content-Length: 39
+Host: localhost:8080
+
+{
+  "loginId" : "",
+  "password" : ""
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>RequestFields</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>loginId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">회원 로그인 아이디</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>password</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">회원 비밀번호</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>HttpResponse</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 400 Bad Request
+Content-Type: text/plain;charset=UTF-8
+Content-Length: 29
+
+아이디를 입력하세요.</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_memberloginsuccess"><a class="link" href="#_memberloginsuccess">MemberLoginSuccess</a></h3>
+<div class="paragraph">
+<p>HttpRequest</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /member/login HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+Accept: */*
+Content-Length: 55
+Host: localhost:8080
+
+{
+  "loginId" : "memberTest",
+  "password" : "123456"
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>RequestFields</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>loginId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">회원 로그인 아이디</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>password</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">회원 비밀번호</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>HttpResponse</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 195
+
+{
+  "accessToken" : "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY3NjM0NTgwOX0.lXgxbrs9p0ZqbDyWliNytUqKVVN6via_EYqmqU9dlZ-K52CMTa4Zxf1PSUo0yqV8gTB-ezmYmWn0KlI39b3pHw"
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>ResponseFields</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>accessToken</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">발급된 AccessToken</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_fileupload"><a class="link" href="#_fileupload">FileUpload</a></h3>
+<div class="paragraph">
+<p>HttpRequest</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /article/file?category=board HTTP/1.1
+Content-Type: application/json;charset=UTF-8; boundary=6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
+Accept: */*
+Host: localhost:8080
+
+--6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
+Content-Disposition: form-data; name=file; filename=test.jpeg
+Content-Type: image/jpeg
+
+&lt;&lt;jpeg data&gt;&gt;
+--6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm--</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>QueryParameters</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>category</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">AWS S3 저장 폴더카테고리</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>HttpResponse</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 254
+
+[ {
+  "fileName" : "test.jpeg",
+  "customFileName" : "board/c32433b9-7800-402c-bca8-24fc75f0da1b.jpeg_1676344019753.jpeg",
+  "url" : "https://jkboston.s3.ap-northeast-2.amazonaws.com/board/c32433b9-7800-402c-bca8-24fc75f0da1b.jpeg_1676344019753.jpeg"
+} ]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>ResponseFields</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].fileName</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">원본 파일 이름</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].customFileName</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">저장되는 파일 이름</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].url</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">다운로드 URL</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_articlesavefail"><a class="link" href="#_articlesavefail">ArticleSaveFail</a></h3>
+<div class="paragraph">
+<p>HttpRequest</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /article/board HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+Accept: */*
+Content-Length: 151
+Host: localhost:8080
+
+{
+  "title" : "",
+  "content" : "내용!!",
+  "uploadFileList" : [ {
+    "fileName" : "test",
+    "customFileName" : "test",
+    "url" : "test"
+  } ]
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>PathParameters
+./article/{category}</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>category</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">게시글 카테고리</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>RequestFields</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>title</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">게시글 제목</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>content</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">게시글 내용</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>uploadFileList[].fileName</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">업로드된 이름</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>uploadFileList[].customFileName</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">서버에 저장된 파일 이름</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>uploadFileList[].url</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">다운로드 주소</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>HttpResponse</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 400 Bad Request
+Content-Type: text/plain;charset=UTF-8
+Content-Length: 25
+
+제목을 작성하세요</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_articlesavesuccess"><a class="link" href="#_articlesavesuccess">ArticleSaveSuccess</a></h3>
+<div class="paragraph">
+<p>HttpRequest</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /article/board HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+Accept: */*
+Content-Length: 159
+Host: localhost:8080
+
+{
+  "title" : "제목!!",
+  "content" : "내용!!",
+  "uploadFileList" : [ {
+    "fileName" : "test",
+    "customFileName" : "test",
+    "url" : "test"
+  } ]
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>PathParameters
+./article/{category}</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>category</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">게시글 카테고리</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>RequestFields</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>title</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">게시글 제목</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>content</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">게시글 내용</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>uploadFileList[].fileName</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">업로드된 이름</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>uploadFileList[].customFileName</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">서버에 저장된 파일 이름</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>uploadFileList[].url</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">다운로드 주소</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>HttpResponse</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 209
+
+{
+  "category" : "BOARD",
+  "id" : 2,
+  "title" : "제목!!",
+  "content" : "내용!!",
+  "uploadFileList" : [ {
+    "id" : 1,
+    "fileName" : "test",
+    "customFileName" : "test",
+    "url" : "test"
+  } ]
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>ResponseFields</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">게시글 번호</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>category</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">게시글 카테고리</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>title</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">게시글 제목</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>content</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">게시글 내용</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>uploadFileList[].id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">DB에 저장된 파일 PK</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>uploadFileList[].fileName</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">DB에 저장된 파일 이름</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>uploadFileList[].customFileName</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">DB에 저장된 변경된 파일 이름</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>uploadFileList[].url</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">DB에 저장된 다운로드 주소</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 </div>
@@ -1212,7 +1708,7 @@ Unresolved directive in member.adoc - include::./build/generated-snippets/Member
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2023-02-06 16:21:50 +0900
+Last updated 2023-02-14 13:19:03 +0900
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">

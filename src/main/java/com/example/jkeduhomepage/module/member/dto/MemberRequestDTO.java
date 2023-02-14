@@ -1,23 +1,22 @@
 package com.example.jkeduhomepage.module.member.dto;
 
-import com.example.jkeduhomepage.module.common.enums.Status;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 @Data
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class MemberRequestDTO {
 
     private String loginId = "";
 
     private String password = "";
 
-    private String email = "";
+    private String email;
 
-    private String name = "";
+    private String name;
 
-    private String phone = "";
-
-    private Status status=Status.RED;
+    private String phone;
 
 
     public UsernamePasswordAuthenticationToken toAuthentication() {

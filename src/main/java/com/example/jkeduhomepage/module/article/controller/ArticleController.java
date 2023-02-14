@@ -8,7 +8,6 @@ import com.example.jkeduhomepage.module.common.enums.Category;
 import com.example.jkeduhomepage.module.member.entity.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.repository.query.parser.Part;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;

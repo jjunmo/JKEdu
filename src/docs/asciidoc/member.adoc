@@ -95,7 +95,68 @@ include::{snippets}/Member-Update-Success/request-fields.adoc[]
 
 HttpResponse
 include::{snippets}/Member-Update-Success/http-response.adoc[]
+
+=== MemberLoginFail
+HttpRequest
+include::{snippets}/Member-login-Fail/http-request.adoc[]
+RequestFields
+include::{snippets}/Member-login-Fail/request-fields.adoc[]
+
+HttpResponse
+include::{snippets}/Member-login-Fail/http-response.adoc[]
+
+=== MemberLoginSuccess
+HttpRequest
+include::{snippets}/Member-login-Success/http-request.adoc[]
+RequestFields
+include::{snippets}/Member-login-Success/request-fields.adoc[]
+
+HttpResponse
+include::{snippets}/Member-login-Success/http-response.adoc[]
 ResponseFields
-include::{snippets}/Member-Update-Success/response-body.adoc[]
+include::{snippets}/Member-login-Success/response-fields.adoc[]
+
+=== FileUpload
+HttpRequest
+include::{snippets}/File-Upload/http-request.adoc[]
+QueryParameters
+include::{snippets}/File-Upload/query-parameters.adoc[]
+
+HttpResponse
+include::{snippets}/File-Upload/http-response.adoc[]
+ResponseFields
+include::{snippets}/File-Upload/response-fields.adoc[]
+
+
+
+=== ArticleSaveFail
+HttpRequest
+include::{snippets}/Article-Save-Fail/http-request.adoc[]
+PathParameters
+include::{snippets}/Article-Save-Fail/path-parameters.adoc[]
+RequestFields
+include::{snippets}/Article-Save-Fail/request-fields.adoc[]
+
+HttpResponse
+include::{snippets}/Article-Save-Fail/http-response.adoc[]
+
+=== ArticleSaveSuccess
+HttpRequest
+include::{snippets}/Article-Save-Success/http-request.adoc[]
+PathParameters
+include::{snippets}/Article-Save-Success/path-parameters.adoc[]
+RequestFields
+include::{snippets}/Article-Save-Success/request-fields.adoc[]
+
+HttpResponse
+include::{snippets}/Article-Save-Success/http-response.adoc[]
+ResponseFields
+include::{snippets}/Article-Save-Success/response-fields.adoc[]
+
+
+
+
+
+
 
 

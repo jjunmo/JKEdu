@@ -15,6 +15,7 @@ import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -60,7 +61,7 @@ class MemberControllerTest {
 
     private void saveMember() {
         MemberRequestDTO memberRequestDTO = new MemberRequestDTO();
-        memberRequestDTO.setLoginId("aaa");
+        memberRequestDTO.setLoginId("memberTest");
         memberRequestDTO.setPassword("123456");
         memberRequestDTO.setEmail("aa@aa");
         memberRequestDTO.setName("momo");
@@ -81,6 +82,8 @@ class MemberControllerTest {
     // 6. Member 수정
     // 7. Member 수정 실패 ( idx 값이 없을 때 )
     // 8. Member 수정 실패 ( title이 빈 값 일때 )
+    // 9. Member 로그인 실패
+    // 10. Member 로그인 성공
 
     @Test
     @DisplayName("1. Member 저장 실패")
@@ -89,6 +92,9 @@ class MemberControllerTest {
         ObjectMapper objectMapper = new ObjectMapper();
 
         MemberRequestDTO memberRequestDTO = new MemberRequestDTO();
+        memberRequestDTO.setEmail("test");
+        memberRequestDTO.setPhone("010101");
+        memberRequestDTO.setName("test");
 
         // Object -> json String
         String paramString = objectMapper.writeValueAsString(memberRequestDTO);
@@ -107,8 +113,8 @@ class MemberControllerTest {
                                 getDescription("password","회원 비밀번호").type(JsonFieldType.STRING),
                                 getDescription("email", "회원 이메일").type(JsonFieldType.STRING),
                                 getDescription("name","회원 이름").type(JsonFieldType.STRING),
-                                getDescription("phone", "회원 휴대번호").type(JsonFieldType.STRING),
-                                getDescription("status","회원 상태").type(JsonFieldType.STRING))
+                                getDescription("phone", "회원 휴대번호").type(JsonFieldType.STRING))
+
                 ));
 
     }
@@ -147,20 +153,18 @@ class MemberControllerTest {
                                 getDescription("password","회원 비밀번호").type(JsonFieldType.STRING),
                                 getDescription("email", "회원 이메일").type(JsonFieldType.STRING),
                                 getDescription("name","회원 이름").type(JsonFieldType.STRING),
-                                getDescription("phone", "회원 휴대번호").type(JsonFieldType.STRING),
-                                getDescription("status","회원 상태").type(JsonFieldType.STRING)),
+                                getDescription("phone", "회원 휴대번호").type(JsonFieldType.STRING)),
                         responseFields(
-                                getDescription("loginId", "회원 로그인 아이디").type(JsonFieldType.STRING),
-                                getDescription("email", "회원 이메일").type(JsonFieldType.STRING),
-                                getDescription("name","회원 이름").type(JsonFieldType.STRING),
-                                getDescription("phone", "회원 휴대번호").type(JsonFieldType.STRING))
+                                getDescription("loginId", "회원가입된 아이디").type(JsonFieldType.STRING),
+                                getDescription("email", "회원가입된 이메일").type(JsonFieldType.STRING),
+                                getDescription("name","회원가입된 이름").type(JsonFieldType.STRING),
+                                getDescription("phone", "회원가입된 휴대번호").type(JsonFieldType.STRING))
                 ));
     }
 
     @Test
     @DisplayName("3. Member 리스트 조회")
     public void member_list() throws Exception {
-        saveMember();
 
         mockMvc.perform(get(URL)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -194,7 +198,7 @@ class MemberControllerTest {
                                 .characterEncoding("UTF-8")
                                 .accept(MediaType.ALL)
                 )
-                .andExpect(jsonPath("loginId").value("aaa"))
+                .andExpect(jsonPath("loginId").value("memberTest"))
                 .andExpect(jsonPath("email").value("aa@aa"))
                 .andExpect(jsonPath("name").value("momo"))
                 .andExpect(jsonPath("phone").value("123456789"))
@@ -336,6 +340,65 @@ class MemberControllerTest {
                         requestFields(
                                 getDescription("email", "회원 이메일").type(JsonFieldType.STRING),
                                 getDescription("password","회원 비밀번호").type(JsonFieldType.STRING))
+                ));
+    }
+
+    @Test
+    @DisplayName("9. Member 로그인 실패")
+    public void member_login_fail() throws Exception {
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        MemberRequestDTO memberRequestDTO = new MemberRequestDTO();
+        memberRequestDTO.setLoginId("");
+        memberRequestDTO.setPassword("");
+
+        // Object -> json String
+        String paramString = objectMapper.writeValueAsString(memberRequestDTO);
+
+        mockMvc.perform(post(URL+"/login")
+                        .content(paramString) // body
+                        .accept(MediaType.ALL)
+                        .characterEncoding("UTF-8")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().string("아이디를 입력하세요."))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andDo(document("Member-login-Fail", // 1
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestFields(
+                                getDescription("loginId", "회원 로그인 아이디").type(JsonFieldType.STRING),
+                                getDescription("password","회원 비밀번호").type(JsonFieldType.STRING))
+                ));
+    }
+
+    @Test
+    @DisplayName("10. Member 로그인 성공")
+    public void member_login_Success() throws Exception {
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        MemberRequestDTO memberRequestDTO = new MemberRequestDTO();
+        memberRequestDTO.setLoginId("memberTest");
+        memberRequestDTO.setPassword("123456");
+
+        // Object -> json String
+        String paramString = objectMapper.writeValueAsString(memberRequestDTO);
+
+        mockMvc.perform(post(URL+"/login")
+                        .content(paramString) // body
+                        .accept(MediaType.ALL)
+                        .characterEncoding("UTF-8")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("Member-login-Success", // 1
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestFields(
+                                getDescription("loginId", "회원 로그인 아이디").type(JsonFieldType.STRING),
+                                getDescription("password","회원 비밀번호").type(JsonFieldType.STRING)),
+                        responseFields(
+                                getDescription("accessToken","발급된 AccessToken").type(JsonFieldType.STRING))
                 ));
     }
 
