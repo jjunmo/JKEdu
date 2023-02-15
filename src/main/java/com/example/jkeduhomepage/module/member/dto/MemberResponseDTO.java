@@ -34,15 +34,6 @@ public class MemberResponseDTO {
 
     private String updatedDate;
 
-    public static MemberResponseDTO saveMember(Member member){
-        return MemberResponseDTO.builder()
-                .loginId(member.getLoginId())
-                .email(member.getEmail())
-                .name(member.getName())
-                .phone(member.getPhone())
-                .build();
-    }
-
     public static MemberResponseDTO choiceMember(Member member){
         return MemberResponseDTO.builder()
                 .loginId(member.getLoginId())

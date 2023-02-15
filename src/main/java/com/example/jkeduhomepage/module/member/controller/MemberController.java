@@ -1,12 +1,14 @@
 package com.example.jkeduhomepage.module.member.controller;
 
-import com.example.jkeduhomepage.module.jwt.TokenDto;
+import com.example.jkeduhomepage.module.common.enums.YN;
 import com.example.jkeduhomepage.module.member.dto.MemberRequestDTO;
 import com.example.jkeduhomepage.module.member.dto.MemberResponseDTO;
 import com.example.jkeduhomepage.module.member.dto.MemberUpdateDTO;
 import com.example.jkeduhomepage.module.member.entity.Member;
+import com.example.jkeduhomepage.module.member.entity.MemberPhoneAuth;
 import com.example.jkeduhomepage.module.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import net.nurigo.java_sdk.exceptions.CoolsmsException;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +18,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-import static com.example.jkeduhomepage.module.member.dto.MemberResponseDTO.*;
+import static com.example.jkeduhomepage.module.member.dto.MemberResponseDTO.choiceMember;
+import static com.example.jkeduhomepage.module.member.dto.MemberResponseDTO.listMember;
 
 @RestController
 @RequestMapping(value = "/member")
@@ -38,7 +41,13 @@ public class MemberController {
         if(memberRequestDTO.getName().equals("")) return new ResponseEntity<>("이름을 입력하세요.",HttpStatus.BAD_REQUEST);
         if(memberRequestDTO.getPhone().equals("")) return new ResponseEntity<>("휴대폰 번호를 입력하세요.",HttpStatus.BAD_REQUEST);
 
-        return new ResponseEntity<>(saveMember(memberService.save(memberRequestDTO)),HttpStatus.OK);
+        String result = memberService.save(memberRequestDTO);
+
+        if(result.equals("NO")){
+            return ResponseEntity.badRequest().body("휴대폰 인증을 완료하세요");
+        }
+
+            return ResponseEntity.ok("회원가입이 완료되었습니다.");
     }
 
     @PostMapping("/login")
@@ -92,8 +101,6 @@ public class MemberController {
 
         if(memberOptional.isEmpty()) return new ResponseEntity<>("해당 정보가 없습니다.",HttpStatus.BAD_REQUEST);
 
-        Member member=memberOptional.get();
-
         return new ResponseEntity<>("비밀번호가 변경 되었습니다.",HttpStatus.OK);
     }
 
@@ -106,5 +113,28 @@ public class MemberController {
         List<Member> memberList = memberService.allList();
 
         return new ResponseEntity<>(listMember(memberList),HttpStatus.OK);
+    }
+
+    @PostMapping("/cert")
+    public HttpEntity<Object> sendSMS(@RequestParam("phone") String phone) throws CoolsmsException {
+         MemberPhoneAuth memberPhoneAuth=memberService.certifiedPhone(phone);
+
+        if(memberPhoneAuth.getCheckYn().equals(YN.Y))
+            return ResponseEntity.badRequest().body("이미 가입된 아이디 입니다.");
+        else
+            return ResponseEntity.ok("인증문자 발송 완료.");
+    }
+
+    @PutMapping("/cert")
+    public HttpEntity<Object> sendSMSCheck(@RequestParam("phone") String phone, @RequestParam("smscode") String smscode) {
+        String result = memberService.certifiedPhoneCheck(phone, smscode);
+        if (result.equals("NO")) {
+            return new ResponseEntity<>("휴대폰 인증을 다시 요청하세요",HttpStatus.NOT_FOUND);
+        }
+        if(result.equals("OK")){
+            return ResponseEntity.ok("인증 완료 되었습니다.");
+        }else {
+            return ResponseEntity.badRequest().body("인증번호가 일치하지 않습니다.");
+        }
     }
 }

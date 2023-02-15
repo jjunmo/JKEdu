@@ -37,7 +37,7 @@ public class ArticleController {
     }
 
     @GetMapping("/{category}")
-    public ResponseEntity<Object> categoryList(@PathVariable Category category, @PageableDefault(size=10) Pageable pageable){
+    public ResponseEntity<Object> categoryList(@PathVariable Category category, @PageableDefault Pageable pageable){
         articleService.isMemberCurrent();
 
         return ResponseEntity.ok().body(articleService.categoryList(category,pageable));

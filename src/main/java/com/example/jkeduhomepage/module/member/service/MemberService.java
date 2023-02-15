@@ -3,12 +3,18 @@ package com.example.jkeduhomepage.module.member.service;
 
 import com.example.jkeduhomepage.module.common.enums.Role;
 import com.example.jkeduhomepage.module.common.enums.Status;
+import com.example.jkeduhomepage.module.common.enums.YN;
 import com.example.jkeduhomepage.module.jwt.TokenProvider;
 import com.example.jkeduhomepage.module.member.dto.MemberRequestDTO;
 import com.example.jkeduhomepage.module.member.dto.MemberUpdateDTO;
 import com.example.jkeduhomepage.module.member.entity.Member;
+import com.example.jkeduhomepage.module.member.entity.MemberPhoneAuth;
+import com.example.jkeduhomepage.module.member.repository.MemberPhoneAuthRepository;
 import com.example.jkeduhomepage.module.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import net.nurigo.java_sdk.api.Message;
+import net.nurigo.java_sdk.exceptions.CoolsmsException;
+import org.json.simple.JSONObject;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -16,8 +22,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
+
+import static com.example.jkeduhomepage.module.common.utility.Cer.getCerNum;
 
 @Service
 @RequiredArgsConstructor
@@ -28,22 +37,38 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
 
+    private final MemberPhoneAuthRepository memberPhoneAuthRepository;
+
     private final PasswordEncoder passwordEncoder;
 
     private final TokenProvider tokenProvider;
 
     @Transactional
-    public Member save(MemberRequestDTO memberRequestDTO){
-        Member member = new Member();
-        member.setLoginId(memberRequestDTO.getLoginId());
-        member.setPassword(passwordEncoder.encode(memberRequestDTO.getPassword()));
-        member.setEmail(memberRequestDTO.getEmail());
-        member.setName(memberRequestDTO.getName());
-        member.setPhone(memberRequestDTO.getPhone());
-        member.setStatus(Status.GREEN);
-        member.setRole(Role.ROLE_USER);
+    public String save(MemberRequestDTO memberRequestDTO) {
+        Optional<MemberPhoneAuth> memberPhoneAuthOptional = memberPhoneAuthRepository.findByPhoneAndCheckYn(memberRequestDTO.getPhone(), YN.Y);
 
-        return memberRepository.save(member);
+        if (memberPhoneAuthOptional.isEmpty()) {
+            return "NO";
+        }
+
+        Optional<Member> memberOptional = memberRepository.findByPhone(memberRequestDTO.getPhone());
+
+        if (memberOptional.isEmpty()) {
+            Member member = new Member();
+            member.setLoginId(memberRequestDTO.getLoginId());
+            member.setPassword(passwordEncoder.encode(memberRequestDTO.getPassword()));
+            member.setEmail(memberRequestDTO.getEmail());
+            member.setName(memberRequestDTO.getName());
+            member.setPhone(memberRequestDTO.getPhone());
+            //TODO: Test
+            member.setStatus(Status.GREEN);
+            member.setRole(Role.ROLE_USER);
+            member.setMemberPhoneAuth(memberPhoneAuthOptional.get());
+            memberRepository.save(member);
+            return "YES";
+        } else
+
+            return null;
     }
     @Transactional
     public Object login(MemberRequestDTO memberRequestDTO){
@@ -75,16 +100,74 @@ public class MemberService {
 
         if(memberOptional.isEmpty()) return memberOptional;
 
-        Member member =memberOptional.get();
+        Member paramMember =memberOptional.get();
 
-        member.setEmail(memberUpdateDTO.getEmail());
-        member.setPassword(memberUpdateDTO.getPassword());
+        paramMember.setEmail(memberUpdateDTO.getEmail());
+        paramMember.setPassword(memberUpdateDTO.getPassword());
 
-        return memberOptional;
+        return Optional.of(paramMember);
     }
 
     public List<Member> allList(){
         return memberRepository.findAll();
     }
 
-}
+    @Transactional
+    public MemberPhoneAuth certifiedPhone(String phone) throws CoolsmsException {
+
+        StringBuilder cerNum = getCerNum(phone);
+        //인증요청시 연락처 유효성 체크
+
+        //collSMS 등록된 사용자
+        String api_key = "NCSFXG0SLI1M6IP8";
+        String api_secret = "LSMCMXB2HEIL4LHFZTCKU4PAHGBECFSX";
+        Message coolsms = new Message(api_key, api_secret);
+
+        // 4 params(to, from, type, text) are mandatory. must be filled
+        HashMap<String, String> params = new HashMap<>();
+        params.put("to", phone);    // 수신전화번호
+        params.put("from", "051-747-1788");    // 발신전화번호. 테스트시에는 발신,수신 둘다 본인 번호로 하면 됨
+        params.put("type", "SMS");
+        params.put("text", "휴대폰 인증번호는" + "["+cerNum+"]" + "입니다.");
+        params.put("app_version", "test app 1.2"); // application name and version
+
+
+            JSONObject obj = coolsms.send(params);
+            System.out.println(obj.toString());
+
+        Optional<MemberPhoneAuth> memberPhoneAuthOptional= memberPhoneAuthRepository.findByPhoneAndCheckYn(phone,YN.Y);
+        if(memberPhoneAuthOptional.isEmpty()){
+            MemberPhoneAuth memberPhoneAuth=new MemberPhoneAuth();
+            memberPhoneAuth.setPhone(phone);
+            memberPhoneAuth.setSmscode(String.valueOf(cerNum));
+            memberPhoneAuth.setCheckYn(YN.N);
+            return memberPhoneAuthRepository.save(memberPhoneAuth);
+        }
+
+        return memberPhoneAuthOptional.get();
+
+        }
+
+    @Transactional
+    public String certifiedPhoneCheck(String phone ,String smscode ){
+
+        Optional<MemberPhoneAuth> memberPhoneAuthOptional = memberPhoneAuthRepository.findByPhoneAndCheckYn(phone,YN.N);
+
+        if(memberPhoneAuthOptional.isEmpty()){
+            return "NO";
+        }
+
+        MemberPhoneAuth memberPhoneAuth= memberPhoneAuthOptional.get();
+
+        if(memberPhoneAuth.getSmscode().equals(smscode)){
+            memberPhoneAuth.setCheckYn(YN.Y);
+            memberPhoneAuthRepository.save(memberPhoneAuth);
+            return "OK";
+        }else {
+            return smscode;
+        }
+
+
+
+        }
+    }

@@ -2,7 +2,9 @@ package com.example.jkeduhomepage.module.member.repository;
 
 import com.example.jkeduhomepage.module.common.enums.Role;
 import com.example.jkeduhomepage.module.common.enums.Status;
+import com.example.jkeduhomepage.module.common.enums.YN;
 import com.example.jkeduhomepage.module.member.entity.Member;
+import com.example.jkeduhomepage.module.member.entity.MemberPhoneAuth;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,6 +17,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 @ExtendWith(SpringExtension.class)
 @ActiveProfiles("dev")
@@ -25,22 +28,29 @@ class MemberRepositoryTest {
     @Autowired
     MemberRepository memberRepository;
 
+    @Autowired
+    MemberPhoneAuthRepository memberPhoneAuthRepository;
+
     @Test
     @Transactional
     @Rollback(value = false)
     @DisplayName("save Member")
     public void testMember(){
-        Member member=new Member(null,"aaaa","a123456","a@a","momo","12341234",Status.RED, Role.ROLE_USER);
-        Member member1 =memberRepository.save(member);
+        MemberPhoneAuth paramMemberPhoneAuth=new MemberPhoneAuth(null,"12341234", YN.Y,"1111");
+        MemberPhoneAuth memberPhoneAuth=memberPhoneAuthRepository.save(paramMemberPhoneAuth);
+        Member paramMember=new Member(null,"aaaa","a123456","a@a","momo","12341234",Status.RED, Role.ROLE_USER,memberPhoneAuth);
+        Member member =memberRepository.save(paramMember);
 
-        assertEquals(member.getId(),member1.getId());
-        assertEquals(member.getLoginId(),member1.getLoginId());
-        assertEquals(member.getPassword(),member1.getPassword());
-        assertEquals(member.getEmail(),member1.getEmail());
-        assertEquals(member.getName(),member1.getName());
-        assertEquals(member.getPhone(),member1.getPhone());
-        assertEquals(member.getStatus(),member1.getStatus());
-        assertEquals(member,member1);
+        assertEquals(member.getId(),paramMember.getId());
+        assertEquals(member.getLoginId(),paramMember.getLoginId());
+        assertEquals(member.getPassword(),paramMember.getPassword());
+        assertEquals(member.getEmail(),paramMember.getEmail());
+        assertEquals(member.getName(),paramMember.getName());
+        assertEquals(member.getPhone(),paramMember.getPhone());
+        assertEquals(member.getStatus(),paramMember.getStatus());
+        assertEquals(member.getMemberPhoneAuth(),memberPhoneAuth);
+        assertEquals(member,paramMember);
+        print();
 
     }
 }

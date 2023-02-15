@@ -29,8 +29,7 @@ include::{snippets}/Member-Save-Success/request-fields.adoc[]
 
 HttpResponse
 include::{snippets}/Member-Save-Success/http-response.adoc[]
-ResponseFields
-include::{snippets}/Member-Save-Success/response-fields.adoc[]
+
 
 === MemberList
 HttpRequest
@@ -127,8 +126,6 @@ include::{snippets}/File-Upload/http-response.adoc[]
 ResponseFields
 include::{snippets}/File-Upload/response-fields.adoc[]
 
-
-
 === ArticleSaveFail
 HttpRequest
 include::{snippets}/Article-Save-Fail/http-request.adoc[]
@@ -147,6 +144,17 @@ PathParameters
 include::{snippets}/Article-Save-Success/path-parameters.adoc[]
 RequestFields
 include::{snippets}/Article-Save-Success/request-fields.adoc[]
+
+HttpResponse
+include::{snippets}/Article-Save-Success/http-response.adoc[]
+ResponseFields
+include::{snippets}/Article-Save-Success/response-fields.adoc[]
+
+=== ArticleList
+HttpRequest
+include::{snippets}/Article-List/http-request.adoc[]
+PathParameters
+include::{snippets}/Article-List/path-parameters.adoc[]
 
 HttpResponse
 include::{snippets}/Article-Save-Success/http-response.adoc[]

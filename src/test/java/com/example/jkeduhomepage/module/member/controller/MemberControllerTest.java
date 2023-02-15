@@ -1,9 +1,12 @@
 package com.example.jkeduhomepage.module.member.controller;
 
+import com.example.jkeduhomepage.module.common.enums.YN;
 import com.example.jkeduhomepage.module.member.dto.MemberRequestDTO;
 import com.example.jkeduhomepage.module.member.dto.MemberUpdateDTO;
+import com.example.jkeduhomepage.module.member.entity.MemberPhoneAuth;
 import com.example.jkeduhomepage.module.member.service.MemberService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import net.nurigo.java_sdk.exceptions.CoolsmsException;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,17 +58,20 @@ class MemberControllerTest {
 
 
     @BeforeAll
-    public void all() {
+    public void all() throws CoolsmsException {
         saveMember();
     }
 
-    private void saveMember() {
+    private void saveMember() throws CoolsmsException {
+        MemberPhoneAuth memberPhoneAuth=memberService.certifiedPhone("12341234");
+        memberService.certifiedPhoneCheck("12341234",memberPhoneAuth.getSmscode());
+
         MemberRequestDTO memberRequestDTO = new MemberRequestDTO();
         memberRequestDTO.setLoginId("memberTest");
         memberRequestDTO.setPassword("123456");
         memberRequestDTO.setEmail("aa@aa");
         memberRequestDTO.setName("momo");
-        memberRequestDTO.setPhone("123456789");
+        memberRequestDTO.setPhone("12341234");
 
         memberService.save(memberRequestDTO);
     }
@@ -114,7 +120,6 @@ class MemberControllerTest {
                                 getDescription("email", "회원 이메일").type(JsonFieldType.STRING),
                                 getDescription("name","회원 이름").type(JsonFieldType.STRING),
                                 getDescription("phone", "회원 휴대번호").type(JsonFieldType.STRING))
-
                 ));
 
     }
@@ -123,6 +128,9 @@ class MemberControllerTest {
     @DisplayName("2. Member 저장 성공")
     public void member_save() throws Exception {
         ObjectMapper objectMapper = new ObjectMapper();
+
+        MemberPhoneAuth memberPhoneAuth=memberService.certifiedPhone("memberPhone");
+        memberService.certifiedPhoneCheck("memberPhone",memberPhoneAuth.getSmscode());
 
         MemberRequestDTO memberRequestDTO = new MemberRequestDTO();
         memberRequestDTO.setLoginId("memeberLoginId");
@@ -139,10 +147,7 @@ class MemberControllerTest {
                         .accept(MediaType.ALL)
                         .characterEncoding("UTF-8")
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("loginId").value("memeberLoginId"))
-                .andExpect(jsonPath("email").value("memberEmail"))
-                .andExpect(jsonPath("name").value("memberName"))
-                .andExpect(jsonPath("phone").value("memberPhone"))
+                .andExpect(content().string("회원가입이 완료되었습니다."))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andDo(document("Member-Save-Success", // 1
@@ -153,12 +158,7 @@ class MemberControllerTest {
                                 getDescription("password","회원 비밀번호").type(JsonFieldType.STRING),
                                 getDescription("email", "회원 이메일").type(JsonFieldType.STRING),
                                 getDescription("name","회원 이름").type(JsonFieldType.STRING),
-                                getDescription("phone", "회원 휴대번호").type(JsonFieldType.STRING)),
-                        responseFields(
-                                getDescription("loginId", "회원가입된 아이디").type(JsonFieldType.STRING),
-                                getDescription("email", "회원가입된 이메일").type(JsonFieldType.STRING),
-                                getDescription("name","회원가입된 이름").type(JsonFieldType.STRING),
-                                getDescription("phone", "회원가입된 휴대번호").type(JsonFieldType.STRING))
+                                getDescription("phone", "회원 휴대번호").type(JsonFieldType.STRING))
                 ));
     }
 
@@ -201,7 +201,7 @@ class MemberControllerTest {
                 .andExpect(jsonPath("loginId").value("memberTest"))
                 .andExpect(jsonPath("email").value("aa@aa"))
                 .andExpect(jsonPath("name").value("momo"))
-                .andExpect(jsonPath("phone").value("123456789"))
+                .andExpect(jsonPath("phone").value("12341234"))
                 .andExpect(jsonPath("status").value("GREEN"))
                 .andExpect(jsonPath("createdDate").value(String.valueOf(LocalDate.now())))
                 .andExpect(jsonPath("updatedDate").value(String.valueOf(LocalDate.now())))
@@ -401,6 +401,8 @@ class MemberControllerTest {
                                 getDescription("accessToken","발급된 AccessToken").type(JsonFieldType.STRING))
                 ));
     }
+
+    //TODO: 문자 인증 테스트 진행 필요
 
 
 
