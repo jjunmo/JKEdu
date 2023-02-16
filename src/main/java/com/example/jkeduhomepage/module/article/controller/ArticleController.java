@@ -10,6 +10,7 @@ import com.example.jkeduhomepage.module.common.enums.Role;
 import com.example.jkeduhomepage.module.member.entity.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,9 +44,9 @@ public class ArticleController {
     }
 
     @GetMapping("/{category}")
-    public ResponseEntity<Object> categoryList(@PathVariable Category category, @PageableDefault Pageable pageable){
+    public ResponseEntity<Object> categoryList(@PathVariable Category category, @PageableDefault(direction = Sort.Direction.DESC) Pageable pageable){
         articleService.isMemberCurrent();
-
+        //TODO:category 에 따른 코드 변경 필요
         return ResponseEntity.ok().body(articleService.categoryList(category,pageable));
     }
 

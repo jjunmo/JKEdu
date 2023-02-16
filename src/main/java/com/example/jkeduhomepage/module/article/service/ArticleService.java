@@ -60,7 +60,7 @@ public class ArticleService {
 
     public ArticlePageResponseDTO categoryList(Category category, Pageable pageable){
 
-        Page<ArticleResponseDTO> articlePage=articleRepository.findByCategoryOrderByIdAsc(category,pageable)
+        Page<ArticleResponseDTO> articlePage=articleRepository.findByCategoryOrderByIdDesc(category,pageable)
                 .map(ArticleResponseDTO::paramArticle);
 
         return ArticlePageResponseDTO.getPage(articlePage.hasNext(),articlePage.getContent());

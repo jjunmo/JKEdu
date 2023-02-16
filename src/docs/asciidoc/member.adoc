@@ -21,6 +21,15 @@ include::{snippets}/Member-Save-Fail/request-fields.adoc[]
 HttpResponse
 include::{snippets}/Member-Save-Fail/http-response.adoc[]
 
+=== MemberSaveFailNoSMS
+HttpRequest
+include::{snippets}/Member-Save-Fail-NoSMS/http-request.adoc[]
+RequestFields
+include::{snippets}/Member-Save-Fail-NoSMS/request-fields.adoc[]
+
+HttpResponse
+include::{snippets}/Member-Save-Fail-NoSMS/http-response.adoc[]
+
 === MemberSaveSuccess
 HttpRequest
 include::{snippets}/Member-Save-Success/http-request.adoc[]
@@ -43,7 +52,7 @@ include::{snippets}/Member-List/response-fields.adoc[]
 === MemberSearch
 HttpRequest
 include::{snippets}/Member-Search/http-request.adoc[]
-RequestPathParameters
+Path
 include::{snippets}/Member-Search/path-parameters.adoc[]
 
 
@@ -55,7 +64,7 @@ include::{snippets}/Member-Search/response-fields.adoc[]
 === MemberSearchFail
 HttpRequest
 include::{snippets}/Member-Search-Fail/http-request.adoc[]
-RequestPathParameters
+Path
 include::{snippets}/Member-Search-Fail/path-parameters.adoc[]
 
 HttpResponse
@@ -65,7 +74,7 @@ include::{snippets}/Member-Search-Fail/http-response.adoc[]
 === MemberUpdateFail ( id )
 HttpRequest
 include::{snippets}/Member-Update-id-Fail/http-request.adoc[]
-RequestPathParameters
+Path
 include::{snippets}/Member-Update-id-Fail/path-parameters.adoc[]
 RequestFields
 include::{snippets}/Member-Update-id-Fail/request-fields.adoc[]
@@ -76,7 +85,7 @@ include::{snippets}/Member-Update-id-Fail/http-response.adoc[]
 === MemberUpdateFail ( body )
 HttpRequest
 include::{snippets}/Member-Update-body-Fail/http-request.adoc[]
-RequestPathParameters
+Path
 include::{snippets}/Member-Update-body-Fail/path-parameters.adoc[]
 RequestFields
 include::{snippets}/Member-Update-body-Fail/request-fields.adoc[]
@@ -87,7 +96,7 @@ include::{snippets}/Member-Update-body-Fail/http-response.adoc[]
 === MemberUpdateSuccess
 HttpRequest
 include::{snippets}/Member-Update-Success/http-request.adoc[]
-RequestPathParameters
+Path
 include::{snippets}/Member-Update-body-Fail/path-parameters.adoc[]
 RequestFields
 include::{snippets}/Member-Update-Success/request-fields.adoc[]
@@ -161,6 +170,79 @@ include::{snippets}/Article-Save-Success/http-response.adoc[]
 ResponseFields
 include::{snippets}/Article-Save-Success/response-fields.adoc[]
 
+=== ArticleGet
+HttpRequest
+include::{snippets}/Article-Get/http-request.adoc[]
+PathParameters
+include::{snippets}/Article-Get/path-parameters.adoc[]
+
+HttpResponse
+include::{snippets}/Article-Get/http-response.adoc[]
+ResponseFields
+include::{snippets}/Article-Get/response-fields.adoc[]
+
+=== ArticleGetFail
+HttpRequest
+include::{snippets}/Article-Get-Fail/http-request.adoc[]
+PathParameters
+include::{snippets}/Article-Get-Fail/path-parameters.adoc[]
+
+HttpResponse
+include::{snippets}/Article-Get-Fail/http-response.adoc[]
+
+=== ArticleDelete
+HttpRequest
+include::{snippets}/Article-Delete/http-request.adoc[]
+PathParameters
+include::{snippets}/Article-Delete/path-parameters.adoc[]
+
+HttpResponse
+include::{snippets}/Article-Delete/http-response.adoc[]
+
+=== PhoneSMSSuccess
+HttpRequest
+include::{snippets}/Phone-SMS-Success/http-request.adoc[]
+QueryParameters
+include::{snippets}/Phone-SMS-Success/query-parameters.adoc[]
+
+HttpResponse
+include::{snippets}/Phone-SMS-Success/http-response.adoc[]
+
+=== PhoneSMSFail
+HttpRequest
+include::{snippets}/Phone-SMS-Fail/http-request.adoc[]
+QueryParameters
+include::{snippets}/Phone-SMS-Fail/query-parameters.adoc[]
+
+HttpResponse
+include::{snippets}/Phone-SMS-Fail/http-response.adoc[]
+
+=== PhoneSMSCheckSuccess
+HttpRequest
+include::{snippets}/Phone-SMS-Check-Success/http-request.adoc[]
+QueryParameters
+include::{snippets}/Phone-SMS-Check-Success/query-parameters.adoc[]
+
+HttpResponse
+include::{snippets}/Phone-SMS-Check-Success/http-response.adoc[]
+
+=== PhoneSMSCheckFail
+HttpRequest
+include::{snippets}/Phone-SMS-Check-Fail-NoPhone/http-request.adoc[]
+QueryParameters
+include::{snippets}/Phone-SMS-Check-Fail-NoPhone/query-parameters.adoc[]
+
+HttpResponse
+include::{snippets}/Phone-SMS-Check-Fail-NoPhone/http-response.adoc[]
+
+=== PhoneSMSCheckFail
+HttpRequest
+include::{snippets}/Phone-SMS-Check-Fail-NoSMS/http-request.adoc[]
+QueryParameters
+include::{snippets}/Phone-SMS-Check-Fail-NoSMS/query-parameters.adoc[]
+
+HttpResponse
+include::{snippets}/Phone-SMS-Check-Fail-NoSMS/http-response.adoc[]
 
 
 

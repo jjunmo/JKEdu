@@ -53,8 +53,6 @@ class ArticleControllerTest {
 
     private MockMvc mockMvc;
 
-    private String BUCKET_NAME="jkboston";
-
     @Autowired
     private MemberRepository memberRepository;
 
@@ -114,7 +112,7 @@ class ArticleControllerTest {
         Article article =new Article();
         article.setTitle("테스트 제목");
         article.setMember(SECURITY_MEMBER);
-        article.setCategory(Category.BOARD);
+        article.setCategory(Category.NOTICE);
         article.setContent("테스트 내용");
         article.setUploadFileList(uploadFileList);
         TEST_ARTICLE=articleRepository.save(article);
@@ -132,7 +130,7 @@ class ArticleControllerTest {
         Article article =new Article();
         article.setTitle("테스트 제목2");
         article.setMember(SECURITY_MEMBER);
-        article.setCategory(Category.BOARD);
+        article.setCategory(Category.NOTICE);
         article.setContent("테스트 내용2");
         article.setUploadFileList(uploadFileList);
         TEST_DELETE_ARTICLE=articleRepository.save(article);
@@ -196,7 +194,7 @@ class ArticleControllerTest {
 
         String paramString = objectMapper.writeValueAsString(articleRequestDTO);
 
-        mockMvc.perform(RestDocumentationRequestBuilders.post(URL+"/{category}","board")
+        mockMvc.perform(RestDocumentationRequestBuilders.post(URL+"/{category}","notice")
                         .content(paramString) // body
                         .accept(MediaType.ALL)
                         .characterEncoding("UTF-8")
@@ -247,7 +245,7 @@ class ArticleControllerTest {
 
         String paramString = objectMapper.writeValueAsString(articleRequestDTO);
 
-        mockMvc.perform(RestDocumentationRequestBuilders.post(URL+"/{category}","board")
+        mockMvc.perform(RestDocumentationRequestBuilders.post(URL+"/{category}","notice")
                         .content(paramString) // body
                         .accept(MediaType.ALL)
                         .characterEncoding("UTF-8")
@@ -275,7 +273,7 @@ class ArticleControllerTest {
     @DisplayName("4.게시글 리스트 보기")
     public void article_list() throws Exception {
 
-        mockMvc.perform(RestDocumentationRequestBuilders.get(URL+"/{category}","board")
+        mockMvc.perform(RestDocumentationRequestBuilders.get(URL+"/{category}","notice")
                         .accept(MediaType.ALL)
                         .characterEncoding("UTF-8")
                         .contentType(MediaType.APPLICATION_JSON))
@@ -301,7 +299,7 @@ class ArticleControllerTest {
     @DisplayName("5.게시글 보기")
     public void get_article() throws Exception {
 
-        mockMvc.perform(RestDocumentationRequestBuilders.get(URL+"/{category}/{id}","board",1)
+        mockMvc.perform(RestDocumentationRequestBuilders.get(URL+"/{category}/{id}","notice",1)
                         .accept(MediaType.ALL)
                         .characterEncoding("UTF-8")
                         .contentType(MediaType.APPLICATION_JSON))
@@ -333,7 +331,7 @@ class ArticleControllerTest {
     @DisplayName("6.존재 하지 않는 게시물")
     public void get_article_fail() throws Exception {
 
-        mockMvc.perform(RestDocumentationRequestBuilders.get(URL+"/{category}/{id}","board",1000)
+        mockMvc.perform(RestDocumentationRequestBuilders.get(URL+"/{category}/{id}","notice",1000)
                         .accept(MediaType.ALL)
                         .characterEncoding("UTF-8")
                         .contentType(MediaType.APPLICATION_JSON))
@@ -354,7 +352,7 @@ class ArticleControllerTest {
     @DisplayName("7.게시글 삭제")
     public void delete_article() throws Exception {
 
-        mockMvc.perform(RestDocumentationRequestBuilders.delete(URL+"/{category}/{id}","board",2)
+        mockMvc.perform(RestDocumentationRequestBuilders.delete(URL+"/{category}/{id}","notice",2)
                         .accept(MediaType.ALL)
                         .characterEncoding("UTF-8")
                         .contentType(MediaType.APPLICATION_JSON))
@@ -369,11 +367,6 @@ class ArticleControllerTest {
                                 parameterWithName("id").description("게시글 번호"))
                 ));
     }
-
-
-
-
-
 
 
     private FieldDescriptor getDescription(String name, String description) {

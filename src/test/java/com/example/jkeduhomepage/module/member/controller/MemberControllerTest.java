@@ -503,6 +503,41 @@ class MemberControllerTest {
                 ));
     }
 
+    @Test
+    @DisplayName(" Member 저장 실패 ( 문자 인증 미진행 )")
+    public void member_save_fail_noSMS() throws Exception {
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        MemberRequestDTO memberRequestDTO = new MemberRequestDTO();
+        memberRequestDTO.setLoginId("memeberLoginId");
+        memberRequestDTO.setPassword("memberPassword");
+        memberRequestDTO.setEmail("memberEmail");
+        memberRequestDTO.setName("memberName");
+        memberRequestDTO.setPhone("memberPhone");
+
+        // Object -> json String
+        String paramString = objectMapper.writeValueAsString(memberRequestDTO);
+
+        mockMvc.perform(post(URL)
+                        .content(paramString) // body
+                        .accept(MediaType.ALL)
+                        .characterEncoding("UTF-8")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().string("휴대폰 인증을 완료하세요"))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andDo(document("Member-Save-Fail-NoSMS", // 1
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestFields(
+                                getDescription("loginId", "회원 로그인 아이디").type(JsonFieldType.STRING),
+                                getDescription("password","회원 비밀번호").type(JsonFieldType.STRING),
+                                getDescription("email", "회원 이메일").type(JsonFieldType.STRING),
+                                getDescription("name","회원 이름").type(JsonFieldType.STRING),
+                                getDescription("phone", "회원 휴대번호").type(JsonFieldType.STRING))
+                ));
+    }
+
 
 
 
