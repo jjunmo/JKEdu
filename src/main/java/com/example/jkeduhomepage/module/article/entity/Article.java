@@ -4,8 +4,10 @@ import com.example.jkeduhomepage.module.article.dto.ArticleResponseDTO;
 import com.example.jkeduhomepage.module.common.enums.Category;
 import com.example.jkeduhomepage.module.common.utility.Basetime;
 import com.example.jkeduhomepage.module.member.entity.Member;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,6 +22,9 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+//무한 재귀 방지
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+@JsonIdentityReference(alwaysAsId = true)
 public class Article extends Basetime {
 
     @Id
@@ -41,11 +46,9 @@ public class Article extends Basetime {
     @JoinColumn(name="member_id", referencedColumnName = "id")
     private Member member;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL,orphanRemoval = true,fetch = FetchType.LAZY)
     @JoinColumn(name = "article_id")
     private List<UploadFile> uploadFileList = new ArrayList<>();
-
-
 
 
     public ArticleResponseDTO entityToDto (Article article) {

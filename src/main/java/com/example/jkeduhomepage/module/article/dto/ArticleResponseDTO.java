@@ -33,13 +33,23 @@ public class ArticleResponseDTO {
 
     private List<UploadFile> uploadFileList;
 
-    public static ArticleResponseDTO articleList(Article article){
+    public static ArticleResponseDTO paramArticle(Article article){
+        return ArticleResponseDTO.builder()
+                .id(article.getId())
+                .title(article.getTitle())
+                .name(article.getMember().getName())
+                .createdDate(article.getCreateDate())
+                .build();
+    }
+
+    public static ArticleResponseDTO oneArticle(Article article){
         return ArticleResponseDTO.builder()
                 .id(article.getId())
                 .title(article.getTitle())
                 .content(article.getContent())
                 .name(article.getMember().getName())
                 .createdDate(article.getCreateDate())
+                .uploadFileList(article.getUploadFileList())
                 .build();
     }
 

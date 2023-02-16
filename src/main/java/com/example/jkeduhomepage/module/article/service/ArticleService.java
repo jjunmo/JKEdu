@@ -1,6 +1,8 @@
 package com.example.jkeduhomepage.module.article.service;
 
 import com.amazonaws.services.kms.model.NotFoundException;
+import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.example.jkeduhomepage.module.article.dto.ArticlePageResponseDTO;
 import com.example.jkeduhomepage.module.article.dto.ArticleRequestDTO;
 import com.example.jkeduhomepage.module.article.dto.ArticleResponseDTO;
@@ -13,6 +15,7 @@ import com.example.jkeduhomepage.module.config.SecurityUtil;
 import com.example.jkeduhomepage.module.member.entity.Member;
 import com.example.jkeduhomepage.module.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -20,12 +23,21 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class ArticleService {
 
     private final ArticleRepository articleRepository;
+
+    private final UploadFileRepository uploadFileRepository;
+
+    private final AmazonS3Client amazonS3Client;
+    @Value("${cloud.aws.s3.bucket}")
+    private String bucketName;
+    private static final String CATEGORY_PREFIX = "/";
 
     private final MemberRepository memberRepository;
 
@@ -48,9 +60,30 @@ public class ArticleService {
 
     public ArticlePageResponseDTO categoryList(Category category, Pageable pageable){
 
-        Slice<ArticleResponseDTO> articlePage=articleRepository.findByCategoryOrderByIdAsc(category,pageable)
-                .map(ArticleResponseDTO::articleList);
+        Page<ArticleResponseDTO> articlePage=articleRepository.findByCategoryOrderByIdAsc(category,pageable)
+                .map(ArticleResponseDTO::paramArticle);
 
         return ArticlePageResponseDTO.getPage(articlePage.hasNext(),articlePage.getContent());
     }
+
+    public Optional<Article> getArticle(Long id){
+        return articleRepository.findById(id);
+    }
+
+    @Transactional
+    public void delete_Article(Category category,Long id) {
+        List<UploadFile> uploadFileList=uploadFileRepository.findByArticle_Id(id);
+
+        uploadFileList.forEach(uploadFile -> deleteFile(category, uploadFile.getFileName()));
+
+        articleRepository.deleteById(id);
+    }
+
+
+    public void deleteFile(Category category,String fileName) {
+        String deleteFileName = category + CATEGORY_PREFIX + fileName;
+        amazonS3Client.deleteObject(new DeleteObjectRequest(bucketName, deleteFileName));
+    }
+
+
 }

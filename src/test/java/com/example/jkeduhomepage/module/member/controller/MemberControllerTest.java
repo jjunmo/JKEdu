@@ -16,6 +16,7 @@ import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
+import org.springframework.restdocs.operation.QueryParameters;
 import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -30,8 +31,7 @@ import java.time.LocalDate;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -63,15 +63,15 @@ class MemberControllerTest {
     }
 
     private void saveMember() throws CoolsmsException {
-        MemberPhoneAuth memberPhoneAuth=memberService.certifiedPhone("12341234");
-        memberService.certifiedPhoneCheck("12341234",memberPhoneAuth.getSmscode());
+        MemberPhoneAuth memberPhoneAuth=memberService.certifiedPhone("memberPhone2");
+        memberService.certifiedPhoneCheck("memberPhone2",memberPhoneAuth.getSmscode());
 
         MemberRequestDTO memberRequestDTO = new MemberRequestDTO();
         memberRequestDTO.setLoginId("memberTest");
         memberRequestDTO.setPassword("123456");
         memberRequestDTO.setEmail("aa@aa");
         memberRequestDTO.setName("momo");
-        memberRequestDTO.setPhone("12341234");
+        memberRequestDTO.setPhone("memberPhone2");
 
         memberService.save(memberRequestDTO);
     }
@@ -201,7 +201,7 @@ class MemberControllerTest {
                 .andExpect(jsonPath("loginId").value("memberTest"))
                 .andExpect(jsonPath("email").value("aa@aa"))
                 .andExpect(jsonPath("name").value("momo"))
-                .andExpect(jsonPath("phone").value("12341234"))
+                .andExpect(jsonPath("phone").value("memberPhone2"))
                 .andExpect(jsonPath("status").value("GREEN"))
                 .andExpect(jsonPath("createdDate").value(String.valueOf(LocalDate.now())))
                 .andExpect(jsonPath("updatedDate").value(String.valueOf(LocalDate.now())))
@@ -403,6 +403,108 @@ class MemberControllerTest {
     }
 
     //TODO: 문자 인증 테스트 진행 필요
+    @Test
+    @DisplayName("11. 인증문자 발송")
+    public void phone_cert() throws Exception {
+
+        mockMvc.perform(post(URL+"/cert?phone=01012341234")
+                        .accept(MediaType.ALL)
+                        .characterEncoding("UTF-8")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(content().string("인증문자 발송 완료."))
+                .andExpect(status().isOk())
+                .andDo(document("Phone-SMS-Success", // 1
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        queryParameters(
+                                parameterWithName("phone").description("인증요청 번호"))
+                ));
+    }
+
+    @Test
+    @DisplayName("12. 인증문자 발송 실패")
+    public void phone_cert_fail() throws Exception {
+
+        mockMvc.perform(post(URL+"/cert?phone=memberPhone2")
+                        .accept(MediaType.ALL)
+                        .characterEncoding("UTF-8")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(content().string("이미 가입된 아이디 입니다."))
+                .andExpect(status().isBadRequest())
+                .andDo(document("Phone-SMS-Fail", // 1
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        queryParameters(
+                                parameterWithName("phone").description("인증요청 번호"))
+                ));
+    }
+
+    @Test
+    @DisplayName("13.인증문자 확인")
+    public void phone_cert_check() throws Exception {
+        MemberPhoneAuth memberPhoneAuth=memberService.certifiedPhone("memberPhone4");
+
+        mockMvc.perform(put(URL+"/cert?phone=memberPhone4&smscode="+memberPhoneAuth.getSmscode())
+                        .accept(MediaType.ALL)
+                        .characterEncoding("UTF-8")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(content().string("인증 완료 되었습니다."))
+                .andExpect(status().isOk())
+                .andDo(document("Phone-SMS-Check-Success", // 1
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        queryParameters(
+                                parameterWithName("phone").description("인증요청 번호"),
+                                parameterWithName("smscode").description("인증번호"))
+                ));
+    }
+
+    @Test
+    @DisplayName("14.인증문자 확인실패( 해당번호로 문자요청을 하지 않은 경우 )")
+    public void phone_cert_check_fail_phone() throws Exception {
+
+        mockMvc.perform(put(URL+"/cert?phone=01010101&smscode=0000")
+                        .accept(MediaType.ALL)
+                        .characterEncoding("UTF-8")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(content().string("휴대폰 인증을 다시 요청하세요"))
+                .andExpect(status().isNotFound())
+                .andDo(document("Phone-SMS-Check-Fail-NoPhone", // 1
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        queryParameters(
+                                parameterWithName("phone").description("인증요청 번호"),
+                                parameterWithName("smscode").description("인증번호"))
+                ));
+    }
+
+    @Test
+    @DisplayName("15.인증문자 확인실패( 인증번호가 불일치 )")
+    public void phone_cert_check_fail_smscode() throws Exception {
+        memberService.certifiedPhone("memberPhone3");
+
+        mockMvc.perform(put(URL+"/cert?phone=memberPhone3&smscode=0000")
+                        .accept(MediaType.ALL)
+                        .characterEncoding("UTF-8")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(content().string("인증번호가 일치하지 않습니다."))
+                .andExpect(status().isBadRequest())
+                .andDo(document("Phone-SMS-Check-Fail-NoSMS", // 1
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        queryParameters(
+                                parameterWithName("phone").description("인증요청 번호"),
+                                parameterWithName("smscode").description("인증번호"))
+                ));
+    }
+
+
+
 
 
 

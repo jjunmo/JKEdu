@@ -4,6 +4,7 @@ import com.example.jkeduhomepage.module.article.dto.ArticleRequestDTO;
 import com.example.jkeduhomepage.module.article.entity.Article;
 import com.example.jkeduhomepage.module.article.entity.UploadFile;
 import com.example.jkeduhomepage.module.article.repository.ArticleRepository;
+import com.example.jkeduhomepage.module.article.repository.UploadFileRepository;
 import com.example.jkeduhomepage.module.common.enums.Category;
 import com.example.jkeduhomepage.module.common.enums.Role;
 import com.example.jkeduhomepage.module.member.entity.Member;
@@ -60,9 +61,14 @@ class ArticleControllerTest {
     @Autowired
     private ArticleRepository articleRepository;
 
+    @Autowired
+    private UploadFileRepository uploadFileRepository;
+
     private Member SECURITY_MEMBER;
 
     private Article TEST_ARTICLE;
+
+    private Article TEST_DELETE_ARTICLE;
 
     private Long SECURITY_MEMBER_ID;
 
@@ -78,6 +84,7 @@ class ArticleControllerTest {
     @BeforeAll
     public void all(){
         saveMember();
+        deleteArticle();
         saveArticle();
     }
 
@@ -96,13 +103,41 @@ class ArticleControllerTest {
     }
 
     public void saveArticle(){
+        List<UploadFile> uploadFileList=new ArrayList<>();
+
+        UploadFile uploadFile =new UploadFile();
+        uploadFile.setFileName("test");
+        uploadFile.setCustomFileName("test");
+        uploadFile.setUrl("test");
+        uploadFileList.add(uploadFile);
+
         Article article =new Article();
         article.setTitle("테스트 제목");
         article.setMember(SECURITY_MEMBER);
         article.setCategory(Category.BOARD);
         article.setContent("테스트 내용");
+        article.setUploadFileList(uploadFileList);
         TEST_ARTICLE=articleRepository.save(article);
     }
+
+    public void deleteArticle(){
+        List<UploadFile> uploadFileList=new ArrayList<>();
+
+        UploadFile uploadFile =new UploadFile();
+        uploadFile.setFileName("test2");
+        uploadFile.setCustomFileName("test2");
+        uploadFile.setUrl("test2");
+        uploadFileList.add(uploadFile);
+
+        Article article =new Article();
+        article.setTitle("테스트 제목2");
+        article.setMember(SECURITY_MEMBER);
+        article.setCategory(Category.BOARD);
+        article.setContent("테스트 내용2");
+        article.setUploadFileList(uploadFileList);
+        TEST_DELETE_ARTICLE=articleRepository.save(article);
+    }
+
 
     @AfterTransaction
     public void accountCleanup() {
@@ -244,8 +279,8 @@ class ArticleControllerTest {
                         .accept(MediaType.ALL)
                         .characterEncoding("UTF-8")
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
                 .andDo(print())
+                .andExpect(status().isOk())
                 .andDo(document("Article-List", // 1
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
@@ -257,11 +292,87 @@ class ArticleControllerTest {
                                 getDescription("articleResponseDTOList[].id","게시글 번호"),
                                 getDescription("articleResponseDTOList[].title","게시글 제목"),
                                 getDescription("articleResponseDTOList[].name","게시글 작성자"),
-                                getDescription("articleResponseDTOList[].content","게시글 내용"),
                                 getDescription("articleResponseDTOList[].createdDate","게시글 작성일"))
                 ));
-
     }
+
+    @Test
+    @WithUserDetails(value = "aaaa")
+    @DisplayName("5.게시글 보기")
+    public void get_article() throws Exception {
+
+        mockMvc.perform(RestDocumentationRequestBuilders.get(URL+"/{category}/{id}","board",1)
+                        .accept(MediaType.ALL)
+                        .characterEncoding("UTF-8")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("Article-Get", // 1
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        pathParameters(
+                                parameterWithName("category").description("게시글 카테고리"),
+                                parameterWithName("id").description("게시글 번호")
+                        ),
+                        responseFields(
+                                getDescription("id","게시글 번호"),
+                                getDescription("title","게시글 제목"),
+                                getDescription("content","게시글 내용"),
+                                getDescription("name","작성자"),
+                                getDescription("createdDate","작성일"),
+                                getDescription("uploadFileList[].id","DB에 저장된 파일 PK"),
+                                getDescription("uploadFileList[].fileName","DB에 저장된 파일 이름"),
+                                getDescription("uploadFileList[].customFileName","DB에 저장된 변경된 파일 이름"),
+                                getDescription("uploadFileList[].url","DB에 저장된 다운로드 주소"),
+                                getDescription("uploadFileList[].article","저장된 게시글 번호"))
+                ));
+    }
+
+    @Test
+    @WithUserDetails(value = "aaaa")
+    @DisplayName("6.존재 하지 않는 게시물")
+    public void get_article_fail() throws Exception {
+
+        mockMvc.perform(RestDocumentationRequestBuilders.get(URL+"/{category}/{id}","board",1000)
+                        .accept(MediaType.ALL)
+                        .characterEncoding("UTF-8")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("해당 게시글은 존재하지 않습니다."))
+                .andDo(document("Article-Get-Fail", // 1
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        pathParameters(
+                                parameterWithName("category").description("게시글 카테고리"),
+                                parameterWithName("id").description("게시글 번호"))
+                ));
+    }
+
+    @Test
+    @WithUserDetails(value = "aaaa")
+    @DisplayName("7.게시글 삭제")
+    public void delete_article() throws Exception {
+
+        mockMvc.perform(RestDocumentationRequestBuilders.delete(URL+"/{category}/{id}","board",2)
+                        .accept(MediaType.ALL)
+                        .characterEncoding("UTF-8")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string("글 삭제 완료"))
+                .andDo(document("Article-Delete",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        pathParameters(
+                                parameterWithName("category").description("게시글 카테고리"),
+                                parameterWithName("id").description("게시글 번호"))
+                ));
+    }
+
+
+
+
 
 
 

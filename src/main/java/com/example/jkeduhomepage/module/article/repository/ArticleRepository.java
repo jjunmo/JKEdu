@@ -9,5 +9,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ArticleRepository extends JpaRepository<Article,Long> {
 
-    Slice<Article> findByCategoryOrderByIdAsc(Category category , Pageable pageable);
+    Page<Article> findByCategoryOrderByIdAsc(Category category , Pageable pageable);
 }

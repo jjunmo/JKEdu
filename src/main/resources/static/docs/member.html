@@ -651,17 +651,17 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 196
+Content-Length: 200
 
 [ {
   "id" : 1,
   "loginId" : "memberTest",
   "email" : "aa@aa",
   "name" : "momo",
-  "phone" : "12341234",
+  "phone" : "memberPhone2",
   "status" : "GREEN",
-  "createdDate" : "2023-02-15",
-  "updatedDate" : "2023-02-15"
+  "createdDate" : "2023-02-16",
+  "updatedDate" : "2023-02-16"
 } ]</code></pre>
 </div>
 </div>
@@ -772,17 +772,17 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 204
+Content-Length: 208
 
 {
   "loginId" : "memberTest",
   "email" : "aa@aa",
   "role" : "ROLE_USER",
   "name" : "momo",
-  "phone" : "12341234",
+  "phone" : "memberPhone2",
   "status" : "GREEN",
-  "createdDate" : "2023-02-15",
-  "updatedDate" : "2023-02-15"
+  "createdDate" : "2023-02-16",
+  "updatedDate" : "2023-02-16"
 }</code></pre>
 </div>
 </div>
@@ -1262,7 +1262,7 @@ Content-Type: application/json
 Content-Length: 195
 
 {
-  "accessToken" : "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY3NjQ0NjQyMH0.N95UfK8JYMQga6Zjye0s_BQ84YE9hRxuHXamPiv2I912lPe2h3oriC4MUW114F12JQ004tDTk2QUxutyJREI7w"
+  "accessToken" : "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY3NjUzNTkxOX0.r-ORYbc0smwTx-cxa8tV95lZVh7qqTCiwCLdNr46ix251rjPh3-0U5of5otSlTCiqzxA_OBcuZ_u1moBUXN7-g"
 }</code></pre>
 </div>
 </div>
@@ -1343,8 +1343,8 @@ Content-Length: 254
 
 [ {
   "fileName" : "test.jpeg",
-  "customFileName" : "board/350d5654-b88b-411b-b45f-4a6cea286805.jpeg_1676444612421.jpeg",
-  "url" : "https://jkboston.s3.ap-northeast-2.amazonaws.com/board/350d5654-b88b-411b-b45f-4a6cea286805.jpeg_1676444612421.jpeg"
+  "customFileName" : "board/29b25964-3e96-444f-829c-b30a01284b91.jpeg_1676534128213.jpeg",
+  "url" : "https://jkboston.s3.ap-northeast-2.amazonaws.com/board/29b25964-3e96-444f-829c-b30a01284b91.jpeg_1676534128213.jpeg"
 } ]</code></pre>
 </div>
 </div>
@@ -1587,11 +1587,11 @@ Content-Length: 209
 
 {
   "category" : "BOARD",
-  "id" : 2,
+  "id" : 3,
   "title" : "제목!!",
   "content" : "내용!!",
   "uploadFileList" : [ {
-    "id" : 1,
+    "id" : 3,
     "fileName" : "test",
     "customFileName" : "test",
     "url" : "test"
@@ -1705,11 +1705,11 @@ Content-Length: 209
 
 {
   "category" : "BOARD",
-  "id" : 2,
+  "id" : 3,
   "title" : "제목!!",
   "content" : "내용!!",
   "uploadFileList" : [ {
-    "id" : 1,
+    "id" : 3,
     "fileName" : "test",
     "customFileName" : "test",
     "url" : "test"

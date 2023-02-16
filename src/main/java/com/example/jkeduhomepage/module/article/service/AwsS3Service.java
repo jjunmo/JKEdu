@@ -32,29 +32,8 @@ public class AwsS3Service {
 
     private final AmazonS3Client amazonS3Client;
 
-    private final UploadFileRepository uploadFileRepository;
-
     @Value("${cloud.aws.s3.bucket}")
     private String bucketName;
-
-    public String uploadFile(String category, MultipartFile multipartFile) {
-
-        String fileName = buildFileName(category, Objects.requireNonNull(multipartFile.getOriginalFilename()));
-
-        ObjectMetadata objectMetadata = new ObjectMetadata();
-        objectMetadata.setContentType(multipartFile.getContentType());
-        objectMetadata.setContentLength(multipartFile.getSize());
-
-        try (InputStream inputStream = multipartFile.getInputStream()) {
-            amazonS3Client.putObject(new PutObjectRequest(bucketName, fileName, inputStream, objectMetadata)
-                    .withCannedAcl(CannedAccessControlList.PublicRead));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        log.info(amazonS3Client.getUrl(bucketName,fileName).toString());
-
-        return amazonS3Client.getUrl(bucketName, fileName).toString();
-    }
 
     public List<UploadFile> uploadFile(String filePath,List<MultipartFile> multipartFile) {
         List<UploadFile> uploadFileList = new ArrayList<>();
@@ -76,8 +55,6 @@ public class AwsS3Service {
                         amazonS3Client.putObject(new PutObjectRequest(bucketName, customFileName, inputStream, objectMetadata)
                                 .withCannedAcl(CannedAccessControlList.PublicRead));
 
-                        //TODO : articleRepository.save()
-
                     } catch (IOException e) {
                         throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "파일 업로드에 실패했습니다.");
                     }
@@ -85,11 +62,6 @@ public class AwsS3Service {
                 }
         );
         return uploadFileList;
-    }
-
-    public void deleteFile(String category,String fileName) {
-        String deleteFileName = category + CATEGORY_PREFIX + fileName;
-        amazonS3Client.deleteObject(new DeleteObjectRequest(bucketName, deleteFileName));
     }
 
 
