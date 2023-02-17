@@ -29,6 +29,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.io.File;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -146,30 +148,64 @@ class ArticleControllerTest {
     // 1. 파일 업로드
 
     @Test
-    @DisplayName("1.파일 업로드")
+    @DisplayName("1.이미지 업로드")
     public void file_upload() throws Exception {
 
-        MockMultipartFile file = new MockMultipartFile("file", "test.jpeg", "image/jpeg",
-                "<<jpeg data>>".getBytes());
+        File filePath=new File("/Users/jjunmo/Desktop/Back/src/test/resources/static/test.jpeg");
 
-        mockMvc.perform(multipart(URL+"/file?category=board")
+        MockMultipartFile file = new MockMultipartFile("file", "test.jpeg", "image/jpeg",
+                Files.readAllBytes(filePath.toPath()));
+
+        mockMvc.perform(multipart(URL+"/file?category=notice")
                         .file(file)
-//                        .params(param)
                         .accept(MediaType.ALL)
                         .characterEncoding("UTF-8")
                         .contentType(MediaType.APPLICATION_JSON))
-                        .andDo(print())
-                        .andExpect(status().isOk())
-                        .andDo(document("File-Upload", // 1
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("Image-Upload", // 1
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
-                                requestParts(partWithName("file").description("업로드 파일")),
-                                queryParameters(parameterWithName("category").description("AWS S3 저장 폴더카테고리")),
-                                responseFields(
-                                        getDescription("[].fileName","원본 파일 이름"),
-                                        getDescription("[].customFileName","저장되는 파일 이름"),
-                                        getDescription("[].url","다운로드 URL")
-                                )
+                        requestParts(partWithName("file").description("업로드 파일")),
+                        queryParameters(parameterWithName("category").description("AWS S3 저장 폴더카테고리")),
+                        responseFields(
+                                getDescription("[].fileName","원본 파일 이름"),
+                                getDescription("[].customFileName","저장되는 파일 이름"),
+                                getDescription("[].url","다운로드 URL"),
+                                getDescription("[].thumbnailImageUrl","썸네일 이미지 URL")
+                        )
+
+                ));
+    }
+
+    @Test
+    @DisplayName("파일 업로드( image 제외 )")
+    public void file_upload_noImage() throws Exception {
+
+        MockMultipartFile file = new MockMultipartFile(
+                "file",
+                "test.txt",
+                MediaType.TEXT_PLAIN_VALUE,
+                "Upload Test :)".getBytes()
+        );
+
+        mockMvc.perform(multipart(URL+"/file?category=notice")
+                        .file(file)
+                        .accept(MediaType.ALL)
+                        .characterEncoding("UTF-8")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("File-Upload", // 1
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestParts(partWithName("file").description("업로드 파일")),
+                        queryParameters(parameterWithName("category").description("AWS S3 저장 폴더카테고리")),
+                        responseFields(
+                                getDescription("[].fileName","원본 파일 이름"),
+                                getDescription("[].customFileName","저장되는 파일 이름"),
+                                getDescription("[].url","다운로드 URL")
+                        )
 
                 ));
     }

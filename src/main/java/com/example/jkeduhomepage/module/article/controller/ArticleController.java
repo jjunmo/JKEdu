@@ -78,11 +78,6 @@ public class ArticleController {
     @PostMapping("/file")
     public ResponseEntity<List<UploadFile>> uploadFile(@RequestParam("category") String filePath, @RequestPart(value = "file")  List<MultipartFile> multipartFile) {
 //        Member member=articleService.isMemberCurrent();
-        if(filePath.equalsIgnoreCase("GALLERY")){
-            throw new RuntimeException("썸넬 이미지 만들어야함");
-            //TODO: 235*300
-        }
-
         return ResponseEntity.ok(awsS3Service.uploadFile(filePath,multipartFile));
     }
 

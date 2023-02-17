@@ -6,6 +6,7 @@ import com.example.jkeduhomepage.module.common.utility.Basetime;
 import com.example.jkeduhomepage.module.member.entity.Member;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.*;
@@ -25,6 +26,7 @@ import java.util.List;
 //무한 재귀 방지
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @JsonIdentityReference(alwaysAsId = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Article extends Basetime {
 
     @Id

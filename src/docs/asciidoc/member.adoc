@@ -124,6 +124,17 @@ include::{snippets}/Member-login-Success/http-response.adoc[]
 ResponseFields
 include::{snippets}/Member-login-Success/response-fields.adoc[]
 
+=== ImageUpload
+HttpRequest
+include::{snippets}/Image-Upload/http-request.adoc[]
+QueryParameters
+include::{snippets}/Image-Upload/query-parameters.adoc[]
+
+HttpResponse
+include::{snippets}/Image-Upload/http-response.adoc[]
+ResponseFields
+include::{snippets}/Image-Upload/response-fields.adoc[]
+
 === FileUpload
 HttpRequest
 include::{snippets}/File-Upload/http-request.adoc[]
