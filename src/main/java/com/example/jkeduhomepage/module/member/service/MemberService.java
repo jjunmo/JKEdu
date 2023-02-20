@@ -6,6 +6,7 @@ import com.example.jkeduhomepage.module.common.enums.Status;
 import com.example.jkeduhomepage.module.common.enums.YN;
 import com.example.jkeduhomepage.module.jwt.TokenProvider;
 import com.example.jkeduhomepage.module.member.dto.MemberRequestDTO;
+import com.example.jkeduhomepage.module.member.dto.MemberReservationDTO;
 import com.example.jkeduhomepage.module.member.dto.MemberUpdateDTO;
 import com.example.jkeduhomepage.module.member.entity.Member;
 import com.example.jkeduhomepage.module.member.entity.MemberPhoneAuth;
@@ -163,11 +164,34 @@ public class MemberService {
             memberPhoneAuth.setCheckYn(YN.Y);
             memberPhoneAuthRepository.save(memberPhoneAuth);
             return "OK";
-        }else {
-            return smscode;
         }
+            return null;
 
-
-
-        }
     }
+
+    public void reservation(MemberReservationDTO memberReservationDTO) throws CoolsmsException {
+
+        String api_key = "NCSFXG0SLI1M6IP8";
+        String api_secret = "LSMCMXB2HEIL4LHFZTCKU4PAHGBECFSX";
+        Message coolsms = new Message(api_key, api_secret);
+
+        // 4 params(to, from, type, text) are mandatory. must be filled
+        HashMap<String, String> params = new HashMap<>();
+        params.put("to", "010-9109-7122");    // 수신전화번호
+        params.put("from", "051-747-1788");    // 발신전화번호. 테스트시에는 발신,수신 둘다 본인 번호로 하면 됨
+        params.put("type", "SMS");
+        params.put("text",
+                "입학 테스트\n" +
+                        "테스트 날짜 : "+memberReservationDTO.getDay()+ "\n" +
+                "학생이름 : "+ memberReservationDTO.getName()+"\n" +
+                "학교 : "+memberReservationDTO.getSchool()+"\n" +
+                "학년 : "+memberReservationDTO.getGrade()+ "\n" +
+                "전화번호 : "+memberReservationDTO.getPhone()+"\n" +
+                "예약자 관계 : "+ memberReservationDTO.getRelationship());
+        params.put("app_version", "test app 1.2"); // application name and version
+
+
+        coolsms.send(params);
+
+    }
+}

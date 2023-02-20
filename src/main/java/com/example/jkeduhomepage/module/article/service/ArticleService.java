@@ -22,6 +22,7 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -63,7 +64,7 @@ public class ArticleService {
         Page<ArticleResponseDTO> articlePage=articleRepository.findByCategoryOrderByIdDesc(category,pageable)
                 .map(ArticleResponseDTO::paramArticle);
 
-        return ArticlePageResponseDTO.getPage(articlePage.hasNext(),articlePage.getContent());
+        return ArticlePageResponseDTO.getPage(articlePage);
     }
 
     public Optional<Article> getArticle(Long id){

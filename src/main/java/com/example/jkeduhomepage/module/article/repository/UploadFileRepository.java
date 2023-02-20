@@ -8,4 +8,6 @@ import java.util.List;
 public interface UploadFileRepository extends JpaRepository<UploadFile,Long> {
 
     List<UploadFile> findByArticle_Id(Long id);
+
+    List<UploadFile> findByArticle_IdNull();
 }

@@ -94,7 +94,7 @@ class ArticleControllerTest {
                 .email("")
                 .phone("01091097122")
                 .name("momo")
-                .role(Role.ROLE_USER)
+                .role(Role.ROLE_ADMIN)
                 .password("1234")
                 .build());
 
@@ -148,11 +148,12 @@ class ArticleControllerTest {
     // 1. 파일 업로드
 
     @Test
+    @WithUserDetails(value = "aaaa")
     @DisplayName("1.이미지 업로드")
     public void file_upload() throws Exception {
+        //TODO : 업로드 response 수정
 
         File filePath=new File("/Users/jjunmo/Desktop/Back/src/test/resources/static/test.jpeg");
-
         MockMultipartFile file = new MockMultipartFile("file", "test.jpeg", "image/jpeg",
                 Files.readAllBytes(filePath.toPath()));
 
@@ -179,6 +180,7 @@ class ArticleControllerTest {
     }
 
     @Test
+    @WithUserDetails(value = "aaaa")
     @DisplayName("파일 업로드( image 제외 )")
     public void file_upload_noImage() throws Exception {
 
@@ -323,6 +325,7 @@ class ArticleControllerTest {
                         ),
                         responseFields(
                                 getDescription("next","다음 페이지 유무"),
+                                getDescription("nowPage","현재 페이지 번호"),
                                 getDescription("articleResponseDTOList[].id","게시글 번호"),
                                 getDescription("articleResponseDTOList[].title","게시글 제목"),
                                 getDescription("articleResponseDTOList[].name","게시글 작성자"),

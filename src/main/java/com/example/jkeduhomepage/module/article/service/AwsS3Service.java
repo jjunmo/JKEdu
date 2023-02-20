@@ -2,9 +2,12 @@ package com.example.jkeduhomepage.module.article.service;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.example.jkeduhomepage.module.article.entity.UploadFile;
+import com.example.jkeduhomepage.module.article.repository.UploadFileRepository;
+import com.example.jkeduhomepage.module.common.enums.Category;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import marvin.image.MarvinImage;
@@ -36,7 +39,11 @@ public class AwsS3Service {
 
     private static final int THUMBNAIL_WIDTH=235;
 
+    private static final int THUMBNAIL_HEIGHT=300;
+
     private final AmazonS3Client amazonS3Client;
+
+    private final UploadFileRepository uploadFileRepository;
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucketName;
@@ -78,13 +85,11 @@ public class AwsS3Service {
                     } catch (IOException e) {
                         throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "파일 업로드에 실패했습니다.");
                     }
-            uploadFileList.add(uploadFile);
-            }
+                    uploadFileList.add(uploadFile);
+                }
         );
         return uploadFileList;
     }
-
-
 
     public String buildFileName(String category, String originalFileName) {
         int fileExtensionIndex = originalFileName.lastIndexOf(FILE_EXTENSION_SEPARATOR);
@@ -115,9 +120,9 @@ public class AwsS3Service {
             int originWidth = image.getWidth();
             int originHeight = image.getHeight();
 
-            // origin 이미지가 resizing될 사이즈보다 작을 경우 resizing 작업 안 함
-            if(originWidth < THUMBNAIL_WIDTH)
-                return originalImage;
+//            // origin 이미지가 resizing될 사이즈보다 작을 경우 resizing 작업 안 함
+//            if(originWidth < THUMBNAIL_WIDTH)
+//                return originalImage;
 
 
             MarvinImage imageMarvin = new MarvinImage(image);
@@ -125,7 +130,7 @@ public class AwsS3Service {
             Scale scale = new Scale();
             scale.load();
             scale.setAttribute("newWidth", THUMBNAIL_WIDTH);
-            scale.setAttribute("newHeight", THUMBNAIL_WIDTH * originHeight / originWidth);
+            scale.setAttribute("newHeight", THUMBNAIL_HEIGHT);
             scale.process(imageMarvin.clone(), imageMarvin, null, null, false);
 
             String fileExtension = fileFormatName.substring(fileFormatName.lastIndexOf(FILE_EXTENSION_SEPARATOR));
@@ -141,5 +146,12 @@ public class AwsS3Service {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "파일 리사이즈에 실패했습니다.");
         }
     }
+//
+//    public void deleteNoFile(Category category, String fileName) {
+//        List<UploadFile> uploadFileList=uploadFileRepository.findByArticle_IdNull();
+//
+//        String deleteFileName = category + CATEGORY_PREFIX + fileName;
+//        amazonS3Client.deleteObject(new DeleteObjectRequest(bucketName, deleteFileName));
+//    }
 
     }

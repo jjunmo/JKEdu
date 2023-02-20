@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -15,14 +16,17 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ArticlePageResponseDTO {
 
-    boolean next;
+    public boolean next;
+
+    public int nowPage;
 
     List<ArticleResponseDTO> articleResponseDTOList;
 
-    public static ArticlePageResponseDTO getPage(boolean next , List<ArticleResponseDTO> articleResponseDTOList ){
+    public static ArticlePageResponseDTO getPage(Page<ArticleResponseDTO> page){
         return ArticlePageResponseDTO.builder()
-                .next(next)
-                .articleResponseDTOList(articleResponseDTOList)
+                .next(page.hasNext())
+                .nowPage(page.getNumber()+1)
+                .articleResponseDTOList(page.getContent())
                 .build();
     }
 }

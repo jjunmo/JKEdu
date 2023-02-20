@@ -402,7 +402,6 @@ class MemberControllerTest {
                 ));
     }
 
-    //TODO: 문자 인증 테스트 진행 필요
     @Test
     @DisplayName("11. 인증문자 발송")
     public void phone_cert() throws Exception {
