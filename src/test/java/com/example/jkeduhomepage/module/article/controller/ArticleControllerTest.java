@@ -4,7 +4,6 @@ import com.example.jkeduhomepage.module.article.dto.ArticleRequestDTO;
 import com.example.jkeduhomepage.module.article.entity.Article;
 import com.example.jkeduhomepage.module.article.entity.UploadFile;
 import com.example.jkeduhomepage.module.article.repository.ArticleRepository;
-import com.example.jkeduhomepage.module.article.repository.UploadFileRepository;
 import com.example.jkeduhomepage.module.common.enums.Category;
 import com.example.jkeduhomepage.module.common.enums.Role;
 import com.example.jkeduhomepage.module.member.entity.Member;
@@ -60,9 +59,6 @@ class ArticleControllerTest {
 
     @Autowired
     private ArticleRepository articleRepository;
-
-    @Autowired
-    private UploadFileRepository uploadFileRepository;
 
     private Member SECURITY_MEMBER;
 
@@ -159,9 +155,9 @@ class ArticleControllerTest {
 
         mockMvc.perform(multipart(URL+"/file?category=notice")
                         .file(file)
-                        .accept(MediaType.ALL)
-                        .characterEncoding("UTF-8")
-                        .contentType(MediaType.APPLICATION_JSON))
+                        .contentType(MediaType.IMAGE_JPEG)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("utf-8"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andDo(document("Image-Upload", // 1

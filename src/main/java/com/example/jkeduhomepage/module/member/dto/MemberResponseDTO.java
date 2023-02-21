@@ -65,4 +65,13 @@ public class MemberResponseDTO {
         return memberResponseDTOList;
     }
 
+    public static MemberResponseDTO info(Member member){
+        return MemberResponseDTO.builder()
+                .loginId(member.getLoginId())
+                .email(member.getEmail())
+                .name(member.getName())
+                .phone(member.getPhone())
+                .build();
+    }
+
 }

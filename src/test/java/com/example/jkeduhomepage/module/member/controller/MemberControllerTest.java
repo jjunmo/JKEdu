@@ -1,9 +1,11 @@
 package com.example.jkeduhomepage.module.member.controller;
 
-import com.example.jkeduhomepage.module.common.enums.YN;
+import com.example.jkeduhomepage.module.common.enums.Role;
 import com.example.jkeduhomepage.module.member.dto.MemberRequestDTO;
 import com.example.jkeduhomepage.module.member.dto.MemberUpdateDTO;
+import com.example.jkeduhomepage.module.member.entity.Member;
 import com.example.jkeduhomepage.module.member.entity.MemberPhoneAuth;
+import com.example.jkeduhomepage.module.member.repository.MemberRepository;
 import com.example.jkeduhomepage.module.member.service.MemberService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.nurigo.java_sdk.exceptions.CoolsmsException;
@@ -16,10 +18,10 @@ import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
-import org.springframework.restdocs.operation.QueryParameters;
 import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -44,9 +46,19 @@ class MemberControllerTest {
     private final String URL = "/member";
 
     @Autowired
-    MemberService memberService;
+    private MemberService memberService;
 
     private MockMvc mockMvc;
+
+    @Autowired
+    private MemberRepository memberRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+
+    private Member SECURITY_DELETE_MEMBER;
+
 
     @BeforeEach
     public void setUp(WebApplicationContext webApplicationContext,
@@ -74,6 +86,16 @@ class MemberControllerTest {
         memberRequestDTO.setPhone("memberPhone2");
 
         memberService.save(memberRequestDTO);
+
+
+        SECURITY_DELETE_MEMBER=memberRepository.save(Member.builder()
+                .loginId("deleteMember")
+                .email("abc@abc")
+                .phone("123321")
+                .name("momo")
+                .role(Role.ROLE_ADMIN)
+                .password(passwordEncoder.encode("1234"))
+                .build());
     }
 
     @BeforeEach
@@ -166,7 +188,7 @@ class MemberControllerTest {
     @DisplayName("3. Member 리스트 조회")
     public void member_list() throws Exception {
 
-        mockMvc.perform(get(URL)
+        mockMvc.perform(get(URL+"/management")
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .characterEncoding("UTF-8")
                         .accept(MediaType.ALL))
@@ -430,7 +452,7 @@ class MemberControllerTest {
                         .characterEncoding("UTF-8")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
-                .andExpect(content().string("이미 가입된 아이디 입니다."))
+                .andExpect(content().string("이미 회원입니다."))
                 .andExpect(status().isBadRequest())
                 .andDo(document("Phone-SMS-Fail", // 1
                         preprocessRequest(prettyPrint()),
@@ -537,8 +559,96 @@ class MemberControllerTest {
                 ));
     }
 
+    @Test
+    @WithUserDetails("memberTest")
+    @DisplayName("Member 내 정보")
+    public void member_info() throws Exception {
+        mockMvc.perform(get(URL)
+                        .accept(MediaType.ALL)
+                        .characterEncoding("UTF-8")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("Member-My-Info", // 1
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        responseFields(
+                                getDescription("loginId","로그인 아이디").type(JsonFieldType.STRING),
+                                getDescription("name","이름").type(JsonFieldType.STRING),
+                                getDescription("email","이메일").type(JsonFieldType.STRING),
+                                getDescription("phone","휴대전화").type(JsonFieldType.STRING))
+                ));
+    }
+
+    @Test
+    @WithUserDetails("memberTest")
+    @DisplayName("Member 비밀번호 변경")
+    public void member_password_change() throws Exception {
+        String password ="{\"newPassword\" : \"123456\"}";
+
+        mockMvc.perform(put(URL)
+                        .content(password)
+                        .accept(MediaType.ALL)
+                        .characterEncoding("UTF-8")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string("비밀번호가 변경 되었습니다."))
+                .andDo(document("Member-Password-Change", // 1
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestFields(
+                                getDescription("newPassword","새로운 비밀번호"))
+                ));
+    }
 
 
+    @Test
+    @WithUserDetails("memberTest")
+    @DisplayName("Member 회원 탈퇴 실패")
+    public void member_delete_fail() throws Exception {
+
+
+        String password ="{\"password\" : \"12312312\"}";
+
+        mockMvc.perform(delete(URL)
+                        .content(password)
+                        .accept(MediaType.ALL)
+                        .characterEncoding("UTF-8")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("현재 비밀번호가 옳지 않습니다."))
+                .andDo(document("Member-Delete-Fail", // 1
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestFields(
+                                getDescription("password","해당 Member 비밀번호"))
+                ));
+    }
+
+    @Test
+    @WithUserDetails("deleteMember")
+    @DisplayName("Member 회원 탈퇴")
+    public void member_delete() throws Exception {
+
+        String password ="{\"password\" : \"1234\"}";
+
+        mockMvc.perform(delete(URL)
+                        .content(password)
+                        .accept(MediaType.ALL)
+                        .characterEncoding("UTF-8")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string("회원탈퇴 완료"))
+                .andDo(document("Member-Delete", // 1
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestFields(
+                                getDescription("password","해당 Member 비밀번호"))
+                ));
+    }
 
 
 

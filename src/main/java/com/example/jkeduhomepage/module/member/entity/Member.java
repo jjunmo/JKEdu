@@ -2,11 +2,9 @@ package com.example.jkeduhomepage.module.member.entity;
 
 import com.example.jkeduhomepage.module.common.enums.Role;
 import com.example.jkeduhomepage.module.common.enums.Status;
-import com.example.jkeduhomepage.module.common.enums.YN;
 import com.example.jkeduhomepage.module.common.utility.Basetime;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.Comment;
 
 
 @Entity

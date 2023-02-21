@@ -12,6 +12,43 @@ JK-Boston-Homepage;
 :sectlinks:
 
 == Member
+=== MemberMyInfo
+HttpRequest
+include::{snippets}/Member-My-Info/http-request.adoc[]
+
+HttpResponse
+include::{snippets}/Member-My-Info/http-response.adoc[]
+ResponseFields
+include::{snippets}/Member-My-Info/response-fields.adoc[]
+
+=== MemberPasswordChange
+HttpRequest
+include::{snippets}/Member-Password-Change/http-request.adoc[]
+RequestFields
+include::{snippets}/Member-Password-Change/request-fields.adoc[]
+
+HttpResponse
+include::{snippets}/Member-Password-Change/http-response.adoc[]
+
+=== MemberDeleteFail
+HttpRequest
+include::{snippets}/Member-Delete-Fail/http-request.adoc[]
+RequestFields
+include::{snippets}/Member-Delete-Fail/request-fields.adoc[]
+
+HttpResponse
+include::{snippets}/Member-Delete-Fail/http-response.adoc[]
+
+=== MemberDelete
+HttpRequest
+include::{snippets}/Member-Delete/http-request.adoc[]
+RequestFields
+include::{snippets}/Member-Delete/request-fields.adoc[]
+
+HttpResponse
+include::{snippets}/Member-Delete/http-response.adoc[]
+
+
 === MemberSaveFail
 HttpRequest
 include::{snippets}/Member-Save-Fail/http-request.adoc[]
@@ -124,9 +161,56 @@ include::{snippets}/Member-login-Success/http-response.adoc[]
 ResponseFields
 include::{snippets}/Member-login-Success/response-fields.adoc[]
 
-=== ImageUpload
+=== PhoneSMSSuccess
 HttpRequest
-include::{snippets}/Image-Upload/http-request.adoc[]
+include::{snippets}/Phone-SMS-Success/http-request.adoc[]
+QueryParameters
+include::{snippets}/Phone-SMS-Success/query-parameters.adoc[]
+
+HttpResponse
+include::{snippets}/Phone-SMS-Success/http-response.adoc[]
+
+=== PhoneSMSFail
+HttpRequest
+include::{snippets}/Phone-SMS-Fail/http-request.adoc[]
+QueryParameters
+include::{snippets}/Phone-SMS-Fail/query-parameters.adoc[]
+
+HttpResponse
+include::{snippets}/Phone-SMS-Fail/http-response.adoc[]
+
+=== PhoneSMSCheckSuccess
+HttpRequest
+include::{snippets}/Phone-SMS-Check-Success/http-request.adoc[]
+QueryParameters
+include::{snippets}/Phone-SMS-Check-Success/query-parameters.adoc[]
+
+HttpResponse
+include::{snippets}/Phone-SMS-Check-Success/http-response.adoc[]
+
+=== PhoneSMSCheckFail
+HttpRequest
+include::{snippets}/Phone-SMS-Check-Fail-NoPhone/http-request.adoc[]
+QueryParameters
+include::{snippets}/Phone-SMS-Check-Fail-NoPhone/query-parameters.adoc[]
+
+HttpResponse
+include::{snippets}/Phone-SMS-Check-Fail-NoPhone/http-response.adoc[]
+
+=== PhoneSMSCheckFail
+HttpRequest
+include::{snippets}/Phone-SMS-Check-Fail-NoSMS/http-request.adoc[]
+QueryParameters
+include::{snippets}/Phone-SMS-Check-Fail-NoSMS/query-parameters.adoc[]
+
+HttpResponse
+include::{snippets}/Phone-SMS-Check-Fail-NoSMS/http-response.adoc[]
+
+== Article
+
+=== ImageUpload
+HttpieRequest
+include::{snippets}/Image-Upload/httpie-request.adoc[]
 QueryParameters
 include::{snippets}/Image-Upload/query-parameters.adoc[]
 
@@ -210,50 +294,17 @@ include::{snippets}/Article-Delete/path-parameters.adoc[]
 HttpResponse
 include::{snippets}/Article-Delete/http-response.adoc[]
 
-=== PhoneSMSSuccess
+
+
+== Reservation
+=== TestReservation
 HttpRequest
-include::{snippets}/Phone-SMS-Success/http-request.adoc[]
+include::{snippets}/Test-Reservation/http-request.adoc[]
 QueryParameters
-include::{snippets}/Phone-SMS-Success/query-parameters.adoc[]
+include::{snippets}/Test-Reservation/request-fields.adoc[]
 
 HttpResponse
-include::{snippets}/Phone-SMS-Success/http-response.adoc[]
-
-=== PhoneSMSFail
-HttpRequest
-include::{snippets}/Phone-SMS-Fail/http-request.adoc[]
-QueryParameters
-include::{snippets}/Phone-SMS-Fail/query-parameters.adoc[]
-
-HttpResponse
-include::{snippets}/Phone-SMS-Fail/http-response.adoc[]
-
-=== PhoneSMSCheckSuccess
-HttpRequest
-include::{snippets}/Phone-SMS-Check-Success/http-request.adoc[]
-QueryParameters
-include::{snippets}/Phone-SMS-Check-Success/query-parameters.adoc[]
-
-HttpResponse
-include::{snippets}/Phone-SMS-Check-Success/http-response.adoc[]
-
-=== PhoneSMSCheckFail
-HttpRequest
-include::{snippets}/Phone-SMS-Check-Fail-NoPhone/http-request.adoc[]
-QueryParameters
-include::{snippets}/Phone-SMS-Check-Fail-NoPhone/query-parameters.adoc[]
-
-HttpResponse
-include::{snippets}/Phone-SMS-Check-Fail-NoPhone/http-response.adoc[]
-
-=== PhoneSMSCheckFail
-HttpRequest
-include::{snippets}/Phone-SMS-Check-Fail-NoSMS/http-request.adoc[]
-QueryParameters
-include::{snippets}/Phone-SMS-Check-Fail-NoSMS/query-parameters.adoc[]
-
-HttpResponse
-include::{snippets}/Phone-SMS-Check-Fail-NoSMS/http-response.adoc[]
+include::{snippets}/Test-Reservation/http-response.adoc[]
 
 
 

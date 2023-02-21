@@ -1,17 +1,18 @@
 package com.example.jkeduhomepage.module.member.controller;
 
 import com.example.jkeduhomepage.module.member.dto.MemberRequestDTO;
-import com.example.jkeduhomepage.module.member.dto.MemberReservationDTO;
 import com.example.jkeduhomepage.module.member.dto.MemberResponseDTO;
 import com.example.jkeduhomepage.module.member.dto.MemberUpdateDTO;
 import com.example.jkeduhomepage.module.member.entity.Member;
 import com.example.jkeduhomepage.module.member.repository.MemberRepository;
 import com.example.jkeduhomepage.module.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import net.nurigo.java_sdk.exceptions.CoolsmsException;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
@@ -24,11 +25,57 @@ import static com.example.jkeduhomepage.module.member.dto.MemberResponseDTO.list
 @RestController
 @RequestMapping(value = "/member")
 @RequiredArgsConstructor
+@Slf4j
 public class MemberController {
 
     private final MemberService memberService;
 
     private final MemberRepository memberRepository;
+
+    private final PasswordEncoder passwordEncoder;
+
+    /**
+     * 내 정보
+     * @return 내 정보
+     */
+    @GetMapping
+    public HttpEntity<Object> myPage(){
+        Member member=memberService.isMemberCurrent();
+
+        return ResponseEntity.ok(MemberResponseDTO.info(member));
+    }
+
+    /**
+     * 비밀번호 변경
+     * @param memberRequestDTO 변경할 비밀번호
+     * @return 비밀번호 변경
+     */
+    @PutMapping
+    public HttpEntity<Object> myPasswordChange(@RequestBody MemberRequestDTO memberRequestDTO){
+        Member member=memberService.isMemberCurrent();
+        member.setPassword(passwordEncoder.encode(memberRequestDTO.getNewPassword()));
+        memberRepository.save(member);
+
+        return ResponseEntity.ok("비밀번호가 변경 되었습니다.");
+    }
+
+
+    @DeleteMapping
+    public HttpEntity<Object> deleteMember(@RequestBody MemberRequestDTO memberRequestDTO){
+
+        Member member=memberService.isMemberCurrent();
+
+        log.info(member.getPassword());
+        log.info(memberRequestDTO.getPassword());
+
+        if (!passwordEncoder.matches(memberRequestDTO.getPassword(),member.getPassword()))
+            return new ResponseEntity<>("현재 비밀번호가 옳지 않습니다.",HttpStatus.BAD_REQUEST);
+        else{
+            memberRepository.delete(member);
+            return ResponseEntity.ok("회원탈퇴 완료");
+        }
+    }
+
 
     /**
      * 회원가입
@@ -119,7 +166,7 @@ public class MemberController {
      * 멤버 리스
      * @return 회원가입 멤버 리스트
      */
-    @GetMapping
+    @GetMapping("/management")
     public HttpEntity<Collection<MemberResponseDTO>> memberList(){
         List<Member> memberList = memberService.allList();
 

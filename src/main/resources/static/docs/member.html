@@ -450,6 +450,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel1">
 <li><a href="#_member">Member</a>
 <ul class="sectlevel2">
+<li><a href="#_membermyinfo">MemberMyInfo</a></li>
+<li><a href="#_memberpasswordchange">MemberPasswordChange</a></li>
+<li><a href="#_memberdeletefail">MemberDeleteFail</a></li>
+<li><a href="#_memberdelete">MemberDelete</a></li>
 <li><a href="#_membersavefail">MemberSaveFail</a></li>
 <li><a href="#_membersavefailnosms">MemberSaveFailNoSMS</a></li>
 <li><a href="#_membersavesuccess">MemberSaveSuccess</a></li>
@@ -461,6 +465,15 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_memberupdatesuccess">MemberUpdateSuccess</a></li>
 <li><a href="#_memberloginfail">MemberLoginFail</a></li>
 <li><a href="#_memberloginsuccess">MemberLoginSuccess</a></li>
+<li><a href="#_phonesmssuccess">PhoneSMSSuccess</a></li>
+<li><a href="#_phonesmsfail">PhoneSMSFail</a></li>
+<li><a href="#_phonesmschecksuccess">PhoneSMSCheckSuccess</a></li>
+<li><a href="#_phonesmscheckfail">PhoneSMSCheckFail</a></li>
+<li><a href="#_phonesmscheckfail_2">PhoneSMSCheckFail</a></li>
+</ul>
+</li>
+<li><a href="#_article">Article</a>
+<ul class="sectlevel2">
 <li><a href="#_imageupload">ImageUpload</a></li>
 <li><a href="#_fileupload">FileUpload</a></li>
 <li><a href="#_articlesavefail">ArticleSaveFail</a></li>
@@ -469,11 +482,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_articleget">ArticleGet</a></li>
 <li><a href="#_articlegetfail">ArticleGetFail</a></li>
 <li><a href="#_articledelete">ArticleDelete</a></li>
-<li><a href="#_phonesmssuccess">PhoneSMSSuccess</a></li>
-<li><a href="#_phonesmsfail">PhoneSMSFail</a></li>
-<li><a href="#_phonesmschecksuccess">PhoneSMSCheckSuccess</a></li>
-<li><a href="#_phonesmscheckfail">PhoneSMSCheckFail</a></li>
-<li><a href="#_phonesmscheckfail_2">PhoneSMSCheckFail</a></li>
+</ul>
+</li>
+<li><a href="#_reservation">Reservation</a>
+<ul class="sectlevel2">
+<li><a href="#_testreservation">TestReservation</a></li>
 </ul>
 </li>
 </ul>
@@ -483,6 +496,241 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="sect1">
 <h2 id="_member"><a class="link" href="#_member">Member</a></h2>
 <div class="sectionbody">
+<div class="sect2">
+<h3 id="_membermyinfo"><a class="link" href="#_membermyinfo">MemberMyInfo</a></h3>
+<div class="paragraph">
+<p>HttpRequest</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /member HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+Accept: */*
+Host: localhost:8080</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>HttpResponse</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 98
+
+{
+  "loginId" : "memberTest",
+  "email" : "aa@aa",
+  "name" : "momo",
+  "phone" : "memberPhone2"
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>ResponseFields</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>loginId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">로그인 아이디</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">이름</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>email</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">이메일</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>phone</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">휴대전화</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_memberpasswordchange"><a class="link" href="#_memberpasswordchange">MemberPasswordChange</a></h3>
+<div class="paragraph">
+<p>HttpRequest</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">PUT /member HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+Accept: */*
+Content-Length: 30
+Host: localhost:8080
+
+{
+  "newPassword" : "123456"
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>RequestFields</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>newPassword</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">새로운 비밀번호</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>HttpResponse</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
+Content-Type: text/plain;charset=UTF-8
+Content-Length: 39
+
+비밀번호가 변경 되었습니다.</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_memberdeletefail"><a class="link" href="#_memberdeletefail">MemberDeleteFail</a></h3>
+<div class="paragraph">
+<p>HttpRequest</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">DELETE /member HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+Accept: */*
+Content-Length: 29
+Host: localhost:8080
+
+{
+  "password" : "12312312"
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>RequestFields</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>password</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">해당 Member 비밀번호</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>HttpResponse</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 400 Bad Request
+Content-Type: text/plain;charset=UTF-8
+Content-Length: 43
+
+현재 비밀번호가 옳지 않습니다.</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_memberdelete"><a class="link" href="#_memberdelete">MemberDelete</a></h3>
+<div class="paragraph">
+<p>HttpRequest</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">DELETE /member HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+Accept: */*
+Content-Length: 25
+Host: localhost:8080
+
+{
+  "password" : "1234"
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>RequestFields</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>password</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">해당 Member 비밀번호</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>HttpResponse</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
+Content-Type: text/plain;charset=UTF-8
+Content-Length: 19
+
+회원탈퇴 완료</code></pre>
+</div>
+</div>
+</div>
 <div class="sect2">
 <h3 id="_membersavefail"><a class="link" href="#_membersavefail">MemberSaveFail</a></h3>
 <div class="paragraph">
@@ -727,7 +975,7 @@ Content-Length: 38
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /member HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /member/management HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Accept: */*
 Host: localhost:8080</code></pre>
@@ -749,8 +997,8 @@ Content-Length: 200
   "name" : "momo",
   "phone" : "memberPhone2",
   "status" : "GREEN",
-  "createdDate" : "2023-02-20",
-  "updatedDate" : "2023-02-20"
+  "createdDate" : "2023-02-21",
+  "updatedDate" : "2023-02-21"
 } ]</code></pre>
 </div>
 </div>
@@ -870,8 +1118,8 @@ Content-Length: 208
   "name" : "momo",
   "phone" : "memberPhone2",
   "status" : "GREEN",
-  "createdDate" : "2023-02-20",
-  "updatedDate" : "2023-02-20"
+  "createdDate" : "2023-02-21",
+  "updatedDate" : "2023-02-21"
 }</code></pre>
 </div>
 </div>
@@ -1351,7 +1599,7 @@ Content-Type: application/json
 Content-Length: 195
 
 {
-  "accessToken" : "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY3Njk3ODg4MH0.DzxWO1CrydDemK568fUKxmVOav0y3cH1UptU3ad7mscOlt1exQ2_kBLY2z_7B0WQudp9Bzw0BQtLzKce26cG-Q"
+  "accessToken" : "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY3NzA1MTE4M30.9P0Cp_7Mbp6UEuTqY7ezOXSkcHacnyQCyXOLtHKTjxG5AmIjXy4Fhps1t8eGYUnyZPDtIOFdBtMN0UlxcsGkcA"
 }</code></pre>
 </div>
 </div>
@@ -1381,88 +1629,268 @@ Content-Length: 195
 </table>
 </div>
 <div class="sect2">
-<h3 id="_imageupload"><a class="link" href="#_imageupload">ImageUpload</a></h3>
+<h3 id="_phonesmssuccess"><a class="link" href="#_phonesmssuccess">PhoneSMSSuccess</a></h3>
 <div class="paragraph">
 <p>HttpRequest</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /article/file?category=notice HTTP/1.1
-Content-Type: application/json;charset=UTF-8; boundary=6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /member/cert?phone=01012341234 HTTP/1.1
+Content-Type: application/json;charset=UTF-8
 Accept: */*
-Host: localhost:8080
+Host: localhost:8080</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>QueryParameters</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>phone</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">인증요청 번호</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>HttpResponse</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
+Content-Type: text/plain;charset=UTF-8
+Content-Length: 27
 
---6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
-Content-Disposition: form-data; name=file; filename=test.jpeg
-Content-Type: image/jpeg
+인증문자 발송 완료.</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_phonesmsfail"><a class="link" href="#_phonesmsfail">PhoneSMSFail</a></h3>
+<div class="paragraph">
+<p>HttpRequest</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /member/cert?phone=memberPhone2 HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+Accept: */*
+Host: localhost:8080</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>QueryParameters</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>phone</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">인증요청 번호</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>HttpResponse</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 400 Bad Request
+Content-Type: text/plain;charset=UTF-8
+Content-Length: 23
 
-���� JFIF      �� C 
-
+이미 회원입니다.</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_phonesmschecksuccess"><a class="link" href="#_phonesmschecksuccess">PhoneSMSCheckSuccess</a></h3>
+<div class="paragraph">
+<p>HttpRequest</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">PUT /member/cert?phone=memberPhone4&amp;smscode=7110 HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+Accept: */*
+Host: localhost:8080</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>QueryParameters</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>phone</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">인증요청 번호</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>smscode</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">인증번호</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>HttpResponse</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
+Content-Type: text/plain;charset=UTF-8
+Content-Length: 30
 
-�� C		��  �T" ��              	�� P    !1AQ"a�2q��	#BR�b���$3r��CSc����&amp;4Te��stu������             �� ,     !1AQ"2#3aqB����   ? �����	�� E�mm����6�d_�BP4��F��{����ض�=[p����yIB I;u�=��I0�����J�fi����|�"VU8iN���h�&amp;n0^��"� m H ����S��S*���}rL��i�V�k� cBg��!iC(d�Hp�p/m����go��]S�����\v�Ѕ,	E��U��3�i����e2��p��Aۮ�=�qe�T�Ғ�}�t��U���'��ŗ��I�+Ķ����!�|Z�#�{MHR+�R�ik�t�-�
-�������� �yr�R�/�JKhif�A9�n6�8���?������X�[VPCI�yE{�8�/�jh�u�R��ТAPԤ�,4����k��]	�kq�OXT���n/�&lt;$C5(�Ô;(x��H��C69�:k�ѕ:C ��L���O�&amp;P@��a��
-3k�
-H�5{	�	��2� H�R,.!͝
-돋)��C5$	��m��F��+�����c&gt;z?%�� 8�U)��H����z���)�Ė���	�� !��t�5��TA:��:��˗�e��zE��ob�_k�L��4ks`k����?p=��8��lN� �Fk�� \M���/huŇS?�z*�c��͒��
-! k�B��©y���`�18C]��i}꒖���� �G��Ğ�T�96�Ͳ� �Fa��y���~�O�� �6&gt;�3[A5{ �pڲ�ڰ
-7V�%a��Dx?VY�SL&amp;en6�iW����DO��Ϊ��[��@�;�OV%�Hfe��J� �_�Ffg��F&amp;�(�Φ�����P;�lET���ʬ	�xy���*���'t��o��R�����%7-�q��R�Z��4]��A�B,���r��цAV��yէ(Z���S��8�Ps��HRB��Ȉƻ�)�j!�Ƃ��P�����jK��2$�l5�1����M�-8�N�D��?(!�  �#�	QQ"Pn&lt;ΐ5�(����W����B�Q������Lӌ�����\)6�⻔�v&amp;�R�2h���r]���ˀd�*�s�������*�piϏ����|����+&lt;;�5�J���bM���ӈv�Y�b9^+7{&lt;c�Ve��EAn-�}�l$���;�X�[D�m�;��QiW1�D\ �e�xg��t�'����'	S
-{t%�%&amp;�JI&gt;�4�	�-�6�@�HW~����%�j�z������(2氵��F��sf�l{dZs�^Qg/R;?�Q��S�0��.�/�Bԑ`9�Z6#�|I;�a�c,�mn���dI�5����)��|���^_B��e� �����kRX�V~�ؕ��uOw�ˎ@�sj�8,!�:�"�RL��:B�@��s�C�/�9�r�$ t�[K��i��4�.q{p_	=\�3A��!����R!�]ltb�􍚫X���ިT���e9�~aa(H���+�%8;	L;'�d]�o����ǧX���=��O�����p�C4�Ud��WSI|��d���a�����{�D����}T���]���k5�FuO��x5��۽x��GR�Z��˻0�*�^h��_Q[x}�τӸf�X��Y'�g�Z�i�F{��(~q[���^L���#�-#��R�
-���)?��f�P��u)�`٩t���ɰ�)+��$Gs��h�Id� (��Pb|���?W�nU�ҩz{?VE˄{V���
-��/��P�\��W����,\ᘧ�v&amp;f��4�D�2%���s^�(�4��X͊�^�bRbT���[i�c��90��*�qEF�^���	:k�_�12��9���,}Ʀv���IǒO��CS�̿0䲍�.:���F�F��Z���Z��}R����_�:߄l��7#&gt;��U��,�`��"�'G����!�jE�}��i���U'KK���.}/�(n R��)$�{�G=�\�����c��l%9@����:CǱ{s�y���;0�g�b=hǴ�2nH�&lt;����&lt;	��-E�����ԯ���^v� S�N��+c�rCu���1�����vVg;�%��PF���La��\��ԇ�3�M�92�V㍔�	A ��j�`�W8|L�H��R���dex]&gt;�\����2�[���=7d���q�̶$ǉ�R{��&amp;s3g�PVT��B�����1��re*��N2ܒ�%�p�V�$^22�&amp;���S
-��6׿t������9�L�eҡ�b�O�-":~��	&lt;F�I�_�s��T�Z�������F�K�~��e�N�ڃr���% o+�}�,�M��P����%yC)Ӡ��e��?y%�֪ʬ�ק��KSi��0�iŨ�a[ic�h����ݟ�:��W3/4�t�*i�6G��A_�
-�D������p�KL��f�5f�oH�����坜}��*�x����K���G
-Q��ԙF�k�o�����Ӷ�ǡ$��n#�j���VJL�$!!!��9Z�D�h!�(�Z��l"V�m�0JTm�%l_S���C:��oE�6w���8qN����U�h2��)&gt;�zR9�}������h���P�����b���]"��m���B1�%��H�m�B/m��jӴ^�xX����9đ'"�j?i]r��{b�oH����V�&gt;rb�0����?U����f�9�+Ǯ?�^=b�T�sj��Y46�OA��5�"���|M=[�ι9?6���D��rJG j�M��뜺E�4*�߱u$U~Q߽�;Rk&lt;*������]�R$����A�V��9Ӳ�Ǝ'ˢi��0����RF���[�e0�,�-��B�������u��5|v"��5����	��j�	�)��	�2B��C�"&gt;�v$�j��0�u�.H;$��r���W���Q�T�0�Ri�����D�T�,y򋓲o�&lt;+���Wk�����D�-W	� D[���$���q�NC��:�]���5���S����2�i&amp;B�P\W�1#�&gt;��`6��󧵏dcU�CaZr����� X)lذ⭛7��}b.�7"_ ��^5���p�O�Y*YsS�nЄ���&gt;��s���Z]�CJf�Zy��̒���H��N�'��X�UR��)�l%� �%�~�O� ^։9YM�A�p�c�Z�&gt;J�����q *��� Wjy��:�ٿ��H�d'�)�m��:�l�J�v�����5)��ԨkJRm���u��B��5��]A�KMʸ[[K �h��r�&gt;2�U�Ή�G�ל�q�KM������ӧ�.np�z��)�K�w2�6�!��A761���Px�GE-M;�g ;�i��;7����fV��%��!���9S�Q}�T���^�L�(H�X�-0�g&amp;'��G!?h����b�-���-9��*�Zġ�$�)�y�$G������|X�H�6���e�$���jM�CL��i�@&gt;�؛�b�[UE(�j*�;k��+P++5��'���v� ~?�.�s�` �pt�G�;�/�r�QZ�sy�8w�OS=&lt;A�9�
-�%�7�_�ｬI����.��%&gt;EB(���
-2�JS�~���8nK&gt;bY��8&lt;����伜}�[3��b"zvY�
-�X
-\��&amp;�5 �31r6��� x���I2�'���0��T��Uj{I��G[����IHkW*�`t����W��E�M�C����!.|���!Τ[PZ ��"�kr�bDc|=��M��&lt;"�� @�g� LC�J�@6�hr��C�|q�,�x���*�(�������Ivm��3����boX���6�@���5)#xzD\k�(M� Q��B� �Bm��2��&lt;'Ma�!��]�ZV s���Ӝ6�lD.�/��s��*ˎ���m���[$I&gt;���9&amp;ޑ�񟋔�`�%�:20�b�'��)u1�|Q��Ա=i�8�*CW%-�����[�;E�ƞ#=#N�W�)�3*�|.(�X����qC��R�PW�+���N�Z�i����D��Se�F�o�K��)� U��JVs�K)*���R�!N:����TI��:Z��|qJ�&gt;Y�bR���/��@&gt;�/&gt;̝��0.&amp;�����&amp;&amp;%Oy- �Δ��J&lt;Ȋ��խ�[W�t���w�P�\�E&gt;M����$MO���P�� �.�	���{jH��jٻ&amp;�ͅpU�E
-GX[i�����8�u�47�h (����C\u,����	R����;��X�kk6ܵ&lt;�U��p�ϻG;u0��胗5��rGk�Ǉ��'aD!�@�S3+p�̎Gm�� v��u|Y\�s�nd���%;DG�8����X�q�y*��ͬs��������F���'����CV)
-��i-�Rf�.��u�O���C���F�Gu0�[n�F�XR��u��ȯM;J��*�_��9$��`m����(�*�� �n$T��d���Tˠ���z5|Ft�JS2ܮaF�^�aj�ed���!�nt�ԠVj�zA�=Xi��4��bK�XL��h�[H`7���⛀zB��G�9#S�B�&gt;p
-&amp;[�D5C��
-�q��aD���B(��[�Aй�E���\�m�9P7�I0BGb'm�= ��Q3�e����!$�L*�4�sm4�[�С@ �7�}�P��.F��H;G69�\Ð�maz�7�Щ�ؖW��W�@���p���d�J�}%��)�6R�v��~e�)Wf_p4�(.8�hF�&gt;)v���h�En�+�0�+"��K($=���#[g�&amp;�V�-�@�����⍇�R\��M��wЫS�5���K���5L�Ƞ"VB]� rJ@�������ɯ�Z{̵�R�.�ʈ��G�NcK,7���6�ID�*����3�0��S0�(T���;�R��θz����Jp�9
-i�5S�Wu'(�i�ރrzF;`aO�5�Q�OÂ��&gt;�x�^�~��0V��t�{�ғ��O�8=/6��5ɧ���G�E�u��'��a|��u�U��I0�Q�����yhG�38W
-��ʧV�?��Y����ces�G�鉩d�)?g]��]cN�#U4��COXT���[�%��v���(�u)}�l//4�i&gt;`�zF@�-��++i�J&lt;��?�5�F���sכ��Sr�lLT�I���ȫR|�m��fBU�yv��-$%H� F���3Bz��m3ZyS���ڏ�'� |LnP��~�xXT�٫c��I(�̲��Z�=��t!c�}�V�~hb�Q1?pY����^u�m�ϲu&gt;ಅ{�_6��\Wp�f�w:�f���y��2�@�y����MŻ�3Dl��Z��@lM�3 G��=�!V�^9�#4��x���M�N��k�Udɽ�:��Ԛ�=�YĔ�;H�lNO!%�y�O�Cmǣ.lI��Q�"篢���� �@���A����Чæ�	���v��!�Q��ju�N���n䁰� t�nP��N���$j�k�F�@(!�R@�Bl~��d�l!�&amp;��_�=��F����(Q&amp;[����"Ѕ�A0e9D9&gt;� �^���45�"U�la� n8\�% ����}�x��p�ܻ�*��~�� ��.+�#�J�w&amp;;�2�W�7d0�)A�iB�"O�XG(`�8�/��z$�*z�4Բ@��UdY١į��'Ԟ�&lt;:����Z��k$���"�l���:JJ���	Q&amp;�q�R�Q$)r�	���nY�9%		�`x�6�0ѐ�%3U7ېA�8l���0�K䱳�h��RG��q=Zo�x�Z��1
-�)9K��O�Ѻ�zG��Of�#/'.��yv��i� =$X�	W�H!�M��^�ۊ��:��
-�*��q�R���L��#s��Z��[
-��ΟBmH��1澑�%�R4�1�pt�\Л����������l_$�reA���$2�D�b\����D(g�c�L��آ�MAM�L&gt;���t�Q��-�gܦ��M2J]n�0P����o�y��\O��hgfr��RӨQm��5�&lt;��q|,p���c�&gt;�'�DV����͊�"�:�O�i9[b]��:��G�&lt;3S���R禞C��޸��Jm�ph�
-��bf��
-$i�٨)�t��&gt;�gt����gл_��#��?��)�ͧN:���v����ݔ{aKq���כfC����DL���_�l²��%9��/t�j\BQ�\{Tڣ+6ܶ��X�9H�o~��̻SL��m.���P�C��,�����0���񄡖�H58��Rǉ&gt;`�#6X=ЪR��^��F-jKh�,g����)�r�����:�,?�Lk��H��m�VmcE�� ����Pb��Nrc��&amp;���vE��W��FӉ����1��m+F��(�	���lmh����m��Im����ˉH�I��#$�F�.���jb �W�|�G�CR�@%SL�pC��'Ru�-��2��	M�츿�Q9�)��UB\��o��j��G8rA)�M��%��7]F\o���
-2HH��o���h4f�`y�c���� �G\R&lt;�);���1�oFm ����n�ɷ�A�ѝA���Ɣن��[�F�+�A	���l  ����!��c9��
-���4$�bkk���N_t &lt;Ds��](\�7�X��B�t�8'��1x���:4�N��m����ԵrHɆ��{�4�힩��zt��gD����ʑ�&amp;+�$�Ò�j�Q��L��wl�U��k��&amp;V�Sԥ&amp;�@���7)YF��Kl6�[H�Ci�g�yUS�l��8��Ϛ�[���!cZ�0~��ߩL�1�d̥KBI��Z"�����IV1��HD�n�3����\	ʐ�lN���`ۭ��1��?�*^}���4V�I���$�%��Xq��ӏё�ڋ��1� �����Y�ʊ��R�4����$�C�أU��²�O���k��=Ү7��$�EWL��*%}��}b�-y6�Y&amp;�Hڀ�&amp;���J�&amp;����_���]Ƅ�S�3��Υ5���I;�n�A"'�ԧ_��uo�&gt;��Y�T�u7���I��.*R0�p�:m9.�w� H�*'�o�q�D .N��K�R�&lt;�ِ�s��}	���\¥�6��(�cT��;��_E�[��:G�@p�'[5(�Y���Q$�rw�{#*b)O��ԭ.`˦p �� ���ޑf��eN��F�qm�)�2����z�Q���Jճ&lt;����J�)��&amp;z���	��X蕤��q����I�G��ٙ�W{��v�I%*&gt;��(���WoF��e+G} �R��9�`y��ښ��B���le�����|�Vnw1�H-mگhI�g{�)&amp;l�9���A���)�ќR��ҳBE��55k�m���:�p�kO�f��v\��*O��e�)��x��[���'$�6�c���Cv��I��P�h�Vު�UeEh�HB�k�9�1__tO���[�$ϸ4�,���1�T��|��DYC�@��A�����S�e���sS2ɿ$��� �:$��1���g�R��`�m �#�ľ��u��қZBФ���\t7!�k§��#I�3�g�7E��Y�9�U��R&amp;b��x@mc�g�q�1��	l�T��7LY�怪��C&amp;�Ҷ��P�:�����5�MU�L��?پ�\�Bw���=#�������g�b�{&gt;X.��5�L,�3�;E^d�&amp;k�XQ�	�	,I�� ����6$��W?H�x#'��tp���r~�%c��U�i!� ��3�Q��HE(X[C�&amp;a���?DI�v��Q!���SL� mfS�eJ��A����1A��4
-cd�ʡgu����&lt;�i9d���l(��5��a|S��F�.�H	CM�=��_&lt;��AA���&amp;�hWR�����,�����O�7W�'�V��Z�%��t�*����Y����B_e��u�[Gi���)N����;b`*꒙�(���(�nhr�f��(8���&amp;�'&lt;���ԓ�㲒dSd=�2@�x�u�fI��}F������R3\_x�f�F=�sSn�Gyr�R��6q�&lt;��=cv�U}�+��S�����\PB-�}#[��Vp�F��
-D�IA_�W�Q�&amp;��(�&lt;�Mz^٬�pն|��2#�4��{Am�#M���=	N�B��.k�����1��;5�c�o]	]��ځ*� ���B�e�[1��m�B��A��(�_HjT� A)6#�&amp;� ��/~�zs�}���$�MR喅[C�����S.���2/�G�O�?��ӱ�1���)��$]JaZ���q�b��5V)֑��*p���t� �@��[�lP���(Ը�.J4�_k�#�'f���vba�&gt;�S�8�̥rI&lt;�EK˹6�l���(%(H�$�Y&gt;��X�&amp;��F�~w����PD�&gt;����V,&gt;	T}����m�p~U͆��U�١k�x}���)7$��+�o���*�*V��.��
-��&gt;.qM��? ˍ�m���a�g&gt;�u~���GH�buǥ�*�_')I ��h����^ ���{�2��G����u���4�\SkIB�l��Ϥ\�\�Z�ٜ�)p��貸��v����G���wR��6�/�ZX[�I:��ٟ��O�X�Z\4����K��JO�%���m�b�m�*�VIEB;a��1���eO)��!+_����/�H�Q�R�*T�&gt;M�Ԭ�He���JR �:FB���l�S���Aba
-u�`�[X� ����:�q�Z�n���
-ZJ^f�����V����QQO�/��0"��|�e�e~�~�,����RC�� ���=ά����&gt;f�v+h�3�W�H3t����_�=��j���s�j��0m���=o-�q�I6�yW�,y^ aɢ���,�+`ⲟ�f�JM�Y�a��#�7��4���Ƕ���&amp;�&amp;t�ݫ�A��C�z#�n.o �����ܬ�=ar�9�6�P��I�A�e2U��&gt;�#�	���ߌ�Sp���ě�^� bFH*fJe [b��l��� ���a������	&amp;��� �Zh��Ny�~���A��;�ѪG�s����f���M�Lw4�=�ԩ����U DiU��z����K�~��xF���������� �u�d�j~��\�˲���YA�E�X���Z��U.������4
-�	q]��-SC���?�T�&amp;�����.��N�;�pz��Zrm�.���@�:��]C����3�(�%'3�nX�?	�A}��:[�ml9�\II�� ��#��A�A,:.�����+j�Du�y���0�,R�Т���,k� Ў@�c ���o��%)?�v�����@M���#k�zf���4U��J�5�����*oA��^�f��5Z�  �@	� ��&amp;�Z�
-x�uȰgVr6�ģYU
-[�˨�f�TV�?�hk.j}�鄔���[&lt;�3�*KL�ԦB�.mR�B�IE-��)Q/S�K�ݜeb�):X�����bz��G�[�+?�H?~�&amp;���9f%���8����e=?��H}BX!^'�q_�gs*�uVD�Ʀ�����Gߘ(rn��w�e÷[GFp���}E��"y5��^&amp;�Sf[WP9�TAg�l֛+������hY6��XC���oX[���[��,Dq	u�!iJ�'PDs'���$Tݪ�\{TVgD��g/(�̣{�GJ�Oq9YTmZ�8�}8rF�ӵlC5?.��[NL�D�X`^PxoDj����HJ  B�g��38-�E���W�U_�
-E���qG~� I����B�_H K��ւ / V|x���*m:J�F�{,��b,ͣE�cy�g[wc,�M�q*� �%b����r��L��c`�!.}�+���q����h&gt;v�m�^PL�٭6���!���&amp;��� ��c��CҢ���t�P�������#c�����"@S5Q&lt;�u���$��Ms�4)a'ö�k��h
-P'CxrE��� V��9�8�E��D�yX��"E��)�FmN�Ɠ^�=g	R+)�=M��� � _��o����4�ߦ��`[^d�Z�$��hE\�km��U���+Ȳ�iݜ�}1Üm[�~m3���6�nc�x���t2M��UAX��=Ő1-5,���p�TZ�BDyO;B�����R��w�����: ���������B�;B��8OHXP$Ǥ!H�$:�8o���D�*M���@�*�x-h ,a�_X�����X]:�*� ���`�@�;i�
-ZKt�=������6�ͨ_�iD|���A�ѧq}��1I����l�h�&gt;j��� �?�q��Raej*Q�:�y�
-�HW��rQ�hc�i� \O�� )/�#]ʓm�d���t� �H����!�څH�z`c� �s�����Ӗ�խW�@�@A�hT5�!� �2.��`��o�^�o�0�+�x��9�I����1�x��m�G&lt;��D5H�X�j)�a�/np�o�LO2i��O�SmM(�m�+��T��]�7H�
-[����/�#���$�E�K-&amp;]�u:"��˜Ts�|8�����r��,�O��kB|(]��8����r�nK����N�\��p��N��&amp;�����`-��CaF�(X�M�@N��hHpA �Q���� ���7 �A ��@ � `t�A �!� 7�����	L����vl�HXZ�H?���eQ3�ƉI
-̙)w'�GB�G�,�E�n��@�,Uc�F���o���t�������U�(�h-E#���؅'Ku����ckl5����й�=Т�S�	!��=��A�@��`��ĝ4��� )�-��kA��e)%7�C˕@_h
-s$��X7�{8�P77ˤL����$��do0��v
-Ŭ4����M�bn�m P���W���K$�s0�	iJ�.n^zZ�Gq,U��'D&gt;��B�� �g��u6�Br��_\����:&amp;�k�8��T&amp;Z�Γ2��4��:٭bE��o	�V�L�.�N��&gt;�vUYV&lt;�Q�Jq�D%��9�O&amp;���=�����1�&lt;�m-ʟG��s�ڔm�-��|e��o
-W��L���6�Wq��)�(���pӅ?f�Nh-�|���QC�ȓ׎��r�[��u��i)̥0��=3|��3$J��ik��9��`²Iz^����t��)�)�WP�	�"���$�阐�jr]_}���D����"Uw�jN�A�j9|c�� ��x �j $��8�&amp; .&lt;�,z@ 5@�!����
-E�����e����Pz ���A� "�CM�ū*P
-�O 7�]z��ۉ+����Ͽ���e���6R�z-�2b7S!)���ک[QmE��}���W�i���/��ۖrU)Hm=˥6A_��nsw���s��1TE�5�^��v����c71�6П�y�r�E+1Wx]l��U�|^�}��#���cҐ�������8�Qz��́ͧH���I�3G�H������{&amp;䞰��M���	�K���1,G��H�f�!0&lt;3M��~p�HF��@�À%$u�Y)]�T&lt;��r|I�-�v ���PC�k�A����O!}D#j'R!V����3G1]��&amp;���k�� ��Î��5���kc\7$s�	F��7�^^�&lt;� 0	� �O�^V���}����'b���_h�`~W���)���Z�2F}��r���%
-��v��Q����g��x?�� ���Q&lt;���+ğ�&amp;�5joe���ʃ�Jˇ���ԟ��U�8��\����Ƃ��U�y�o8H�;&amp;��4c�@�"T�
-t��P��')�"��u��;a��ҧ���µ5����Я�7옵`��e���жu����p��PQvY�eNo�$��M����USx�D�xK̼�v�2�6̺��C�c�-��1��+GĲ嚭6Z}�=����aBOq.i�m���W(q.�:��&amp;��B�[s�|�g�\����O��o�6˝����#R�c�,l�"SK'w��w[� ��&gt;q]f��t�ϩtg��6�4���I�p5Vb~���SQ�R�����'?+Sh=)2��d{L�(|����ZB�O��h[���Ox�y�9&gt;��|�Sl&gt;��m��u��T�x���~�1�h�my�YM�q󊕋��
-�KT�X���\+'2�b6��j��`�&gt;�^+N�+��K�K"q�t�X�1e�)�P���om7�m
-�CCl|��Ah &amp;�B�A��zKQ檕�2��+Z���u&gt;Q-Z�'B�=?&gt;�ed�Nu��k�b���N�f��Ba�$���ʸ,����X����Þe�)tV��W�)&gt;�6ŬT��ؖ��$�s���̨}^]'��6����ŌAO�7jq����{�ER��!ē�8�Ma�L�n��ʯ�6�_��X���'ɽ����C�I*I
-������U{�0���ݥ�3$�@���m��+V��S&gt;@&gt;�2���&amp;oDm#&lt;�d��k�F� M�k��!Mbid IO�`�6c�k�FV~�Ap��gaа}!6���3je�e ,��/9�3J�Mߧ�8�}KB� �~�H��	�&amp;���6�����L���A�O�*�~pt�&lt;pʄ�̙?���ae6��d��Z�8�䒼�����kn�q�SxU$!�9�!6��_�U�rVAO,���9M�����=	�c����m�(M����
-�˔I���jT"�Q�$$�
-4I���t'_�e��a��q@$k!6p�D�(���H��E���	�*��L��_ b��#]�0���s�l�j��L�=p�c��T��3§�.X� �Lf���K,O�j�@����f �P4�b�'8��12��v�?/$��Ϻ��a_]���"��"�-��]=����]��4�y�7)���B��lJ�r�R��I�˩Q�G%d$���87�2��Z�JjjY����l(H�+\��g��ȹG�&amp;��k�`߭���,`�aohs�Z�#d��Q���x��_{	�sYy��7O�4�!�b=b��qW)�d�(&amp;�/�Ĥ��'�%V�9�x�Xֱh����������
-(uAC[DY��}������������B���g���p��OS�B�,ɸ�����xv�\~�C��g�+~�4��y�I��R�.&lt;������BL��D���T��f��R�N������$��S�Ҋؓ
-@��'���;!x��*�o�Q��+���)�_����_J���uF�jC�_VBV�
-yeI �ߖS���7�&gt;��7"˙�йU�)w
-?(�H��Ɵ�*����t���e�z� K�W�3��m�	Q���K��5�8���R8�bZz^m�G�\�k �WI�)�,f{&gt;��	|}V�l�ܢ/P#�xr�SG���׋l���G�r�+Nh�74Ĳ�O8&gt;f+lQ��Jq�:$��$�L��.ܛG�R�'W���H�i��U=Irf��b`j�&lt;����H�qڃ%'�(��bU�JܡHi���Y( [k�O��Nk͔���� (�hU�{&lt;�O���iAR�Iu}�G�� �F�	i!6��-*��:n@�P�ë�&lt;��2f�6P��Z�� �W�)��H�.��.�
-(z\�p9�e h�^ۜ5�=#A��k�#��ys:¡dN�©7�� Bi	�-��D�2�v����%��7[`�AI���U� ��hG���]�HSd�����uH�h�8JbY�$���[����E�Sspo��.��ѯ�O�L'(����:��&amp;�F�A�m��  ��e^ck�@�P����0b���m{\�c�(Dj��l�;^�o�� M�\��&amp;�V0)WM�ÂE��CV3+A&amp;�h�I�����f:#�M��i��wM2X�Ls�j�Ϟ����Hp�����-=���1��=D���6 ��xZbag���vi���)��VM���������&amp;2rP[��qg�sTʑ�8]M9X)��:�$�5yEA��/;6�ʫ��g�s-��
-�����e��d��,�6�����7S�J��.����&lt;�����ޒ1�ӶmA�2i2!&amp;�;���9&amp;&amp;�?��΍Q1$�ڒz�hc6w���ɺ�K��9E�3v���2�������М�x�K����X��x���)�܊�fʡ�P&gt;$����A�����c�EIT՚�IX��W�����M��x��&lt;��� �Ѱ�s�G����9yBƏ�(Ip���f{5n�RX�e ~q���V٣��_5]k�T����L�p=g-Fyʃ�?�y�䥝��*6�B�ʄ��D�	��Jr�T{�59����Q�&lt;���=�-���KK���&gt;&lt;V"��󗱉�8������+tn��:#��x�b�KDR��i�����P������7����)b�jXj^m�S�Q�Χ��J@��Є�R�6"5�}�Uk�|�������]&gt;��Ei�����-V�oy�i?�,�m�hf��6t^�*r���������V{k���P��A �v�E��"���BH�%���I�Xx�zÛ�yBfX�[D���Zǜ � ��#hU�H��h �թ���������U���0ՐH�R7S���� f&gt;p��k�&lt; �X e����A��0�H�Q���o M�M�h-bH������&amp; &lt; �B�m������ 2�/��&amp;��ō�l��C�E
-�o��{����j0�#a$���x�wXZ��d�$�_��T�g���5�:�emy�����q���0� �a��ݠ�� 1��'��9׋U�����`I�Ì%��Fi�gޖ���O������g�M��vt�|��H��p�n?eG+k�;׶L  Xa �x#�=����� � �^ �����5�^U���NNkK֘rQ�y��K��}���{G�b`�Wp���b�"��;�|�1c���":'�I�&amp;::�bc�{[��u�������WD�̴:���Ry���u�7��܁h�)C䏋=O*XwF�-��-&amp;�ӝ,϶�=�&amp;�Sv��D�L��s4�OT(�[^��&lt;N��$��q0�W���1c^WV㲴����߼�&gt;��?��),�Ş��� ���}�f�����������A^�o��f��x=��O���&gt;���)�54��sHA��TDC�����^?/���:i�X32�L̪�4ʯbڂ�G�D}0�U�1�U�U��囘J�����0)x�J�0�s-�Ы)�&amp;��/�we�Õ����7T�v��6���N㼢�Y��{��¬���n�&gt;�^E��W��$)(�h��d8`��q(�*4�ј��3�X~q����|5��_��w�G�����IU)�5_�Y"�U��7�m����/����5�ˮez��06:ăut��� 1赿��o}�&lt;) �n-	���^���ׇ���N�h�DXz����5�h �`G8x�X5��S 	� �/R@HL�)0 �"�C�Z����o�h� ?��
---6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm--</code></pre>
+인증 완료 되었습니다.</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_phonesmscheckfail"><a class="link" href="#_phonesmscheckfail">PhoneSMSCheckFail</a></h3>
+<div class="paragraph">
+<p>HttpRequest</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">PUT /member/cert?phone=01010101&amp;smscode=0000 HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+Accept: */*
+Host: localhost:8080</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>QueryParameters</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>phone</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">인증요청 번호</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>smscode</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">인증번호</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>HttpResponse</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 404 Not Found
+Content-Type: text/plain;charset=UTF-8
+Content-Length: 42
+
+휴대폰 인증을 다시 요청하세요</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_phonesmscheckfail_2"><a class="link" href="#_phonesmscheckfail_2">PhoneSMSCheckFail</a></h3>
+<div class="paragraph">
+<p>HttpRequest</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">PUT /member/cert?phone=memberPhone3&amp;smscode=0000 HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+Accept: */*
+Host: localhost:8080</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>QueryParameters</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>phone</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">인증요청 번호</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>smscode</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">인증번호</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>HttpResponse</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 400 Bad Request
+Content-Type: text/plain;charset=UTF-8
+Content-Length: 42
+
+인증번호가 일치하지 않습니다.</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_article"><a class="link" href="#_article">Article</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_imageupload"><a class="link" href="#_imageupload">ImageUpload</a></h3>
+<div class="paragraph">
+<p>HttpieRequest</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">$ http --multipart POST 'http://localhost:8080/article/file?category=notice' \
+    'Content-Type:image/jpeg;charset=utf-8' \
+    'Accept:application/json' \
+    'file'@'test.jpeg'</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1497,9 +1925,9 @@ Content-Length: 403
 
 [ {
   "fileName" : "test.jpeg",
-  "customFileName" : "notice/2e082320-22a1-4ac2-81d7-9c2c83ccb607.jpeg_1676870870512.jpeg",
-  "url" : "https://jkboston.s3.ap-northeast-2.amazonaws.com/notice/2e082320-22a1-4ac2-81d7-9c2c83ccb607.jpeg_1676870870512.jpeg",
-  "thumbnailImageUrl" : "https://jkboston.s3.ap-northeast-2.amazonaws.com/thumbnail/f1906e0c-3cb7-41bc-a335-1a362c3fedb2.jpeg_1676870870586.jpeg"
+  "customFileName" : "notice/ac22922e-ce5f-4a9b-82a3-61816565d669.jpeg_1676964794373.jpeg",
+  "url" : "https://jkboston.s3.ap-northeast-2.amazonaws.com/notice/ac22922e-ce5f-4a9b-82a3-61816565d669.jpeg_1676964794373.jpeg",
+  "thumbnailImageUrl" : "https://jkboston.s3.ap-northeast-2.amazonaws.com/thumbnail/7db09c36-6150-4356-8c54-18846b86ae02.jpeg_1676964794459.jpeg"
 } ]</code></pre>
 </div>
 </div>
@@ -1595,8 +2023,8 @@ Content-Length: 251
 
 [ {
   "fileName" : "test.txt",
-  "customFileName" : "notice/2bfcc699-3d8c-4c54-b0d8-30526908cc6b.txt_1676870869963.txt",
-  "url" : "https://jkboston.s3.ap-northeast-2.amazonaws.com/notice/2bfcc699-3d8c-4c54-b0d8-30526908cc6b.txt_1676870869963.txt"
+  "customFileName" : "notice/653a727d-1070-4b0d-9ed7-261578400502.txt_1676964793788.txt",
+  "url" : "https://jkboston.s3.ap-northeast-2.amazonaws.com/notice/653a727d-1070-4b0d-9ed7-261578400502.txt_1676964793788.txt"
 } ]</code></pre>
 </div>
 </div>
@@ -2082,7 +2510,7 @@ Content-Length: 276
   "title" : "테스트 제목2",
   "name" : "momo",
   "content" : "테스트 내용2",
-  "createdDate" : "2023-02-20",
+  "createdDate" : "2023-02-21",
   "uploadFileList" : [ {
     "id" : 1,
     "fileName" : "test2",
@@ -2267,17 +2695,32 @@ Content-Length: 17
 </div>
 </div>
 </div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_reservation"><a class="link" href="#_reservation">Reservation</a></h2>
+<div class="sectionbody">
 <div class="sect2">
-<h3 id="_phonesmssuccess"><a class="link" href="#_phonesmssuccess">PhoneSMSSuccess</a></h3>
+<h3 id="_testreservation"><a class="link" href="#_testreservation">TestReservation</a></h3>
 <div class="paragraph">
 <p>HttpRequest</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /member/cert?phone=01012341234 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /reservation HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Accept: */*
-Host: localhost:8080</code></pre>
+Content-Length: 172
+Host: localhost:8080
+
+{
+  "day" : 1607698800000,
+  "name" : "준모",
+  "school" : "준모초등학교",
+  "grade" : "13학년",
+  "phone" : "01091097122",
+  "relationship" : "아무도모름"
+}</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2285,19 +2728,47 @@ Host: localhost:8080</code></pre>
 </div>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
-<col style="width: 50%;">
-<col style="width: 50%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
 </colgroup>
 <thead>
 <tr>
-<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
 <th class="tableblock halign-left valign-top">Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>day</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">예약 날짜</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">이름</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>school</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">다니는 학교</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grade</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">학년</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>phone</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">인증요청 번호</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">휴대번호</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>relationship</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">예약자와의 관계</p></td>
 </tr>
 </tbody>
 </table>
@@ -2308,209 +2779,9 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: text/plain;charset=UTF-8
-Content-Length: 27
+Content-Length: 23
 
-인증문자 발송 완료.</code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_phonesmsfail"><a class="link" href="#_phonesmsfail">PhoneSMSFail</a></h3>
-<div class="paragraph">
-<p>HttpRequest</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /member/cert?phone=memberPhone2 HTTP/1.1
-Content-Type: application/json;charset=UTF-8
-Accept: */*
-Host: localhost:8080</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>QueryParameters</p>
-</div>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 50%;">
-<col style="width: 50%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Parameter</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>phone</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">인증요청 번호</p></td>
-</tr>
-</tbody>
-</table>
-<div class="paragraph">
-<p>HttpResponse</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 400 Bad Request
-Content-Type: text/plain;charset=UTF-8
-Content-Length: 37
-
-이미 가입된 아이디 입니다.</code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_phonesmschecksuccess"><a class="link" href="#_phonesmschecksuccess">PhoneSMSCheckSuccess</a></h3>
-<div class="paragraph">
-<p>HttpRequest</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">PUT /member/cert?phone=memberPhone4&amp;smscode=8094 HTTP/1.1
-Content-Type: application/json;charset=UTF-8
-Accept: */*
-Host: localhost:8080</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>QueryParameters</p>
-</div>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 50%;">
-<col style="width: 50%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Parameter</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>phone</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">인증요청 번호</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>smscode</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">인증번호</p></td>
-</tr>
-</tbody>
-</table>
-<div class="paragraph">
-<p>HttpResponse</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
-Content-Type: text/plain;charset=UTF-8
-Content-Length: 30
-
-인증 완료 되었습니다.</code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_phonesmscheckfail"><a class="link" href="#_phonesmscheckfail">PhoneSMSCheckFail</a></h3>
-<div class="paragraph">
-<p>HttpRequest</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">PUT /member/cert?phone=01010101&amp;smscode=0000 HTTP/1.1
-Content-Type: application/json;charset=UTF-8
-Accept: */*
-Host: localhost:8080</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>QueryParameters</p>
-</div>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 50%;">
-<col style="width: 50%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Parameter</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>phone</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">인증요청 번호</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>smscode</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">인증번호</p></td>
-</tr>
-</tbody>
-</table>
-<div class="paragraph">
-<p>HttpResponse</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 404 Not Found
-Content-Type: text/plain;charset=UTF-8
-Content-Length: 42
-
-휴대폰 인증을 다시 요청하세요</code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_phonesmscheckfail_2"><a class="link" href="#_phonesmscheckfail_2">PhoneSMSCheckFail</a></h3>
-<div class="paragraph">
-<p>HttpRequest</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">PUT /member/cert?phone=memberPhone3&amp;smscode=0000 HTTP/1.1
-Content-Type: application/json;charset=UTF-8
-Accept: */*
-Host: localhost:8080</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>QueryParameters</p>
-</div>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 50%;">
-<col style="width: 50%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Parameter</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>phone</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">인증요청 번호</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>smscode</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">인증번호</p></td>
-</tr>
-</tbody>
-</table>
-<div class="paragraph">
-<p>HttpResponse</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 400 Bad Request
-Content-Type: text/plain;charset=UTF-8
-Content-Length: 42
-
-인증번호가 일치하지 않습니다.</code></pre>
+예약 되었습니다.</code></pre>
 </div>
 </div>
 </div>
@@ -2520,7 +2791,7 @@ Content-Length: 42
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2023-02-17 15:59:39 +0900
+Last updated 2023-02-21 16:32:56 +0900
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">

@@ -18,6 +18,8 @@ public class MemberRequestDTO {
 
     private String phone;
 
+    private String newPassword;
+
 
     public UsernamePasswordAuthenticationToken toAuthentication() {
         return new UsernamePasswordAuthenticationToken(loginId, password);
