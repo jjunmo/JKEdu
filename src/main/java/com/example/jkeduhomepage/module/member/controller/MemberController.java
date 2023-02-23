@@ -1,5 +1,6 @@
 package com.example.jkeduhomepage.module.member.controller;
 
+import com.example.jkeduhomepage.module.common.enums.Role;
 import com.example.jkeduhomepage.module.member.dto.MemberRequestDTO;
 import com.example.jkeduhomepage.module.member.dto.MemberResponseDTO;
 import com.example.jkeduhomepage.module.member.dto.MemberUpdateDTO;
@@ -9,6 +10,8 @@ import com.example.jkeduhomepage.module.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.nurigo.java_sdk.exceptions.CoolsmsException;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -136,7 +139,7 @@ public class MemberController {
         Optional<Member> memberOptional=memberService.getMember(id);
 
         if(memberOptional.isEmpty())
-            return new ResponseEntity<>("얘는 누구냐",HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("조회에 실패했습니다.",HttpStatus.BAD_REQUEST);
 
         Member member=memberOptional.get();
 
@@ -167,11 +170,43 @@ public class MemberController {
      * @return 회원가입 멤버 리스트
      */
     @GetMapping("/management")
-    public HttpEntity<Collection<MemberResponseDTO>> memberList(){
+    public HttpEntity<Object> memberList(){
+
+        Member member=memberService.isMemberCurrent();
+
+        if(!member.getRole().equals(Role.ROLE_ADMIN)) return new ResponseEntity<>("잘못된 접근",HttpStatus.FORBIDDEN);
+
         List<Member> memberList = memberService.allList();
 
-        return new ResponseEntity<>(listMember(memberList),HttpStatus.OK);
+        return ResponseEntity.ok(listMember(memberList));
     }
+
+    @GetMapping("/approval")
+    public HttpEntity<Object> memberApprovalList(@PageableDefault Pageable pageable){
+
+        Member member=memberService.isMemberCurrent();
+
+        if(!member.getRole().equals(Role.ROLE_ADMIN)) return new ResponseEntity<>("잘못된 접근",HttpStatus.FORBIDDEN);
+
+        return ResponseEntity.ok(memberService.approvalList(pageable));
+    }
+
+    @PostMapping("/approval/{id}")
+    public HttpEntity<Object> memberApproval(@PathVariable Long id){
+
+        Member member=memberService.isMemberCurrent();
+
+        if(!member.getRole().equals(Role.ROLE_ADMIN)) return new ResponseEntity<>("잘못된 접근",HttpStatus.FORBIDDEN);
+
+        String result =memberService.approvalMember(id);
+
+        if(result.equals("OK")) return ResponseEntity.ok("회원가입을 승인하였습니다.");
+
+        else return ResponseEntity.badRequest().body("운영자에게 문의하세요.");
+
+    }
+
+
 
     /**
      * 휴대폰 인증

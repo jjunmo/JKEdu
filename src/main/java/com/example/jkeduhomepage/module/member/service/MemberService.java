@@ -7,9 +7,7 @@ import com.example.jkeduhomepage.module.common.enums.Status;
 import com.example.jkeduhomepage.module.common.enums.YN;
 import com.example.jkeduhomepage.module.config.SecurityUtil;
 import com.example.jkeduhomepage.module.jwt.TokenProvider;
-import com.example.jkeduhomepage.module.member.dto.MemberRequestDTO;
-import com.example.jkeduhomepage.module.member.dto.MemberReservationDTO;
-import com.example.jkeduhomepage.module.member.dto.MemberUpdateDTO;
+import com.example.jkeduhomepage.module.member.dto.*;
 import com.example.jkeduhomepage.module.member.entity.Member;
 import com.example.jkeduhomepage.module.member.entity.MemberPhoneAuth;
 import com.example.jkeduhomepage.module.member.repository.MemberPhoneAuthRepository;
@@ -19,6 +17,8 @@ import lombok.extern.slf4j.Slf4j;
 import net.nurigo.java_sdk.api.Message;
 import net.nurigo.java_sdk.exceptions.CoolsmsException;
 import org.json.simple.JSONObject;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -78,9 +78,7 @@ public class MemberService {
             member.setMemberPhoneAuth(memberPhoneAuthOptional.get());
             memberRepository.save(member);
             return "YES";
-        } else
-
-            return null;
+        } else return null;
     }
     @Transactional
     public Object login(MemberRequestDTO memberRequestDTO){
@@ -97,7 +95,7 @@ public class MemberService {
             Authentication authentication = managerBuilder.getObject().authenticate(authenticationToken);
 
 
-           return tokenProvider.generateTokenDto(authentication);
+           return tokenProvider.generateTokenDto(authentication,member.getName());
 
     }
 
@@ -123,6 +121,27 @@ public class MemberService {
     public List<Member> allList(){
         return memberRepository.findAll();
     }
+
+    public MemberPageResponseDTO approvalList(Pageable pageable){
+        Slice<MemberResponseDTO> memberResponseDTOSlice=memberRepository.findByStatusOrderByIdDesc(Status.RED,pageable).map(MemberResponseDTO::approval);
+
+        return MemberPageResponseDTO.getPage(memberResponseDTOSlice.hasNext(),memberResponseDTOSlice.getContent());
+    }
+
+
+    @Transactional
+    public String approvalMember(Long id){
+            Optional<Member> memberOptional=memberRepository.findById(id);
+            if(memberOptional.isPresent()){
+                Member member = memberOptional.get();
+                member.setStatus(Status.GREEN);
+                memberRepository.save(member);
+                return "OK";
+            }
+
+            return null;
+    }
+
 
     @Transactional
     public MemberPhoneAuth certifiedPhone(String phone) throws CoolsmsException {
@@ -189,7 +208,7 @@ public class MemberService {
 
         // 4 params(to, from, type, text) are mandatory. must be filled
         HashMap<String, String> params = new HashMap<>();
-        params.put("to", "010-9109-7122");    // 수신전화번호
+        params.put("to", "010-9109-7122");    // 수신전화번호 01089488846
         params.put("from", "051-747-1788");    // 발신전화번호. 테스트시에는 발신,수신 둘다 본인 번호로 하면 됨
         params.put("type", "SMS");
         params.put("subject","입학 테스트 신청");
@@ -197,10 +216,10 @@ public class MemberService {
 //                "입학 테스트 신청"+"\n" +
                         "테스트 날짜 : "+ localDate.toString() + "\n" +
                         "학생이름 : "+ memberReservationDTO.getName() +"\n" +
-                        "학교 : "+ memberReservationDTO.getSchool() +"\n" +
-                        "학년 : "+memberReservationDTO.getGrade()+ "\n" +
-                        "전화번호 : "+memberReservationDTO.getPhone()+"\n" +
-                        "예약자 관계 : "+ memberReservationDTO.getRelationship());
+//                        "학교 : "+ memberReservationDTO.getSchool() +"\n" +
+//                        "학년 : "+memberReservationDTO.getGrade()+ "\n" +
+                        "전화번호 : "+memberReservationDTO.getPhone()+"\n");
+//                        "예약자 관계 : "+ memberReservationDTO.getRelationship());
         params.put("app_version", "test app 1.2"); // application name and version
 
 

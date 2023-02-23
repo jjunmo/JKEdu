@@ -1,6 +1,7 @@
 package com.example.jkeduhomepage.module.member.controller;
 
 import com.example.jkeduhomepage.module.common.enums.Role;
+import com.example.jkeduhomepage.module.common.enums.Status;
 import com.example.jkeduhomepage.module.member.dto.MemberRequestDTO;
 import com.example.jkeduhomepage.module.member.dto.MemberUpdateDTO;
 import com.example.jkeduhomepage.module.member.entity.Member;
@@ -56,8 +57,11 @@ class MemberControllerTest {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    private static Member SECURITY_ADMIN_MEMBER;
 
-    private Member SECURITY_DELETE_MEMBER;
+    private static Member SECURITY_DELETE_MEMBER;
+
+    private static Member RED_MEMBER;
 
 
     @BeforeEach
@@ -84,8 +88,26 @@ class MemberControllerTest {
         memberRequestDTO.setEmail("aa@aa");
         memberRequestDTO.setName("momo");
         memberRequestDTO.setPhone("memberPhone2");
-
         memberService.save(memberRequestDTO);
+
+
+        SECURITY_ADMIN_MEMBER=memberRepository.save(Member.builder()
+                .loginId("adminMember")
+                .email("abc@abc")
+                .phone("123456789")
+                .name("jkjk")
+                .role(Role.ROLE_ADMIN)
+                .password(passwordEncoder.encode("4321"))
+                .build());
+
+        RED_MEMBER=memberRepository.save(Member.builder()
+                .loginId("redMember")
+                .email("red")
+                .phone("221133")
+                .name("redred")
+                .password(passwordEncoder.encode("4321"))
+                .status(Status.RED)
+                .build());
 
 
         SECURITY_DELETE_MEMBER=memberRepository.save(Member.builder()
@@ -109,7 +131,7 @@ class MemberControllerTest {
     // 5. Member 조회 실패 ( idx 값이 없을 때 )
     // 6. Member 수정
     // 7. Member 수정 실패 ( idx 값이 없을 때 )
-    // 8. Member 수정 실패 ( title이 빈 값 일때 )
+    // 8. Member 수정 실패 ( body 빈 값 일때 )
     // 9. Member 로그인 실패
     // 10. Member 로그인 성공
 
@@ -185,6 +207,7 @@ class MemberControllerTest {
     }
 
     @Test
+    @WithUserDetails("adminMember")
     @DisplayName("3. Member 리스트 조회")
     public void member_list() throws Exception {
 
@@ -255,7 +278,7 @@ class MemberControllerTest {
                         .characterEncoding("UTF-8")
                         .accept(MediaType.ALL)
                 )
-                .andExpect(content().string("얘는 누구냐"))
+                .andExpect(content().string("조회에 실패했습니다."))
                 .andExpect(status().isBadRequest())
                 .andDo(print())
                 .andDo(document("Member-Search-Fail" ,
@@ -420,6 +443,7 @@ class MemberControllerTest {
                                 getDescription("loginId", "회원 로그인 아이디").type(JsonFieldType.STRING),
                                 getDescription("password","회원 비밀번호").type(JsonFieldType.STRING)),
                         responseFields(
+                                getDescription("name","사용자 이름").type(JsonFieldType.STRING),
                                 getDescription("accessToken","발급된 AccessToken").type(JsonFieldType.STRING))
                 ));
     }
@@ -649,6 +673,54 @@ class MemberControllerTest {
                                 getDescription("password","해당 Member 비밀번호"))
                 ));
     }
+
+    @Test
+    @WithUserDetails("adminMember")
+    @DisplayName("승인이 필요한 Member 리스트")
+    public void member_approval_list() throws Exception {
+
+        mockMvc.perform(get(URL+"/approval")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .characterEncoding("UTF-8")
+                        .accept(MediaType.ALL))
+                .andDo(print())
+                .andExpect(status().isOk()) // 7
+                .andDo(document("Member-Approval-List", // 1
+                        preprocessResponse(prettyPrint()), // 2
+                        responseFields( // 3
+                                getDescription("next","다음 페이지 유무"),
+                                subsectionWithPath("memberResponseDTOList[]").description("승인이 필요한 멤버"),
+                                getDescription("memberResponseDTOList[].id", "회원 고유번호(PK)").type(JsonFieldType.NUMBER),// 5
+                                getDescription("memberResponseDTOList[].loginId", "회원 로그인 아이디").type(JsonFieldType.STRING),
+                                getDescription("memberResponseDTOList[].email", "회원 이메일").type(JsonFieldType.STRING),
+                                getDescription("memberResponseDTOList[].name","회원 이름").type(JsonFieldType.STRING),
+                                getDescription("memberResponseDTOList[].phone", "회원 휴대번호").type(JsonFieldType.STRING),
+                                getDescription("memberResponseDTOList[].status","회원 상태").type(JsonFieldType.STRING),
+                                getDescription("memberResponseDTOList[].createdDate", "회원가입 승인요청 날짜").type(JsonFieldType.STRING))
+                ));
+    }
+
+    @Test
+    @WithUserDetails("adminMember")
+    @DisplayName("회원가입 승인")
+    public void member_approval() throws Exception {
+
+        mockMvc.perform(RestDocumentationRequestBuilders.post(URL+"/approval/{id}",3)
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .characterEncoding("UTF-8")
+                        .accept(MediaType.ALL))
+                .andExpect(content().string("회원가입을 승인하였습니다."))
+                .andDo(print())
+                .andExpect(status().isOk()) // 7
+                .andDo(document("Member-Approval", // 1
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        pathParameters(
+                                parameterWithName("id").description("해당 회원번호"))// 2
+                ));
+    }
+
+
 
 
 
