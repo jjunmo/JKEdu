@@ -98,10 +98,9 @@ public class ArticleController {
     public ResponseEntity<Object> deleteArticle(@PathVariable Category category,@PathVariable Long id) {
         Member member=articleService.isMemberCurrent();
 
-        //TODO : 권한 이후 설정
-//        if(!member.getRole().equals(Role.ROLE_ADMIN)){
-//            return new ResponseEntity<>("권한이 없습니다.", HttpStatus.FORBIDDEN);
-//        }
+        if(!member.getRole().equals(Role.ROLE_ADMIN)){
+            return new ResponseEntity<>("권한이 없습니다.", HttpStatus.FORBIDDEN);
+        }
         articleService.delete_Article(category,id);
         return ResponseEntity.ok("글 삭제 완료");
     }

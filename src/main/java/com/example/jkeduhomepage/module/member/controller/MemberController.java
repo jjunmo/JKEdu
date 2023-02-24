@@ -68,9 +68,6 @@ public class MemberController {
 
         Member member=memberService.isMemberCurrent();
 
-        log.info(member.getPassword());
-        log.info(memberRequestDTO.getPassword());
-
         if (!passwordEncoder.matches(memberRequestDTO.getPassword(),member.getPassword()))
             return new ResponseEntity<>("현재 비밀번호가 옳지 않습니다.",HttpStatus.BAD_REQUEST);
         else{

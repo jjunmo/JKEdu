@@ -61,6 +61,8 @@ class MemberControllerTest {
 
     private static Member SECURITY_DELETE_MEMBER;
 
+    private static Member SECURITY_MEMBER;
+
     private static Member RED_MEMBER;
 
 
@@ -97,6 +99,15 @@ class MemberControllerTest {
                 .phone("123456789")
                 .name("jkjk")
                 .role(Role.ROLE_ADMIN)
+                .password(passwordEncoder.encode("4321"))
+                .build());
+
+        SECURITY_MEMBER=memberRepository.save(Member.builder()
+                .loginId("userMember")
+                .email("cba@cba")
+                .phone("123456789")
+                .name("jkjk")
+                .role(Role.ROLE_USER)
                 .password(passwordEncoder.encode("4321"))
                 .build());
 
@@ -701,11 +712,27 @@ class MemberControllerTest {
     }
 
     @Test
+    @WithUserDetails("userMember")
+    @DisplayName("승인이 필요한 Member 리스트 보기 실패")
+    public void member_approval_list_Fail() throws Exception {
+
+        mockMvc.perform(get(URL+"/approval")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .characterEncoding("UTF-8")
+                        .accept(MediaType.ALL))
+                .andExpect(content().string("잘못된 접근"))
+                .andDo(print())
+                .andExpect(status().isForbidden()) // 7
+                .andDo(document("Member-Approval-List-Fail"));
+
+    }
+
+    @Test
     @WithUserDetails("adminMember")
     @DisplayName("회원가입 승인")
     public void member_approval() throws Exception {
 
-        mockMvc.perform(RestDocumentationRequestBuilders.post(URL+"/approval/{id}",3)
+        mockMvc.perform(RestDocumentationRequestBuilders.post(URL+"/approval/{id}",RED_MEMBER.getId())
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .characterEncoding("UTF-8")
                         .accept(MediaType.ALL))
@@ -718,6 +745,22 @@ class MemberControllerTest {
                         pathParameters(
                                 parameterWithName("id").description("해당 회원번호"))// 2
                 ));
+    }
+
+    @Test
+    @WithUserDetails("userMember")
+    @DisplayName("회원가입 승인 실패")
+    public void member_approval_fail() throws Exception {
+
+        mockMvc.perform(RestDocumentationRequestBuilders.post(URL+"/approval/{id}",RED_MEMBER.getId())
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .characterEncoding("UTF-8")
+                        .accept(MediaType.ALL))
+                .andExpect(content().string("잘못된 접근"))
+                .andDo(print())
+                .andExpect(status().isForbidden()) // 7
+                .andDo(document("Member-Approval-fail"));
+
     }
 
 

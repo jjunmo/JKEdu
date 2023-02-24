@@ -18,7 +18,7 @@ public class MemberPageResponseDTO {
 
     boolean next;
 
-    private List<MemberResponseDTO> memberResponseDTOList=new ArrayList<>();
+    private List<MemberResponseDTO> memberResponseDTOList;
 
 
     public static MemberPageResponseDTO getPage(boolean next, List<MemberResponseDTO> memberResponseDTOList){

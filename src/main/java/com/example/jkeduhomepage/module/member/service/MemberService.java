@@ -119,7 +119,7 @@ public class MemberService {
     }
 
     public List<Member> allList(){
-        return memberRepository.findAll();
+        return memberRepository.findByStatusAndRole(Status.GREEN,Role.ROLE_USER);
     }
 
     public MemberPageResponseDTO approvalList(Pageable pageable){

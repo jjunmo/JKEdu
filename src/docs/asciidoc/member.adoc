@@ -206,6 +206,26 @@ include::{snippets}/Phone-SMS-Check-Fail-NoSMS/query-parameters.adoc[]
 HttpResponse
 include::{snippets}/Phone-SMS-Check-Fail-NoSMS/http-response.adoc[]
 
+=== MemberApprovalList
+HttpRequest
+include::{snippets}/Member-Approval-List/http-request.adoc[]
+
+HttpResponse
+include::{snippets}/Member-Approval-List/http-response.adoc[]
+ResponseFields
+include::{snippets}/Member-Approval-List/response-fields.adoc[]
+
+
+=== MemberApproval
+HttpRequest
+include::{snippets}/Member-Approval/http-request.adoc[]
+PathParameters
+include::{snippets}/Member-Approval/path-parameters.adoc[]
+
+HttpResponse
+include::{snippets}/Member-Approval/http-response.adoc[]
+
+
 == Article
 
 === ImageUpload
