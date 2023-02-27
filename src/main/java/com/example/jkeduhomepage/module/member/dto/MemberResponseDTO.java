@@ -66,6 +66,20 @@ public class MemberResponseDTO {
         return memberResponseDTOList;
     }
 
+    public static List<MemberResponseDTO> approvalList(List<Member> memberList){
+        List<MemberResponseDTO> memberResponseDTOList=new ArrayList<>();
+        memberList.forEach(
+                ml->{
+                    MemberResponseDTO memberResponseDTO=new MemberResponseDTO();
+                    memberResponseDTO.setId(ml.getId());
+                    memberResponseDTO.setName(ml.getName());
+                    memberResponseDTO.setPhone(ml.getPhone());
+                    memberResponseDTO.setCreatedDate(String.valueOf(ml.getCreateDate()));
+                    memberResponseDTOList.add(memberResponseDTO);
+                });
+        return memberResponseDTOList;
+    }
+
     public static MemberResponseDTO info(Member member){
         return MemberResponseDTO.builder()
                 .loginId(member.getLoginId())
@@ -75,15 +89,15 @@ public class MemberResponseDTO {
                 .build();
     }
 
-    public static MemberResponseDTO approval(Member member){
-        return MemberResponseDTO.builder()
-                .id(member.getId())
-                .loginId(member.getLoginId())
-                .email(member.getEmail())
-                .name(member.getName())
-                .phone(member.getPhone())
-                .status(String.valueOf(member.getStatus()))
-                .createdDate(String.valueOf(member.getUpdateDate()))
-                .build();
-    }
+//    public static MemberResponseDTO approval(Member member){
+//        return MemberResponseDTO.builder()
+//                .id(member.getId())
+//                .loginId(member.getLoginId())
+//                .email(member.getEmail())
+//                .name(member.getName())
+//                .phone(member.getPhone())
+//                .status(String.valueOf(member.getStatus()))
+//                .createdDate(String.valueOf(member.getUpdateDate()))
+//                .build();
+//    }
 }

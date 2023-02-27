@@ -990,14 +990,14 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 200
+Content-Length: 199
 
 [ {
-  "id" : 1,
-  "loginId" : "memberTest",
-  "email" : "aa@aa",
-  "name" : "momo",
-  "phone" : "memberPhone2",
+  "id" : 3,
+  "loginId" : "userMember",
+  "email" : "cba@cba",
+  "name" : "jkjk",
+  "phone" : "123456789",
   "status" : "GREEN",
   "createdDate" : "2023-02-24",
   "updatedDate" : "2023-02-24"
@@ -1111,7 +1111,7 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 208
+Content-Length: 206
 
 {
   "loginId" : "memberTest",
@@ -1119,7 +1119,7 @@ Content-Length: 208
   "role" : "ROLE_USER",
   "name" : "momo",
   "phone" : "memberPhone2",
-  "status" : "GREEN",
+  "status" : "RED",
   "createdDate" : "2023-02-24",
   "updatedDate" : "2023-02-24"
 }</code></pre>
@@ -1553,12 +1553,12 @@ Content-Length: 29
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /member/login HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Accept: */*
-Content-Length: 55
+Content-Length: 54
 Host: localhost:8080
 
 {
-  "loginId" : "memberTest",
-  "password" : "123456"
+  "loginId" : "adminMember",
+  "password" : "4321"
 }</code></pre>
 </div>
 </div>
@@ -1598,11 +1598,11 @@ Host: localhost:8080
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 214
+Content-Length: 215
 
 {
-  "name" : "momo",
-  "accessToken" : "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY3NzMwOTA2MH0.AiKPSpxn9oWxLoPtcVE1Qzc-tfWi4kV3Ajmn07zNVB-m_6xHJqBbu9YBMzJhyc0LmHr8fXkb4UHZMw4hMzAPig"
+  "name" : "jkjk",
+  "accessToken" : "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwiYXV0aCI6IlJPTEVfQURNSU4iLCJleHAiOjE2NzczMTQ4NzV9.N0zHKkeQH5Ed1ARiCq3tGl-CLfC0AQWh0IbOimWQ8GH--6yZLTP3iZBnVZFFPzcKMoRvNNOJxSXY7_DxqMQbEg"
 }</code></pre>
 </div>
 </div>
@@ -1737,7 +1737,7 @@ Content-Length: 23
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">PUT /member/cert?phone=memberPhone4&amp;smscode=0299 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">PUT /member/cert?phone=memberPhone4&amp;smscode=7782 HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Accept: */*
 Host: localhost:8080</code></pre>
@@ -1903,20 +1903,14 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 225
+Content-Length: 97
 
-{
-  "next" : false,
-  "memberResponseDTOList" : [ {
-    "id" : 4,
-    "loginId" : "redMember",
-    "email" : "red",
-    "name" : "redred",
-    "phone" : "221133",
-    "status" : "RED",
-    "createdDate" : "2023-02-24"
-  } ]
-}</code></pre>
+[ {
+  "id" : 1,
+  "name" : "momo",
+  "phone" : "memberPhone2",
+  "createdDate" : "2023-02-24"
+} ]</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1937,47 +1931,22 @@ Content-Length: 225
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>next</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">다음 페이지 유무</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>memberResponseDTOList[]</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">승인이 필요한 멤버</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>memberResponseDTOList[].id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].id</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">회원 고유번호(PK)</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>memberResponseDTOList[].loginId</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">회원 로그인 아이디</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>memberResponseDTOList[].email</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">회원 이메일</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>memberResponseDTOList[].name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].name</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">회원 이름</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>memberResponseDTOList[].phone</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].phone</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">회원 휴대번호</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>memberResponseDTOList[].status</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">회원 상태</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>memberResponseDTOList[].createdDate</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].createdDate</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">회원가입 승인요청 날짜</p></td>
 </tr>
@@ -2082,9 +2051,9 @@ Content-Length: 403
 
 [ {
   "fileName" : "test.jpeg",
-  "customFileName" : "notice/d52cd40c-61b8-45f8-a682-0c3a3a5d5697.jpeg_1677222705769.jpeg",
-  "url" : "https://jkboston.s3.ap-northeast-2.amazonaws.com/notice/d52cd40c-61b8-45f8-a682-0c3a3a5d5697.jpeg_1677222705769.jpeg",
-  "thumbnailImageUrl" : "https://jkboston.s3.ap-northeast-2.amazonaws.com/thumbnail/4b48153e-27a4-4bca-ad27-02fb96b051be.jpeg_1677222705835.jpeg"
+  "customFileName" : "notice/869fcb39-f819-4ed6-9019-a2c3dad4eed1.jpeg_1677228485748.jpeg",
+  "url" : "https://jkboston.s3.ap-northeast-2.amazonaws.com/notice/869fcb39-f819-4ed6-9019-a2c3dad4eed1.jpeg_1677228485748.jpeg",
+  "thumbnailImageUrl" : "https://jkboston.s3.ap-northeast-2.amazonaws.com/thumbnail/b0913f5e-0085-43cb-a5b0-79bd4764aab5.jpeg_1677228485850.jpeg"
 } ]</code></pre>
 </div>
 </div>
@@ -2180,8 +2149,8 @@ Content-Length: 251
 
 [ {
   "fileName" : "test.txt",
-  "customFileName" : "notice/7406267d-b5a7-4cef-8a91-3edb05ef30f1.txt_1677222705254.txt",
-  "url" : "https://jkboston.s3.ap-northeast-2.amazonaws.com/notice/7406267d-b5a7-4cef-8a91-3edb05ef30f1.txt_1677222705254.txt"
+  "customFileName" : "notice/a50a3251-82b4-4f46-823f-2342b8f6ccb6.txt_1677228485200.txt",
+  "url" : "https://jkboston.s3.ap-northeast-2.amazonaws.com/notice/a50a3251-82b4-4f46-823f-2342b8f6ccb6.txt_1677228485200.txt"
 } ]</code></pre>
 </div>
 </div>

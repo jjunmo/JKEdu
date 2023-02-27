@@ -7,7 +7,10 @@ import com.example.jkeduhomepage.module.common.enums.Status;
 import com.example.jkeduhomepage.module.common.enums.YN;
 import com.example.jkeduhomepage.module.config.SecurityUtil;
 import com.example.jkeduhomepage.module.jwt.TokenProvider;
-import com.example.jkeduhomepage.module.member.dto.*;
+import com.example.jkeduhomepage.module.member.dto.MemberRequestDTO;
+import com.example.jkeduhomepage.module.member.dto.MemberReservationDTO;
+import com.example.jkeduhomepage.module.member.dto.MemberResponseDTO;
+import com.example.jkeduhomepage.module.member.dto.MemberUpdateDTO;
 import com.example.jkeduhomepage.module.member.entity.Member;
 import com.example.jkeduhomepage.module.member.entity.MemberPhoneAuth;
 import com.example.jkeduhomepage.module.member.repository.MemberPhoneAuthRepository;
@@ -17,8 +20,6 @@ import lombok.extern.slf4j.Slf4j;
 import net.nurigo.java_sdk.api.Message;
 import net.nurigo.java_sdk.exceptions.CoolsmsException;
 import org.json.simple.JSONObject;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -72,30 +73,32 @@ public class MemberService {
             member.setEmail(memberRequestDTO.getEmail());
             member.setName(memberRequestDTO.getName());
             member.setPhone(memberRequestDTO.getPhone());
-            //TODO: Test
-            member.setStatus(Status.GREEN);
+            member.setStatus(Status.RED);
             member.setRole(Role.ROLE_USER);
             member.setMemberPhoneAuth(memberPhoneAuthOptional.get());
             memberRepository.save(member);
             return "YES";
+
         } else return null;
     }
     @Transactional
     public Object login(MemberRequestDTO memberRequestDTO){
-        Optional<Member> memberOptional = memberRepository.findByLoginIdAndStatus(memberRequestDTO.getLoginId(), Status.GREEN);
+        Optional<Member> memberOptional = memberRepository.findByLoginId(memberRequestDTO.getLoginId());
 
-        if(memberOptional.isEmpty()){
-            return "id_fail";
-        }
-         Member member = memberOptional.get();
+        if(memberOptional.isEmpty()) return "id_fail";
 
-            if (!passwordEncoder.matches(memberRequestDTO.getPassword(), member.getPassword())) return "pw_fail";
+        Member member = memberOptional.get();
 
-            UsernamePasswordAuthenticationToken authenticationToken = memberRequestDTO.toAuthentication();
-            Authentication authentication = managerBuilder.getObject().authenticate(authenticationToken);
+        if (!passwordEncoder.matches(memberRequestDTO.getPassword(), member.getPassword())) return "pw_fail";
+
+        if(member.getStatus().equals(Status.RED)) return "approval_fail";
 
 
-           return tokenProvider.generateTokenDto(authentication,member.getName());
+        UsernamePasswordAuthenticationToken authenticationToken = memberRequestDTO.toAuthentication();
+        Authentication authentication = managerBuilder.getObject().authenticate(authenticationToken);
+
+
+        return tokenProvider.generateTokenDto(authentication,member.getName());
 
     }
 
@@ -122,10 +125,9 @@ public class MemberService {
         return memberRepository.findByStatusAndRole(Status.GREEN,Role.ROLE_USER);
     }
 
-    public MemberPageResponseDTO approvalList(Pageable pageable){
-        Slice<MemberResponseDTO> memberResponseDTOSlice=memberRepository.findByStatusOrderByIdDesc(Status.RED,pageable).map(MemberResponseDTO::approval);
-
-        return MemberPageResponseDTO.getPage(memberResponseDTOSlice.hasNext(),memberResponseDTOSlice.getContent());
+    public List<MemberResponseDTO> approvalList(){
+        List<Member> memberList=memberRepository.findByStatus(Status.RED);
+        return MemberResponseDTO.approvalList(memberList);
     }
 
 
@@ -154,6 +156,7 @@ public class MemberService {
         String api_secret = "LSMCMXB2HEIL4LHFZTCKU4PAHGBECFSX";
         Message coolsms = new Message(api_key, api_secret);
 
+
         // 4 params(to, from, type, text) are mandatory. must be filled
         HashMap<String, String> params = new HashMap<>();
         params.put("to", phone);    // 수신전화번호
@@ -162,27 +165,36 @@ public class MemberService {
         params.put("text", "휴대폰 인증번호는" + "["+cerNum+"]" + "입니다.");
         params.put("app_version", "test app 1.2"); // application name and version
 
+        Optional<MemberPhoneAuth> memberPhoneAuthOptional= memberPhoneAuthRepository.findByPhone(phone);
 
-            JSONObject obj = coolsms.send(params);
-            System.out.println(obj.toString());
-
-        Optional<MemberPhoneAuth> memberPhoneAuthOptional= memberPhoneAuthRepository.findByPhoneAndCheckYn(phone,YN.Y);
         if(memberPhoneAuthOptional.isEmpty()){
             MemberPhoneAuth memberPhoneAuth=new MemberPhoneAuth();
             memberPhoneAuth.setPhone(phone);
             memberPhoneAuth.setSmscode(String.valueOf(cerNum));
             memberPhoneAuth.setCheckYn(YN.N);
+
+            JSONObject obj = coolsms.send(params);
+            System.out.println(obj.toString());
+
             return memberPhoneAuthRepository.save(memberPhoneAuth);
+
         }
 
-        return memberPhoneAuthOptional.get();
+            JSONObject obj = coolsms.send(params);
+            System.out.println(obj.toString());
+
+            MemberPhoneAuth memberPhoneAuth =memberPhoneAuthOptional.get();
+            memberPhoneAuth.setCheckYn(YN.N);
+            memberPhoneAuth.setSmscode(String.valueOf(cerNum));
+
+        return memberPhoneAuth;
 
         }
 
     @Transactional
     public String certifiedPhoneCheck(String phone ,String smscode ){
 
-        Optional<MemberPhoneAuth> memberPhoneAuthOptional = memberPhoneAuthRepository.findByPhoneAndCheckYn(phone,YN.N);
+        Optional<MemberPhoneAuth> memberPhoneAuthOptional = memberPhoneAuthRepository.findByPhoneAndCheckYn(phone, YN.N);
 
         if(memberPhoneAuthOptional.isEmpty()){
             return "NO";

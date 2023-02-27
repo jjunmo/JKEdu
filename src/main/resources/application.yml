@@ -9,7 +9,7 @@ spring:
       max-request-size: 200MB
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
       naming:
         # CamelCase -> SnakeCase
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
@@ -22,7 +22,7 @@ spring:
       enabled: true
       settings:
         web-allow-others: true
-      path: /db
+      path: /jjunmo
   datasource:
     url: jdbc:h2:mem:test
     username: sa

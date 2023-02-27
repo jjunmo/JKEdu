@@ -10,6 +10,7 @@ import com.example.jkeduhomepage.module.member.repository.MemberRepository;
 import com.example.jkeduhomepage.module.member.service.MemberService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.nurigo.java_sdk.exceptions.CoolsmsException;
+import org.apache.commons.lang.text.StrTokenizer;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -99,6 +100,7 @@ class MemberControllerTest {
                 .phone("123456789")
                 .name("jkjk")
                 .role(Role.ROLE_ADMIN)
+                .status(Status.GREEN)
                 .password(passwordEncoder.encode("4321"))
                 .build());
 
@@ -108,6 +110,7 @@ class MemberControllerTest {
                 .phone("123456789")
                 .name("jkjk")
                 .role(Role.ROLE_USER)
+                .status(Status.GREEN)
                 .password(passwordEncoder.encode("4321"))
                 .build());
 
@@ -245,7 +248,7 @@ class MemberControllerTest {
 
     @Test
     @DisplayName("4. member 조회 (id)")
-    public void member() throws Exception {
+    public void member_search() throws Exception {
 
         // When && Then
         // 조회
@@ -258,7 +261,7 @@ class MemberControllerTest {
                 .andExpect(jsonPath("email").value("aa@aa"))
                 .andExpect(jsonPath("name").value("momo"))
                 .andExpect(jsonPath("phone").value("memberPhone2"))
-                .andExpect(jsonPath("status").value("GREEN"))
+                .andExpect(jsonPath("status").value("RED"))
                 .andExpect(jsonPath("createdDate").value(String.valueOf(LocalDate.now())))
                 .andExpect(jsonPath("updatedDate").value(String.valueOf(LocalDate.now())))
                 .andDo(print())
@@ -434,8 +437,8 @@ class MemberControllerTest {
         ObjectMapper objectMapper = new ObjectMapper();
 
         MemberRequestDTO memberRequestDTO = new MemberRequestDTO();
-        memberRequestDTO.setLoginId("memberTest");
-        memberRequestDTO.setPassword("123456");
+        memberRequestDTO.setLoginId("adminMember");
+        memberRequestDTO.setPassword("4321");
 
         // Object -> json String
         String paramString = objectMapper.writeValueAsString(memberRequestDTO);
@@ -699,15 +702,10 @@ class MemberControllerTest {
                 .andDo(document("Member-Approval-List", // 1
                         preprocessResponse(prettyPrint()), // 2
                         responseFields( // 3
-                                getDescription("next","다음 페이지 유무"),
-                                subsectionWithPath("memberResponseDTOList[]").description("승인이 필요한 멤버"),
-                                getDescription("memberResponseDTOList[].id", "회원 고유번호(PK)").type(JsonFieldType.NUMBER),// 5
-                                getDescription("memberResponseDTOList[].loginId", "회원 로그인 아이디").type(JsonFieldType.STRING),
-                                getDescription("memberResponseDTOList[].email", "회원 이메일").type(JsonFieldType.STRING),
-                                getDescription("memberResponseDTOList[].name","회원 이름").type(JsonFieldType.STRING),
-                                getDescription("memberResponseDTOList[].phone", "회원 휴대번호").type(JsonFieldType.STRING),
-                                getDescription("memberResponseDTOList[].status","회원 상태").type(JsonFieldType.STRING),
-                                getDescription("memberResponseDTOList[].createdDate", "회원가입 승인요청 날짜").type(JsonFieldType.STRING))
+                                getDescription("[].id", "회원 고유번호(PK)").type(JsonFieldType.NUMBER),// 5
+                                getDescription("[].name","회원 이름").type(JsonFieldType.STRING),
+                                getDescription("[].phone", "회원 휴대번호").type(JsonFieldType.STRING),
+                                getDescription("[].createdDate", "회원가입 승인요청 날짜").type(JsonFieldType.STRING))
                 ));
     }
 

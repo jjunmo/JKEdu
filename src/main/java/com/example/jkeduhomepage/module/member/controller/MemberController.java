@@ -5,6 +5,7 @@ import com.example.jkeduhomepage.module.member.dto.MemberRequestDTO;
 import com.example.jkeduhomepage.module.member.dto.MemberResponseDTO;
 import com.example.jkeduhomepage.module.member.dto.MemberUpdateDTO;
 import com.example.jkeduhomepage.module.member.entity.Member;
+import com.example.jkeduhomepage.module.member.entity.MemberPhoneAuth;
 import com.example.jkeduhomepage.module.member.repository.MemberRepository;
 import com.example.jkeduhomepage.module.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -115,13 +116,11 @@ public class MemberController {
 
         Object result=memberService.login(memberRequestDTO);
 
-        if(result.equals("id_fail")){
-            return ResponseEntity.badRequest().body("존재하지 않는 아이디 입니다.");
-        }
+        if(result.equals("id_fail")) return ResponseEntity.badRequest().body("존재하지 않는 아이디 입니다.");
 
-        if(result.equals("pw_fail")){
-            return ResponseEntity.badRequest().body("비밀번호가 일치하지 않습니다.");
-        }
+        if(result.equals("pw_fail")) return ResponseEntity.badRequest().body("비밀번호가 일치하지 않습니다.");
+
+        if(result.equals("approval_fail")) return new ResponseEntity<>("관리자의 승인이 필요합니다.",HttpStatus.FORBIDDEN);
 
         return ResponseEntity.ok().body(result);
     }
@@ -179,13 +178,13 @@ public class MemberController {
     }
 
     @GetMapping("/approval")
-    public HttpEntity<Object> memberApprovalList(@PageableDefault Pageable pageable){
+    public HttpEntity<Object> memberApprovalList(){
 
         Member member=memberService.isMemberCurrent();
 
         if(!member.getRole().equals(Role.ROLE_ADMIN)) return new ResponseEntity<>("잘못된 접근",HttpStatus.FORBIDDEN);
 
-        return ResponseEntity.ok(memberService.approvalList(pageable));
+        return ResponseEntity.ok(memberService.approvalList());
     }
 
     @PostMapping("/approval/{id}")
