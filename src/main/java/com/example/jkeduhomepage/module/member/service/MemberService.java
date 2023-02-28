@@ -220,7 +220,7 @@ public class MemberService {
 
         // 4 params(to, from, type, text) are mandatory. must be filled
         HashMap<String, String> params = new HashMap<>();
-        params.put("to", "010-9109-7122");    // 수신전화번호 01089488846
+        params.put("to", "010-8948-8846");    // 수신전화번호 01089488846
         params.put("from", "051-747-1788");    // 발신전화번호. 테스트시에는 발신,수신 둘다 본인 번호로 하면 됨
         params.put("type", "SMS");
         params.put("subject","입학 테스트 신청");

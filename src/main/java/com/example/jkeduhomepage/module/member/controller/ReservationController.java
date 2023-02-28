@@ -15,6 +15,12 @@ public class ReservationController {
 
     private final MemberService memberService;
 
+    /**
+     * 예약하기
+     * @param memberReservationDTO 예약자 정보
+     * @return 예약 문자 발송
+     * @throws CoolsmsException 문자 발송실패
+     */
     @PostMapping
     public HttpEntity<Object> reservationExam(@RequestBody MemberReservationDTO memberReservationDTO) throws CoolsmsException {
         memberService.reservation(memberReservationDTO);

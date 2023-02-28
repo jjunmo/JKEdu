@@ -15,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.firewall.DefaultHttpFirewall;
 import org.springframework.security.web.firewall.HttpFirewall;
+import org.springframework.security.web.header.writers.frameoptions.XFrameOptionsHeaderWriter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -32,9 +33,9 @@ public class WebSecurityConfig implements WebMvcConfigurer {
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
     private static final String FRONT_LOCAL ="http://localhost:3000";
-    private static final String DOMAIN = "http://jkboston.co.kr";
-
-    private static final String FRONT_IP="";
+    private static final String DOMAIN = "http://www.jkboston.co.kr";
+    private static final String DOMAIN_2 = "http://jkboston.co.kr";
+    private static final String FRONT_IP="http://13.124.54.110";
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -62,6 +63,10 @@ public class WebSecurityConfig implements WebMvcConfigurer {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 
                 .and()
+                .headers()
+                .addHeaderWriter(new XFrameOptionsHeaderWriter(XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN))
+
+                .and()
                 .exceptionHandling()
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 .accessDeniedHandler(jwtAccessDeniedHandler)
@@ -83,6 +88,7 @@ public class WebSecurityConfig implements WebMvcConfigurer {
         config.addAllowedOrigin(FRONT_LOCAL);
         config.addAllowedOrigin(FRONT_IP);// 프론트 IPv4 주소
         config.addAllowedOrigin(DOMAIN);//도메인 주소
+        config.addAllowedOrigin(DOMAIN_2);
         config.addAllowedMethod("*");
         config.addAllowedHeader("*");
         config.setAllowCredentials(true);
@@ -91,6 +97,8 @@ public class WebSecurityConfig implements WebMvcConfigurer {
         source.registerCorsConfiguration("/**", config);
         return source;
     }
+
+
 
     public void configure(WebSecurity web) throws Exception {
         web.httpFirewall(defaultHttpFirewall());

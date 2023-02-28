@@ -5,21 +5,17 @@ import com.example.jkeduhomepage.module.member.dto.MemberRequestDTO;
 import com.example.jkeduhomepage.module.member.dto.MemberResponseDTO;
 import com.example.jkeduhomepage.module.member.dto.MemberUpdateDTO;
 import com.example.jkeduhomepage.module.member.entity.Member;
-import com.example.jkeduhomepage.module.member.entity.MemberPhoneAuth;
 import com.example.jkeduhomepage.module.member.repository.MemberRepository;
 import com.example.jkeduhomepage.module.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.nurigo.java_sdk.exceptions.CoolsmsException;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -63,7 +59,11 @@ public class MemberController {
         return ResponseEntity.ok("비밀번호가 변경 되었습니다.");
     }
 
-
+    /**
+     * 회원 탈퇴
+     * @param memberRequestDTO 비밀번호
+     * @return 회원 탈퇴
+     */
     @DeleteMapping
     public HttpEntity<Object> deleteMember(@RequestBody MemberRequestDTO memberRequestDTO){
 
@@ -177,6 +177,10 @@ public class MemberController {
         return ResponseEntity.ok(listMember(memberList));
     }
 
+    /**
+     * 회원가입 승인 리스트
+     * @return 회원가입 승인 리스트
+     */
     @GetMapping("/approval")
     public HttpEntity<Object> memberApprovalList(){
 
@@ -187,6 +191,11 @@ public class MemberController {
         return ResponseEntity.ok(memberService.approvalList());
     }
 
+    /**
+     * 승인 요청
+     * @param id 승인요청 멤버
+     * @return 승인
+     */
     @PostMapping("/approval/{id}")
     public HttpEntity<Object> memberApproval(@PathVariable Long id){
 

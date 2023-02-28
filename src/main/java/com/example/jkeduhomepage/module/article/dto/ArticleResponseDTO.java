@@ -39,6 +39,16 @@ public class ArticleResponseDTO {
                 .title(article.getTitle())
                 .name(article.getMember().getName())
                 .createdDate(article.getCreateDate())
+                .uploadFileList(article.getUploadFileList())
+                .build();
+    }
+
+    public static ArticleResponseDTO paramNoticeArticle(Article article){
+        return ArticleResponseDTO.builder()
+                .id(article.getId())
+                .title(article.getTitle())
+                .name(article.getMember().getName())
+                .createdDate(article.getCreateDate())
                 .build();
     }
 

@@ -89,15 +89,4 @@ public class MemberResponseDTO {
                 .build();
     }
 
-//    public static MemberResponseDTO approval(Member member){
-//        return MemberResponseDTO.builder()
-//                .id(member.getId())
-//                .loginId(member.getLoginId())
-//                .email(member.getEmail())
-//                .name(member.getName())
-//                .phone(member.getPhone())
-//                .status(String.valueOf(member.getStatus()))
-//                .createdDate(String.valueOf(member.getUpdateDate()))
-//                .build();
-//    }
 }

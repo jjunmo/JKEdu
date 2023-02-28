@@ -60,8 +60,15 @@ public class ArticleService {
     }
 
     public ArticlePageResponseDTO categoryList(Category category, Pageable pageable){
+        Page<ArticleResponseDTO> articlePage;
 
-        Page<ArticleResponseDTO> articlePage=articleRepository.findByCategoryOrderByIdDesc(category,pageable)
+        if(category.equals(Category.NOTICE)){
+           articlePage=articleRepository.findByCategoryOrderByIdDesc(category,pageable)
+                    .map(ArticleResponseDTO::paramNoticeArticle);
+           return ArticlePageResponseDTO.getPage(articlePage);
+        }
+
+             articlePage=articleRepository.findByCategoryOrderByIdDesc(category,pageable)
                 .map(ArticleResponseDTO::paramArticle);
 
         return ArticlePageResponseDTO.getPage(articlePage);

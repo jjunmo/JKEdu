@@ -14,6 +14,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Comment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,22 +33,28 @@ public class Article extends Basetime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "article_id")
+    @Comment("게시글 번호")
     private Long id;
 
     @Column(name = "title")
+    @Comment("게시글 제목")
     private String title;
     @Lob
     @Column(name = "content")
+    @Comment("게시글 내용")
     private String content;
 
     @Enumerated(EnumType.STRING)
     @Nonnull
+    @Comment("게시글 카테고리")
     private Category category;
 
+    @Comment("글쓴이")
     @ManyToOne
     @JoinColumn(name="member_id", referencedColumnName = "id")
     private Member member;
 
+    @Comment("업로드 파일")
     @OneToMany(cascade = CascadeType.ALL,orphanRemoval = true,fetch = FetchType.LAZY)
     @JoinColumn(name = "article_id")
     private List<UploadFile> uploadFileList = new ArrayList<>();
