@@ -1,0 +1,334 @@
+ifndef::snippets[]
+:snippets: ./build/generated-snippets
+endif::[]
+
+= JK-Boston-Gang
+JK-Boston-Homepage;
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 4
+:sectlinks:
+
+== Member
+=== MemberMyInfo
+HttpRequest
+include::{snippets}/Member-My-Info/http-request.adoc[]
+
+HttpResponse
+include::{snippets}/Member-My-Info/http-response.adoc[]
+ResponseFields
+include::{snippets}/Member-My-Info/response-fields.adoc[]
+
+=== MemberPasswordChange
+HttpRequest
+include::{snippets}/Member-Password-Change/http-request.adoc[]
+RequestFields
+include::{snippets}/Member-Password-Change/request-fields.adoc[]
+
+HttpResponse
+include::{snippets}/Member-Password-Change/http-response.adoc[]
+
+=== MemberDeleteFail
+HttpRequest
+include::{snippets}/Member-Delete-Fail/http-request.adoc[]
+RequestFields
+include::{snippets}/Member-Delete-Fail/request-fields.adoc[]
+
+HttpResponse
+include::{snippets}/Member-Delete-Fail/http-response.adoc[]
+
+=== MemberDelete
+HttpRequest
+include::{snippets}/Member-Delete/http-request.adoc[]
+RequestFields
+include::{snippets}/Member-Delete/request-fields.adoc[]
+
+HttpResponse
+include::{snippets}/Member-Delete/http-response.adoc[]
+
+
+=== MemberSaveFail
+HttpRequest
+include::{snippets}/Member-Save-Fail/http-request.adoc[]
+RequestFields
+include::{snippets}/Member-Save-Fail/request-fields.adoc[]
+
+HttpResponse
+include::{snippets}/Member-Save-Fail/http-response.adoc[]
+
+=== MemberSaveFailNoSMS
+HttpRequest
+include::{snippets}/Member-Save-Fail-NoSMS/http-request.adoc[]
+RequestFields
+include::{snippets}/Member-Save-Fail-NoSMS/request-fields.adoc[]
+
+HttpResponse
+include::{snippets}/Member-Save-Fail-NoSMS/http-response.adoc[]
+
+=== MemberSaveSuccess
+HttpRequest
+include::{snippets}/Member-Save-Success/http-request.adoc[]
+RequestFields
+include::{snippets}/Member-Save-Success/request-fields.adoc[]
+
+HttpResponse
+include::{snippets}/Member-Save-Success/http-response.adoc[]
+
+
+=== MemberList
+HttpRequest
+include::{snippets}/Member-List/http-request.adoc[]
+
+HttpResponse
+include::{snippets}/Member-List/http-response.adoc[]
+ResponseFields
+include::{snippets}/Member-List/response-fields.adoc[]
+
+=== MemberSearch
+HttpRequest
+include::{snippets}/Member-Search/http-request.adoc[]
+Path
+include::{snippets}/Member-Search/path-parameters.adoc[]
+
+
+HttpResponse
+include::{snippets}/Member-Search/http-response.adoc[]
+ResponseFields
+include::{snippets}/Member-Search/response-fields.adoc[]
+
+=== MemberSearchFail
+HttpRequest
+include::{snippets}/Member-Search-Fail/http-request.adoc[]
+Path
+include::{snippets}/Member-Search-Fail/path-parameters.adoc[]
+
+HttpResponse
+include::{snippets}/Member-Search-Fail/http-response.adoc[]
+
+
+=== MemberUpdateFail ( id )
+HttpRequest
+include::{snippets}/Member-Update-id-Fail/http-request.adoc[]
+Path
+include::{snippets}/Member-Update-id-Fail/path-parameters.adoc[]
+RequestFields
+include::{snippets}/Member-Update-id-Fail/request-fields.adoc[]
+
+HttpResponse
+include::{snippets}/Member-Update-id-Fail/http-response.adoc[]
+
+=== MemberUpdateFail ( body )
+HttpRequest
+include::{snippets}/Member-Update-body-Fail/http-request.adoc[]
+Path
+include::{snippets}/Member-Update-body-Fail/path-parameters.adoc[]
+RequestFields
+include::{snippets}/Member-Update-body-Fail/request-fields.adoc[]
+
+HttpResponse
+include::{snippets}/Member-Update-body-Fail/http-response.adoc[]
+
+=== MemberUpdateSuccess
+HttpRequest
+include::{snippets}/Member-Update-Success/http-request.adoc[]
+Path
+include::{snippets}/Member-Update-body-Fail/path-parameters.adoc[]
+RequestFields
+include::{snippets}/Member-Update-Success/request-fields.adoc[]
+
+HttpResponse
+include::{snippets}/Member-Update-Success/http-response.adoc[]
+
+=== MemberLoginFail
+HttpRequest
+include::{snippets}/Member-login-Fail/http-request.adoc[]
+RequestFields
+include::{snippets}/Member-login-Fail/request-fields.adoc[]
+
+HttpResponse
+include::{snippets}/Member-login-Fail/http-response.adoc[]
+
+=== MemberLoginSuccess
+HttpRequest
+include::{snippets}/Member-login-Success/http-request.adoc[]
+RequestFields
+include::{snippets}/Member-login-Success/request-fields.adoc[]
+
+HttpResponse
+include::{snippets}/Member-login-Success/http-response.adoc[]
+ResponseFields
+include::{snippets}/Member-login-Success/response-fields.adoc[]
+
+=== PhoneSMSSuccess
+HttpRequest
+include::{snippets}/Phone-SMS-Success/http-request.adoc[]
+QueryParameters
+include::{snippets}/Phone-SMS-Success/query-parameters.adoc[]
+
+HttpResponse
+include::{snippets}/Phone-SMS-Success/http-response.adoc[]
+
+=== PhoneSMSFail
+HttpRequest
+include::{snippets}/Phone-SMS-Fail/http-request.adoc[]
+QueryParameters
+include::{snippets}/Phone-SMS-Fail/query-parameters.adoc[]
+
+HttpResponse
+include::{snippets}/Phone-SMS-Fail/http-response.adoc[]
+
+=== PhoneSMSCheckSuccess
+HttpRequest
+include::{snippets}/Phone-SMS-Check-Success/http-request.adoc[]
+QueryParameters
+include::{snippets}/Phone-SMS-Check-Success/query-parameters.adoc[]
+
+HttpResponse
+include::{snippets}/Phone-SMS-Check-Success/http-response.adoc[]
+
+=== PhoneSMSCheckFail
+HttpRequest
+include::{snippets}/Phone-SMS-Check-Fail-NoPhone/http-request.adoc[]
+QueryParameters
+include::{snippets}/Phone-SMS-Check-Fail-NoPhone/query-parameters.adoc[]
+
+HttpResponse
+include::{snippets}/Phone-SMS-Check-Fail-NoPhone/http-response.adoc[]
+
+=== PhoneSMSCheckFail
+HttpRequest
+include::{snippets}/Phone-SMS-Check-Fail-NoSMS/http-request.adoc[]
+QueryParameters
+include::{snippets}/Phone-SMS-Check-Fail-NoSMS/query-parameters.adoc[]
+
+HttpResponse
+include::{snippets}/Phone-SMS-Check-Fail-NoSMS/http-response.adoc[]
+
+=== MemberApprovalList
+HttpRequest
+include::{snippets}/Member-Approval-List/http-request.adoc[]
+
+HttpResponse
+include::{snippets}/Member-Approval-List/http-response.adoc[]
+ResponseFields
+include::{snippets}/Member-Approval-List/response-fields.adoc[]
+
+
+=== MemberApproval
+HttpRequest
+include::{snippets}/Member-Approval/http-request.adoc[]
+PathParameters
+include::{snippets}/Member-Approval/path-parameters.adoc[]
+
+HttpResponse
+include::{snippets}/Member-Approval/http-response.adoc[]
+
+
+== Article
+
+=== ImageUpload
+HttpieRequest
+include::{snippets}/Image-Upload/httpie-request.adoc[]
+QueryParameters
+include::{snippets}/Image-Upload/query-parameters.adoc[]
+
+HttpResponse
+include::{snippets}/Image-Upload/http-response.adoc[]
+ResponseFields
+include::{snippets}/Image-Upload/response-fields.adoc[]
+
+=== FileUpload
+HttpRequest
+include::{snippets}/File-Upload/http-request.adoc[]
+QueryParameters
+include::{snippets}/File-Upload/query-parameters.adoc[]
+
+HttpResponse
+include::{snippets}/File-Upload/http-response.adoc[]
+ResponseFields
+include::{snippets}/File-Upload/response-fields.adoc[]
+
+=== ArticleSaveFail
+HttpRequest
+include::{snippets}/Article-Save-Fail/http-request.adoc[]
+PathParameters
+include::{snippets}/Article-Save-Fail/path-parameters.adoc[]
+RequestFields
+include::{snippets}/Article-Save-Fail/request-fields.adoc[]
+
+HttpResponse
+include::{snippets}/Article-Save-Fail/http-response.adoc[]
+
+=== ArticleSaveSuccess
+HttpRequest
+include::{snippets}/Article-Save-Success/http-request.adoc[]
+PathParameters
+include::{snippets}/Article-Save-Success/path-parameters.adoc[]
+RequestFields
+include::{snippets}/Article-Save-Success/request-fields.adoc[]
+
+HttpResponse
+include::{snippets}/Article-Save-Success/http-response.adoc[]
+ResponseFields
+include::{snippets}/Article-Save-Success/response-fields.adoc[]
+
+=== ArticleList
+HttpRequest
+include::{snippets}/Article-List/http-request.adoc[]
+PathParameters
+include::{snippets}/Article-List/path-parameters.adoc[]
+
+HttpResponse
+include::{snippets}/Article-Save-Success/http-response.adoc[]
+ResponseFields
+include::{snippets}/Article-Save-Success/response-fields.adoc[]
+
+=== ArticleGet
+HttpRequest
+include::{snippets}/Article-Get/http-request.adoc[]
+PathParameters
+include::{snippets}/Article-Get/path-parameters.adoc[]
+
+HttpResponse
+include::{snippets}/Article-Get/http-response.adoc[]
+ResponseFields
+include::{snippets}/Article-Get/response-fields.adoc[]
+
+=== ArticleGetFail
+HttpRequest
+include::{snippets}/Article-Get-Fail/http-request.adoc[]
+PathParameters
+include::{snippets}/Article-Get-Fail/path-parameters.adoc[]
+
+HttpResponse
+include::{snippets}/Article-Get-Fail/http-response.adoc[]
+
+=== ArticleDelete
+HttpRequest
+include::{snippets}/Article-Delete/http-request.adoc[]
+PathParameters
+include::{snippets}/Article-Delete/path-parameters.adoc[]
+
+HttpResponse
+include::{snippets}/Article-Delete/http-response.adoc[]
+
+
+
+== Reservation
+=== TestReservation
+HttpRequest
+include::{snippets}/Test-Reservation/http-request.adoc[]
+QueryParameters
+include::{snippets}/Test-Reservation/request-fields.adoc[]
+
+HttpResponse
+include::{snippets}/Test-Reservation/http-response.adoc[]
+
+
+
+
+
+
+
